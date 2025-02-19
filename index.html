@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入與註冊</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #698F99;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #6aa7b6;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+        }
+
+        .container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #ffffff;
+        }
+
+        .container input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #6aa7b6;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .container button:hover {
+            background-color: #0056b3;
+        }
+
+        .container a {
+            display: block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container a:hover {
+            text-decoration: underline;
+        }
+
+        #message {
+            color: white;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="loginPage">
+        <h2>登入帳戶</h2>
+        <input type="email" id="loginEmail" placeholder="請輸入電子郵件">
+        <input type="password" id="loginPassword" placeholder="請輸入密碼">
+        <button onclick="login()">登入</button>
+        <a href="#" onclick="togglePage()">註冊新帳戶</a>
+        <p id="message"></p>
+    </div>
+
+    <div class="container" id="registerPage" style="display: none;">
+        <h2>註冊帳戶</h2>
+        <input type="email" id="registerEmail" placeholder="請輸入電子郵件">
+        <input type="password" id="registerPassword" placeholder="請輸入密碼">
+        <button onclick="register()">註冊</button>
+        <a href="#" onclick="togglePage()">返回登入</a>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        function togglePage() {
+            document.getElementById('loginPage').style.display = 
+                document.getElementById('loginPage').style.display === 'none' ? 'block' : 'none';
+            document.getElementById('registerPage').style.display = 
+                document.getElementById('registerPage').style.display === 'none' ? 'block' : 'none';
+            document.getElementById('message').innerText = ""; // 清除訊息
+        }
+
+        function register() {
+            let email = document.getElementById("registerEmail").value;
+            let password = document.getElementById("registerPassword").value;
+
+            if (!email || !password) {
+                document.getElementById("message").innerText = "請輸入完整資訊！";
+                return;
+            }
+
+            if (localStorage.getItem(email)) {
+                document.getElementById("message").innerText = "此帳戶已被註冊！";
+                return;
+            }
+
+            localStorage.setItem(email, password);
+            document.getElementById("message").innerText = "註冊成功！請前往登入。";
+
+            setTimeout(() => {
+                togglePage();
+            }, 1000); // 1秒後跳轉到登入頁面
+        }
+
+        function login() {
+            let email = document.getElementById("loginEmail").value;
+            let password = document.getElementById("loginPassword").value;
+            let storedPassword = localStorage.getItem(email);
+
+            if (!storedPassword) {
+                document.getElementById("message").innerText = "帳戶不存在！請註冊。";
+                return;
+            }
+
+            if (storedPassword !== password) {
+                document.getElementById("message").innerText = "密碼錯誤！請重試。";
+                return;
+            }
+
+            document.getElementById("message").innerText = "登入成功！";
+            setTimeout(() => {
+                alert("歡迎 " + email + "，您已成功登入！");
+                // 這裡可以跳轉到其他頁面，例如：
+                // window.location.href = "dashboard.html";
+            }, 1000);
+        }
+    </script>
+
+</body>
+</html>
