@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>劈哩啪啦身份辨識魔法終端連接器</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #698F99;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #6aa7b6;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90vw;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .title {
+            font-size: 3em;
+            position: absolute;
+            top: 10%;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 80px; /* 按鈕間距加大 */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        button {
+            background-color: white;
+            color: #333;
+            border: none;
+            border-radius: 20px;
+            padding: 20px 40px;
+            font-size: 2em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.05);
+        }
+        input {
+            width: 60%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1.5em;
+        }
+        .hidden {
+            display: none;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #5b7d85;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .record-list {
+            width: 50%;
+            max-height: 40%;
+            overflow-y: auto;
+            text-align: left;
+            font-size: 1.5em;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+        }
+        .red { color: red; }
+        .green { color: green; }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainMenu">
+        <div class="button-group">
+            <button onclick="toggleSection('organizerSection')">我是舉辦者</button>
+            <button onclick="toggleSection('participantSection')">我是參加者</button>
+        </div>
+    </div>
+
+    <div id="organizerSection" class="container hidden">
+        <button class="back-button" onclick="toggleSection('mainMenu')">返回</button>
+        <h2 class="title">舉辦者選單</h2>
+        <div class="button-group">
+            <button onclick="toggleSection('createEventSection')">舉辦活動</button>
+            <button onclick="toggleSection('manageEventSection')">管理活動</button>
+        </div>
+    </div>
+
+    <div id="createEventSection" class="container hidden">
+        <button class="back-button" onclick="toggleSection('organizerSection')">返回</button>
+        <h2 class="title">舉辦活動</h2>
+        <input type="text" id="eventName" placeholder="輸入活動名稱">
+        <button onclick="createEvent()">確認</button>
+    </div>
+
+    <div id="manageEventSection" class="container hidden">
+        <button class="back-button" onclick="toggleSection('organizerSection')">返回</button>
+        <h2 class="title">管理活動</h2>
+        <div class="record-list" id="eventManagementList"></div>
+    </div>
+
+    <div id="participantSection" class="container hidden">
+        <button class="back-button" onclick="toggleSection('mainMenu')">返回</button>
+        <h2 class="title">參加者選單</h2>
+        <div class="button-group">
+            <button onclick="toggleSection('joinEventSection')">加入活動</button>
+            <button onclick="toggleSection('checkInRecordSection')">打卡紀錄</button>
+        </div>
+    </div>
+
+    <div id="joinEventSection" class="container hidden">
+        <button class="back-button" onclick="toggleSection('participantSection')">返回</button>
+        <h2 class="title">加入活動</h2>
+        <input type="text" id="eventCode" placeholder="輸入活動代碼">
+        <button onclick="joinEvent()">確認</button>
+    </div>
+
+    <div id="checkInRecordSection" class="container hidden">
+        <button class="back-button" onclick="toggleSection('participantSection')">返回</button>
+        <h2 class="title">打卡紀錄</h2>
+        <div class="record-list" id="checkInRecords"></div>
+    </div>
+
+    <script>
+        function toggleSection(sectionId) {
+            document.querySelectorAll('.container').forEach(div => {
+                div.classList.add('hidden');
+            });
+            document.getElementById(sectionId).classList.remove('hidden');
+            if (sectionId === 'checkInRecordSection') {
+                loadCheckInRecords();
+            }
+            if (sectionId === 'manageEventSection') {
+                loadEventManagement();
+            }
+        }
+
+        function createEvent() {
+            let eventName = document.getElementById('eventName').value;
+            if (!eventName) {
+                alert('請輸入活動名稱');
+                return;
+            }
+            let events = JSON.parse(localStorage.getItem('events')) || [];
+            events.push({ name: eventName, members: [] });
+            localStorage.setItem('events', JSON.stringify(events)); 
+            alert('活動已建立');
+            document.getElementById('eventName').value = '';
+            loadEventManagement();
+        }
+
+        function joinEvent() {
+            let eventCode = document.getElementById('eventCode').value;
+            if (!eventCode) {
+                alert('請輸入活動代碼');    
+                return;
+            }
+            let joinedEvents = JSON.parse(localStorage.getItem('joinedEvents')) || [];
+            joinedEvents.push({ name: eventCode, status: "未打卡" });
+            localStorage.setItem('joinedEvents', JSON.stringify(joinedEvents)); 
+            alert('成功加入活動');
+        }
+
+        function loadCheckInRecords() {
+            let joinedEvents = JSON.parse(localStorage.getItem('joinedEvents')) || [];
+            document.getElementById('checkInRecords').innerHTML = joinedEvents.map(event => `<div class="record-item">${event.name} - <span class="${event.status === '未打卡' ? 'red' : 'green'}">${event.status}</span></div>`).join('');
+        }
+
+        function loadEventManagement() {
+            let events = JSON.parse(localStorage.getItem('events')) || [];
+            document.getElementById('eventManagementList').innerHTML = events.map(event => `<div class="record-item">${event.name} - 成員: ${event.members.length}</div>`).join('');
+        }
+    </script>
+</body>
+</html>
