@@ -1,0 +1,76 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #698F99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #6aa7b6;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px;
+    height: auto; /* 初始高度 */
+    max-width: 90vw; /* 限制最大寬度 */
+    max-height: 80vh; /* 限制最大高度 */
+    transition: width 1s ease-in-out, height 1s ease-in-out; /* 設定寬度與高度的動畫 */
+}
+
+.container.expand {
+    width: 90vw; /* 當 .expand 類別添加時，寬度變為視窗寬度的 90% */
+    height: 80vh; /* 高度變為視窗高度的 80% */
+}
+
+.container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #ffffff;
+}
+
+.container input {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #6aa7b6;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.container button:hover {
+    background-color: #0056b3;
+}
+
+.container a {
+    display: block;
+    margin-top: 15px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.container a:hover {
+    text-decoration: underline;
+}
+
+#message {
+    color: white;
+    font-size: 14px;
+    margin-top: 10px;
+}
