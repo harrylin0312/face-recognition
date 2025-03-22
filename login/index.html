@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>劈哩啪啦身份辨識魔法終端連接器</title>
+    <link rel="stylesheet" href="styles2.css"> 
+</head>
+<body>
+    <div class="container" id="mainMenu">
+        <div class="button-group">
+            <button onclick="toggleSection('organizer')">管理</button>
+            <button onclick="toggleSection('participant')">參加</button>
+        </div>
+    </div>
+
+    <div id="organizer" class="container hidden">
+        <button class="back-button" onclick="toggleSection('mainMenu')">返回</button>
+        <h2 class="title">管理</h2>
+        <div class="button-group">
+            <button onclick="toggleSection('createEvent')">舉辦</button>
+            <button onclick="toggleSection('manageEvent')">紀錄</button>
+        </div>
+    </div>
+
+    <div id="createEvent" class="container hidden">
+        <button class="back-button" onclick="toggleSection('organizer')">返回</button>
+        <h2 class="title">舉辦</h2>
+        <input type="text" id="eventName" placeholder="輸入活動名稱">
+        <button onclick="createEvent()">確認</button>
+    </div>
+
+    <div id="manageEvent" class="container hidden">
+        <button class="back-button" onclick="toggleSection('organizer')">返回</button>
+        <h2 class="title">紀錄</h2>
+        <div class="record-list" id="eventManagementList"></div>
+    </div>
+
+    <div id="participant" class="container hidden">
+        <button class="back-button" onclick="toggleSection('mainMenu')">返回</button>
+        <h2 class="title">參加</h2>
+        <div class="button-group">
+            <button onclick="toggleSection('joinEvent')">加入</button>
+            <button onclick="toggleSection('checkInRecord')">紀錄</button>
+        </div>
+    </div>
+
+    <div id="joinEvent" class="container hidden">
+        <button class="back-button" onclick="toggleSection('participant')">返回</button>
+        <h2 class="title">加入</h2>
+        <input type="text" id="eventCode" placeholder="輸入活動代碼">
+        <button onclick="joinEvent()">確認</button>
+    </div>
+
+    <div id="checkInRecord" class="container hidden">
+        <button class="back-button" onclick="toggleSection('participant')">返回</button>
+        <h2 class="title">紀錄</h2>
+        <div class="record-list" id="checkInRecords"></div>
+    </div>
+
+    <script src="script2.js"></script> 
+</body>
+</html>
