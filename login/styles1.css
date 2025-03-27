@@ -136,16 +136,3 @@ body {/*背景*/
     transition: opacity 0.1s ease; /* 添加平滑過渡，避免突變 */
 }
 
-/* 容器本身不參與動畫 */
-.container {
-    background-color: #116f73;
-    padding: 20px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 300px;
-    max-width: 90vw;
-    max-height: 80vh;
-    transition: width 1s ease-in-out, height 1s ease-in-out; /* 保留原有的擴張動畫 */
-    position: relative; /* 確保子元素定位正常 */
-}
