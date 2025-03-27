@@ -19,6 +19,7 @@ body {/*背景*/
     max-width: 90vw;
     max-height: 80vh;
     transition: width 1s ease-in-out, height 1s ease-in-out;
+    position: relative; /* 確保子元素定位正常 */
 }
 @keyframes expandEffect {/*動畫設定*/
     from {
@@ -84,15 +85,67 @@ body {/*背景*/
 }
 
 
-/*成功登入淡出動畫*/
+/*成功登入淡出動畫
 .hidden {
-    animation: fadeOut 0.5s ease forwards; /* 0.5秒淡出效果 */
+    animation: fadeOut 0.5s ease forwards; /* 0.5秒淡出效果 
 }
-@keyframes fadeOut {/*動畫設定*/
+@keyframes fadeOut {/*淡出動畫設定
     from {
         opacity: 1;
     }
     to {
         opacity: 0;
     }
+}*/
+
+/* 淡出動畫 */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* 淡入動畫 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 隱藏類別 */
+.hidden {
+    animation: fadeOut 0.5s ease forwards; /* 0.5秒淡出效果 */
+    opacity: 0; /* 確保淡出後保持隱藏 */
+}
+
+/* 顯示類別 */
+.visible {
+    animation: fadeIn 0.5s ease forwards; /* 0.5秒淡入效果 */
+    opacity: 1; /* 確保淡入後完全顯示 */
+}
+
+/* 容器內的子元素初始狀態 */
+.container > * {
+    opacity: 1; /* 預設可見 */
+    transition: opacity 0.1s ease; /* 添加平滑過渡，避免突變 */
+}
+
+/* 容器本身不參與動畫 */
+.container {
+    background-color: #116f73;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px;
+    max-width: 90vw;
+    max-height: 80vh;
+    transition: width 1s ease-in-out, height 1s ease-in-out; /* 保留原有的擴張動畫 */
+    position: relative; /* 確保子元素定位正常 */
 }
