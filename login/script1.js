@@ -80,8 +80,7 @@ function login() {
         container.classList.add("expand"); // 0.5 秒後觸發動畫
     
         setTimeout(() => {
-            //window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
-            window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
+            window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
         }, 1500);
     }, 500);
 }
