@@ -79,6 +79,7 @@ input {
     border: none;
     border-radius: 10px;
     cursor: pointer;
+    opacity: 1; /* 固定可見，不參與動畫 */
 }
 
 .record-list {
@@ -102,3 +103,43 @@ input {
 
 .red { color: red; }
 .green { color: green; }
+
+/* 淡出動畫 */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* 淡入動畫 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 動畫類別 */
+.fade-out {
+    animation: fadeOut 0.4s ease forwards;
+}
+
+/* 顯示類別 */
+.fade-in {
+    animation: fadeIn 0.7s ease forwards;
+}
+
+/* 容器內子元素初始狀態（除了 .back-button） */
+.container > *:not(.back-button) {
+    opacity: 0; /* 初始透明，等待淡入 */
+}
+
+/* 非隱藏容器內的子元素保持可見 */
+.container:not(.hidden) > *:not(.back-button) {
+    opacity: 1; /* 確保顯示時可見 */
+}
