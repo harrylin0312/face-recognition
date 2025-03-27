@@ -2,18 +2,30 @@
 function togglePage() {
     let loginPage = document.getElementById('loginPage');
     let registerPage = document.getElementById('registerPage');
+    let loginElements = loginPage.querySelectorAll('h2, input, button, a, p');
+    let registerElements = registerPage.querySelectorAll('h2, input, button, a, p');
 
-    // 切換 display 屬性（顯示/隱藏效果）
     if (loginPage.style.display === 'none') {
-        loginPage.style.display = 'block';
-        registerPage.style.display = 'none';
+        // 從註冊切到登入
+        registerElements.forEach(element => element.classList.remove('visible'));
+        registerElements.forEach(element => element.classList.add('hidden'));
+        setTimeout(() => {
+            registerPage.style.display = 'none';
+            loginPage.style.display = 'block';
+            loginElements.forEach(element => element.classList.remove('hidden'));
+            loginElements.forEach(element => element.classList.add('visible'));
+        }, 500); // 等待淡出完成 (0.5秒)
     } else {
-        loginPage.style.display = 'none';
-        registerPage.style.display = 'block';
+        // 從登入切到註冊
+        loginElements.forEach(element => element.classList.remove('visible'));
+        loginElements.forEach(element => element.classList.add('hidden'));
+        setTimeout(() => {
+            loginPage.style.display = 'none';
+            registerPage.style.display = 'block';
+            registerElements.forEach(element => element.classList.remove('hidden'));
+            registerElements.forEach(element => element.classList.add('visible'));
+        }, 500); // 等待淡出完成 (0.5秒)
     }
-
-    // 清除訊息
-    document.getElementById('message').innerText = "";
 }
 
 //註冊功能
@@ -68,7 +80,8 @@ function login() {
         container.classList.add("expand"); // 0.5 秒後觸發動畫
     
         setTimeout(() => {
-            window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
-        }, 1400);
+            //window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
+            window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
+        }, 1500);
     }, 500);
 }
