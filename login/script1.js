@@ -56,10 +56,20 @@ function login() {
     }
 
     document.getElementById("message").innerText = "登入成功！";
+    document.getElementById("message").innerText = "登入成功！";
+
     setTimeout(() => {
-        // 跳轉頁面
-        window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
-        const container = document.querySelector(".container"); // 選取 .container 元素
+        const container = document.querySelector(".container");
+        const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
+        // 給所有指定的元素加上 'hidden' 類別
+        elementsToHide.forEach(element => element.classList.add ("hidden"));
+            
+        
         container.classList.add("expand"); // 0.5 秒後觸發動畫
-    }, 1000);
+    
+        setTimeout(() => {
+            //window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
+            window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
+        }, 1400);
+    }, 500);
 }
