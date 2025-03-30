@@ -1,4 +1,4 @@
-// 切換界面
+// 切換介面
 function togglePage() {
     let loginPage = document.getElementById('loginPage');
     let registerPage = document.getElementById('registerPage');
@@ -34,17 +34,17 @@ function register() {
     let password = document.getElementById("registerPassword").value;
 
     if (!email || !password) {
-        document.getElementById("message").innerText = "請輸入完整資訊！";
+        document.getElementById("RegisterMessage").innerText = "請輸入完整資訊！";
         return;
     }
 
     if (localStorage.getItem(email)) {
-        document.getElementById("message").innerText = "此帳戶已被註冊！";
+        document.getElementById("RegisterMessage").innerText = "此帳戶已被註冊！";
         return;
     }
 
     localStorage.setItem(email, password);
-    document.getElementById("message").innerText = "註冊成功！請前往登入。";
+    document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
 
     setTimeout(() => {
         togglePage(); // 自動切換回登入頁面
@@ -58,16 +58,16 @@ function login() {
     let storedPassword = localStorage.getItem(email);
 
     if (!storedPassword) {
-        document.getElementById("message").innerText = "帳戶不存在！請註冊。";
+        document.getElementById("LoginMessage").innerText = "帳戶不存在！請註冊。";
         return;
     }
 
     if (storedPassword !== password) {
-        document.getElementById("message").innerText = "密碼錯誤！請重試。";
+        document.getElementById("LoginMessage").innerText = "密碼錯誤！請重試。";
         return;
     }
 
-    document.getElementById("message").innerText = "登入成功！";
+    document.getElementById("LoginMessage").innerText = "登入成功！";
 
     setTimeout(() => {
         const container = document.querySelector(".container");
