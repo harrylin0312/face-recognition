@@ -68,7 +68,6 @@ function login() {
     }
 
     document.getElementById("message").innerText = "登入成功！";
-    document.getElementById("message").innerText = "登入成功！";
 
     setTimeout(() => {
         const container = document.querySelector(".container");
