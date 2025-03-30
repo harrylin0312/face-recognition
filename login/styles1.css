@@ -78,25 +78,11 @@ body {/*背景*/
 }
 
 /*提示訊息*/
-#message {
+#LoginMessage, #RegisterMessage {
     color: white;
     font-size: 14px;
     margin-top: 10px;
 }
-
-
-/*成功登入淡出動畫
-.hidden {
-    animation: fadeOut 0.5s ease forwards; /* 0.5秒淡出效果 
-}
-@keyframes fadeOut {/*淡出動畫設定
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}*/
 
 /* 淡出動畫 */
 @keyframes fadeOut {
