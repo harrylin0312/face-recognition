@@ -135,4 +135,3 @@ body {/*背景*/
     opacity: 1; /* 預設可見 */
     transition: opacity 0.1s ease; /* 添加平滑過渡，避免突變 */
 }
-
