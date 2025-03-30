@@ -1,4 +1,4 @@
-// 切換登入或註冊頁面
+// 切換界面
 function togglePage() {
     let loginPage = document.getElementById('loginPage');
     let registerPage = document.getElementById('registerPage');
