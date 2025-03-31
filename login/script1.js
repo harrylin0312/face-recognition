@@ -79,7 +79,15 @@ function login() {
         container.classList.add("expand"); // 0.5 秒後觸發動畫
     
         setTimeout(() => {
-            window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
+            //window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
+            window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
         }, 1500);
     }, 500);
 }
+
+// 監聽 Enter 鍵以執行登入
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        login(); // 呼叫登入函數
+    }
+});
