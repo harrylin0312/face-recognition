@@ -8,7 +8,7 @@ body {/*背景*/
     align-items: center;
     height: 100vh;
 }
-
+/*------------------------------------------------------------*/
 .container {/*容器*/
     background-color: #116f73;
     padding: 20px 30px;
@@ -21,27 +21,43 @@ body {/*背景*/
     transition: width 1s ease-in-out, height 1s ease-in-out;
     position: relative; /* 確保子元素定位正常 */
 }
-@keyframes expandEffect {/*動畫設定*/
+@keyframes expandDesktop {/* 預設版擴張動畫 */
     from {
         height: 300px;
         width: 300px;
     }
     to {
         height: 80vh;
-        width: 90vw;
+        width: 90vw; 
         background-color: #6aa7b6;
     }
 }
-.container.expand {
-    animation: expandEffect 1.5s forwards;/*1.5秒擴張效果*/
+@keyframes expandPhone {/* 手機版擴張動畫 */
+    from {
+        height: 300px;
+        width: 300px;
+    }
+    to {
+        height: 80vh;
+        width: 80vw; 
+        background-color: #6aa7b6;
+    }
 }
-
+.container.expand {/*執行預設版擴張效果*/
+    animation: expandDesktop 1.5s forwards;/*1.5秒擴張效果*/
+}
+@media (max-width: 950px) {/*執行手機版擴張效果*/
+    .container.expand {
+        animation: expandPhone 1.5s forwards;/*1.5秒擴張效果*/
+    }
+}
+/*------------------------------------------------------------*/
 .container h2 {/*標題*/
     margin-bottom: 20px;
     font-size: 24px;
     color: #ffffff;
 }
-
+/*------------------------------------------------------------*/
 .container input {/*輸入框*/
     width: calc(100% - 22px);
     padding: 10px;
@@ -50,7 +66,7 @@ body {/*背景*/
     border-radius: 4px;
     font-size: 16px;
 }
-
+/*------------------------------------------------------------*/
 .container button {/*按鈕*/
     width: 100%;
     padding: 10px;
@@ -64,60 +80,44 @@ body {/*背景*/
 .container button:hover {/*懸浮動畫*/
     background-color: #0056b3;
 }
-
-/*切換介面按鈕*/
-.container a {
+/*------------------------------------------------------------*/
+.container a {/*切換介面按鈕*/
     display: block;
     margin-top: 15px;
     color: #ffffff;
     text-decoration: none;
     font-size: 14px;
 }
-.container a:hover {/*懸浮動畫*/
+.container a:hover {/*懸浮底線*/
     text-decoration: underline;
 }
-
-/*提示訊息*/
-#LoginMessage, #RegisterMessage {
+/*------------------------------------------------------------*/
+#LoginMessage, #RegisterMessage {/*提示訊息*/
     color: white;
     font-size: 14px;
     margin-top: 10px;
 }
-
-/* 淡出動畫 */
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
+/*------------------------------------------------------------*/
+@keyframes fadeOut {/* 淡出動畫 */
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+@keyframes fadeIn {/* 淡入動畫 */
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
 
-/* 淡入動畫 */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-/* 隱藏類別 */
-.hidden {
+.hidden {/* 隱藏類別 */
     animation: fadeOut 0.5s ease forwards; /* 0.5秒淡出效果 */
     opacity: 0; /* 確保淡出後保持隱藏 */
 }
 
-/* 顯示類別 */
-.visible {
+.visible {/* 顯示類別 */
     animation: fadeIn 0.5s ease forwards; /* 0.5秒淡入效果 */
     opacity: 1; /* 確保淡入後完全顯示 */
 }
 
-/* 容器內的子元素初始狀態 */
-.container > * {
+.container > * {/* 容器內的子元素初始狀態 */
     opacity: 1; /* 預設可見 */
     transition: opacity 0.1s ease; /* 添加平滑過渡，避免突變 */
 }
