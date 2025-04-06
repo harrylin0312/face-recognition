@@ -7,36 +7,29 @@
     <link rel="stylesheet" href="styles1.css">
 </head>
 <body>
+    <div class="container">
+        <!-- 登入畫面 (預設顯示) -->
+        <div id="loginPage" style="display: block;">
+            <h2>登入帳戶</h2>
+            <input type="email" id="loginEmail" placeholder="請輸入帳號">
+            <input type="password" id="loginPassword" placeholder="請輸入密碼">
+            <button onclick="login()">登入</button>
+            <a href="#" onclick="togglePage()">註冊新帳戶</a>
+            <p id="LoginMessage"></p>
+        </div>
 
-    <!-- 登入畫面 (預設顯示) -->
-    <div class="container" id="loginPage">
-        <h2>登入帳戶</h2>
-        <input type="email" id="loginEmail" placeholder="請輸入帳號">
-        <input type="password" id="loginPassword" placeholder="請輸入密碼">
-        <button onclick="login()">登入</button>
-        
-        <!-- 點擊連結後切換到註冊畫面 -->
-        <a href="#" onclick="togglePage()">註冊新帳戶</a>
-        
-        <p id="LoginMessage"></p>
+        <!-- 註冊畫面 (預設隱藏) -->
+        <div id="registerPage" style="display: none;">
+            <h2>註冊帳戶</h2>
+            <input type="email" id="registerEmail" placeholder="請輸入帳號">
+            <input type="password" id="registerPassword" placeholder="請輸入密碼">
+            <button onclick="register()">註冊</button>
+            <a href="#" onclick="togglePage()">返回登入</a>
+            <p id="RegisterMessage"></p>
+        </div>
     </div>
 
-    <!-- 註冊畫面 (預設隱藏) -->
-    <div class="container" id="registerPage" style="display: none;">
-        <h2>註冊帳戶</h2>
-        <input type="email" id="registerEmail" placeholder="請輸入帳號">
-        <input type="password" id="registerPassword" placeholder="請輸入密碼">
-        <button onclick="register()">註冊</button>
-        
-        <!-- 點擊連結後切換回登入畫面 -->
-        <a href="#" onclick="togglePage()">返回登入</a>
-        
-        <p id="RegisterMessage"></p>
-    </div>
-
-    <script src="script1.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-
+    <!-- 引入改進後的 script1.js -->
+    <script type="module" src="script1.js"></script>
 </body>
 </html>
