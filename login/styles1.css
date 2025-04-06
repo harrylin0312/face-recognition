@@ -1,4 +1,5 @@
-body {/*背景*/
+/*背景*/
+body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -9,19 +10,21 @@ body {/*背景*/
     height: 100vh;
 }
 /*------------------------------------------------------------*/
-.container {/*容器*/
+/*容器*/
+.container {
     background-color: #116f73;
-    padding: 20px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
+    padding: 20px 30px; /*設定內邊距*/
+    border-radius: 8px; /*設定圓角邊框*/
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /*設定陰影*/
+    text-align: center; /*文字置中對齊*/
+    max-height: 80%;
+    max-width: 90%;
     width: 300px;
-    max-width: 90vw;
-    max-height: 80vh;
     transition: width 1s ease-in-out, height 1s ease-in-out;
-    position: relative; /* 確保子元素定位正常 */
+    position: relative; /*相對位置偏移*/
 }
-@keyframes expandDesktop {/* 預設版擴張動畫 */
+/*擴張效果設定*/
+@keyframes expandDesktop { /*預設版擴張動畫*/
     from {
         height: 300px;
         width: 300px;
@@ -32,7 +35,7 @@ body {/*背景*/
         background-color: #6aa7b6;
     }
 }
-@keyframes expandPhone {/* 手機版擴張動畫 */
+@keyframes expandPhone { /*手機版擴張動畫*/
     from {
         height: 300px;
         width: 300px;
@@ -43,22 +46,25 @@ body {/*背景*/
         background-color: #6aa7b6;
     }
 }
-.container.expand {/*執行預設版擴張效果*/
-    animation: expandDesktop 1.5s forwards;/*1.5秒擴張效果*/
+/*執行擴張效果*/
+.container.expand { /*執行預設版擴張效果*/
+    animation: expandDesktop 1.5s forwards; /*1.5秒擴張效果*/
 }
-@media (max-width: 950px) {/*執行手機版擴張效果*/
+@media (max-width: 950px) { /*執行手機版擴張效果*/
     .container.expand {
-        animation: expandPhone 1.5s forwards;/*1.5秒擴張效果*/
+        animation: expandPhone 1.5s forwards; /*1.5秒擴張效果*/
     }
 }
 /*------------------------------------------------------------*/
-.container h2 {/*標題*/
+/*標題*/
+.container h2 {
     margin-bottom: 20px;
     font-size: 24px;
     color: #ffffff;
 }
 /*------------------------------------------------------------*/
-.container input {/*輸入框*/
+/*輸入框*/
+.container input {
     width: calc(100% - 22px);
     padding: 10px;
     margin-bottom: 15px;
@@ -67,7 +73,8 @@ body {/*背景*/
     font-size: 16px;
 }
 /*------------------------------------------------------------*/
-.container button {/*按鈕*/
+/*按鈕*/
+.container button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -77,47 +84,52 @@ body {/*背景*/
     font-size: 16px;
     cursor: pointer;
 }
-.container button:hover {/*懸浮動畫*/
+/*懸浮動畫*/
+.container button:hover {
     background-color: #0056b3;
 }
 /*------------------------------------------------------------*/
-.container a {/*切換介面按鈕*/
+/*切換介面按鈕*/
+.container a {
     display: block;
     margin-top: 15px;
     color: #ffffff;
     text-decoration: none;
     font-size: 14px;
 }
-.container a:hover {/*懸浮底線*/
+/*懸浮底線*/
+.container a:hover {
     text-decoration: underline;
 }
 /*------------------------------------------------------------*/
-#LoginMessage, #RegisterMessage {/*提示訊息*/
+/*提示訊息*/
+#LoginMessage, #RegisterMessage { 
     color: white;
     font-size: 14px;
     margin-top: 10px;
 }
 /*------------------------------------------------------------*/
-@keyframes fadeOut {/* 淡出動畫 */
+/*切換動畫設定*/
+@keyframes fadeOut { /*淡出動畫*/
     from {opacity: 1;}
     to {opacity: 0;}
 }
-@keyframes fadeIn {/* 淡入動畫 */
+@keyframes fadeIn { /*淡入動畫*/
     from {opacity: 0;}
     to {opacity: 1;}
 }
-
-.hidden {/* 隱藏類別 */
-    animation: fadeOut 0.5s ease forwards; /* 0.5秒淡出效果 */
-    opacity: 0; /* 確保淡出後保持隱藏 */
+/*執行隱藏*/
+.hidden { 
+    animation: fadeOut 0.5s ease forwards; /*0.5秒淡出效果*/
+    opacity: 0; /*確保淡出後保持隱藏*/
 }
-
-.visible {/* 顯示類別 */
-    animation: fadeIn 0.5s ease forwards; /* 0.5秒淡入效果 */
-    opacity: 1; /* 確保淡入後完全顯示 */
+/*執行顯示*/
+.visible { /*顯示類別*/
+    animation: fadeIn 0.5s ease forwards; /*0.5秒淡入效果*/
+    opacity: 1; /*確保淡入後完全顯示*/
 }
-
-.container > * {/* 容器內的子元素初始狀態 */
-    opacity: 1; /* 預設可見 */
-    transition: opacity 0.1s ease; /* 添加平滑過渡，避免突變 */
+/*設定容器內的子元素初始狀態*/
+.container > * { 
+    opacity: 1; /*預設可見*/
+    transition: opacity 0.1s ease; /*添加平滑過渡，避免突變*/
 }
