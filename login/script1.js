@@ -1,3 +1,17 @@
+const firebaseConfig = {
+    apiKey: "AIzaSyDDRL_2uAJD63ALwp2uNtAnakA4BayVl30",
+    authDomain: "face-recognition-556ed.firebaseapp.com",
+    projectId: "face-recognition-556ed",
+    storageBucket: "face-recognition-556ed.firebasestorage.app",
+    messagingSenderId: "614926935705",
+    appId: "1:614926935705:web:57d56d7115a6504497fa08",
+    measurementId: "G-YXSM0L5Z83"
+  };
+
+// 初始化 Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
 // 切換介面
 function togglePage() {
     let loginPage = document.getElementById('loginPage');
@@ -28,7 +42,7 @@ function togglePage() {
     }
 }
 
-//註冊功能
+// 註冊功能
 function register() {
     let email = document.getElementById("registerEmail").value;
     let password = document.getElementById("registerPassword").value;
@@ -38,51 +52,51 @@ function register() {
         return;
     }
 
-    if (localStorage.getItem(email)) {
-        document.getElementById("RegisterMessage").innerText = "此帳戶已被註冊！";
-        return;
-    }
-
-    localStorage.setItem(email, password);
-    document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
-
-    setTimeout(() => {
-        togglePage(); // 自動切換回登入頁面
-    }, 1000); // 1秒後跳轉到登入頁面
+    auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // 註冊成功
+            document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
+            setTimeout(() => {
+                togglePage(); // 自動切換回登入頁面
+            }, 1000); // 1秒後跳轉到登入頁面
+        })
+        .catch((error) => {
+            // 處理錯誤
+            let errorMessage = error.message;
+            document.getElementById("RegisterMessage").innerText = errorMessage;
+        });
 }
 
 // 登入功能
 function login() {
     let email = document.getElementById("loginEmail").value;
     let password = document.getElementById("loginPassword").value;
-    let storedPassword = localStorage.getItem(email);
 
-    if (!storedPassword) {
-        document.getElementById("LoginMessage").innerText = "帳戶不存在！請註冊。";
-        return;
-    }
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // 登入成功
+            document.getElementById("LoginMessage").innerText = "登入成功！";
 
-    if (storedPassword !== password) {
-        document.getElementById("LoginMessage").innerText = "密碼錯誤！請重試。";
-        return;
-    }
-
-    document.getElementById("LoginMessage").innerText = "登入成功！";
-
-    setTimeout(() => {
-        const container = document.querySelector(".container");
-        const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
-        // 給所有指定的元素加上 'hidden' 類別
-        elementsToHide.forEach(element => element.classList.add ("hidden"));
+            setTimeout(() => {
+                const container = document.querySelector(".container");
+                const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
+                // 給所有指定的元素加上 'hidden' 類別
+                elementsToHide.forEach(element => element.classList.add("hidden"));
+                
+                container.classList.add("expand"); // 0.5 秒後觸發動畫
             
-        
-        container.classList.add("expand"); // 0.5 秒後觸發動畫
-    
-        setTimeout(() => {
-            window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
-            //window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
-        }, 1500);
-    }, 500);
+                setTimeout(() => {
+                    // 根據你的需求，這裡可以改成線上 URL 或本地檔案路徑
+                    window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
+                    //window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
+                }, 1500);
+            }, 500);
+        })
+        .catch((error) => {
+            // 處理錯誤
+            let errorMessage = error.message;
+            document.getElementById("LoginMessage").innerText = errorMessage;
+        });
 }
 
 // 監聽 Enter 鍵以執行登入
