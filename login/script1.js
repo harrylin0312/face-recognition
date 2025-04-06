@@ -1,3 +1,7 @@
+// 導入 Firebase 模組
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
 const firebaseConfig = {
     apiKey: "AIzaSyDDRL_2uAJD63ALwp2uNtAnakA4BayVl30",
     authDomain: "face-recognition-556ed.firebaseapp.com",
@@ -9,8 +13,8 @@ const firebaseConfig = {
   };
 
 // 初始化 Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 // 切換介面
 function togglePage() {
@@ -52,7 +56,7 @@ function register() {
         return;
     }
 
-    auth.createUserWithEmailAndPassword(email, password)
+    createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // 註冊成功
             document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
@@ -72,7 +76,7 @@ function login() {
     let email = document.getElementById("loginEmail").value;
     let password = document.getElementById("loginPassword").value;
 
-    auth.signInWithEmailAndPassword(email, password)
+    signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // 登入成功
             document.getElementById("LoginMessage").innerText = "登入成功！";
@@ -88,7 +92,7 @@ function login() {
                 setTimeout(() => {
                     // 根據你的需求，這裡可以改成線上 URL 或本地檔案路徑
                     window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
-                    //window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
+                    // window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
                 }, 1500);
             }, 500);
         })
@@ -105,3 +109,8 @@ document.addEventListener("keydown", function(event) {
         login(); // 呼叫登入函數
     }
 });
+
+// 將函數暴露給全局，以便 HTML 事件處理器使用
+window.togglePage = togglePage;
+window.register = register;
+window.login = login;
