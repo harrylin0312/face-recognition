@@ -99,25 +99,29 @@ function login() {
 
             setTimeout(() => {
                 const container = document.querySelector(".container");
-                const loginPage = document.getElementById('loginPage');
+                const loginPage = document.getElementById("loginPage");
                 
-                // 確保 loginPage 是可見的
-                loginPage.style.display = 'block';
+                // 確保 container 和 loginPage 可見
+                container.style.display = "block";
+                loginPage.style.display = "block";
+
+                // 選擇所有需要隱藏的元素
                 const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
-                
-                // 清除所有元素的 hidden 類別，確保動畫從可見狀態開始
-                elementsToHide.forEach(element => element.classList.remove("hidden"));
-                elementsToHide.forEach(element => element.classList.add("visible"));
 
-                // 500ms 後開始隱藏動畫
+                // 確保元素處於可見狀態，然後觸發隱藏動畫
+                elementsToHide.forEach(element => {
+                    element.classList.remove("hidden"); // 先移除 hidden，確保可見
+                    element.offsetHeight; // 強制 reflow，避免動畫跳過
+                    element.classList.add("hidden"); // 再添加 hidden，觸發動畫
+                });
+
+                // 添加 expand 動畫
+                container.classList.add("expand");
+
+                // 跳轉頁面
                 setTimeout(() => {
-                    elementsToHide.forEach(element => element.classList.add("hidden"));
-                    container.classList.add("expand");
-
-                    setTimeout(() => {
-                        window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
-                    }, 1500);
-                }, 500);
+                    window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
+                }, 1500);
             }, 500);
         })
         .catch((error) => {
