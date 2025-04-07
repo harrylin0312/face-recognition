@@ -10,7 +10,25 @@ const firebaseConfig = {
     messagingSenderId: "614926935705",
     appId: "1:614926935705:web:57d56d7115a6504497fa08",
     measurementId: "G-YXSM0L5Z83"
-  };
+};
+
+// 錯誤碼轉換函數
+function translateErrorCode(code) {
+    const errorMessages = {
+        "auth/email-already-in-use": "此Email已被註冊。",
+        "auth/invalid-email": "Email格式錯誤。",
+        "auth/weak-password": "密碼至少需要6個字元。",
+        "auth/user-not-found": "找不到此帳號。",
+        "auth/wrong-password": "密碼錯誤。",
+        "auth/missing-password": "請輸入密碼。",
+        "auth/too-many-requests": "嘗試次數過多，請稍後再試。",
+        "auth/network-request-failed": "網路連線錯誤，請檢查您的網路。",
+        "auth/internal-error": "伺服器內部錯誤，請稍後再試。",
+        "auth/operation-not-allowed": "目前不允許此操作，請聯繫管理員。",
+        "auth/invalid-credential": "登入憑證無效，請重新輸入。",
+    };
+    return errorMessages[code] || "發生未知錯誤：" + code;
+}
 
 // 初始化 Firebase
 const app = initializeApp(firebaseConfig);
@@ -65,8 +83,7 @@ function register() {
             }, 1000); // 1秒後跳轉到登入頁面
         })
         .catch((error) => {
-            // 處理錯誤
-            let errorMessage = error.message;
+            let errorMessage = translateErrorCode(error.code);
             document.getElementById("RegisterMessage").innerText = errorMessage;
         });
 }
@@ -96,8 +113,7 @@ function login() {
             }, 500);
         })
         .catch((error) => {
-            // 處理錯誤
-            let errorMessage = error.message;
+            let errorMessage = translateErrorCode(error.code);
             document.getElementById("LoginMessage").innerText = errorMessage;
         });
 }
