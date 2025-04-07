@@ -103,10 +103,16 @@ body {
 }
 /*------------------------------------------------------------*/
 /*提示訊息*/
-#LoginMessage, #RegisterMessage { 
-    color: white;
+#LoginMessage, #RegisterMessage {
     font-size: 14px;
     margin-top: 10px;
+}
+/* 新增成功與錯誤訊息樣式 */
+.message-success {
+    color: #00ff00;
+}
+.message-error {
+    color: #ff4d4d;
 }
 /*------------------------------------------------------------*/
 /*切換動畫設定*/
