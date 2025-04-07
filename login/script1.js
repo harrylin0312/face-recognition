@@ -88,65 +88,33 @@ function register() {
         });
 }
 
-// 註冊功能
-function register() {
-    let email = document.getElementById("registerEmail").value;
-    let password = document.getElementById("registerPassword").value;
-
-    const registerMsg = document.getElementById("RegisterMessage");
-
-    if (!email || !password) {
-        registerMsg.innerText = "請輸入完整資訊！";
-        registerMsg.classList.remove("message-success");
-        registerMsg.classList.add("message-error");
-        return;
-    }
-
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            registerMsg.innerText = "註冊成功！請前往登入。";
-            registerMsg.classList.remove("message-error");
-            registerMsg.classList.add("message-success");
-            setTimeout(() => {
-                togglePage();
-            }, 1000);
-        })
-        .catch((error) => {
-            let errorMessage = translateErrorCode(error.code);
-            registerMsg.innerText = errorMessage;
-            registerMsg.classList.remove("message-success");
-            registerMsg.classList.add("message-error");
-        });
-}
-
 // 登入功能
 function login() {
     let email = document.getElementById("loginEmail").value;
     let password = document.getElementById("loginPassword").value;
 
-    const loginMsg = document.getElementById("LoginMessage");
-
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            loginMsg.innerText = "登入成功！";
-            loginMsg.classList.remove("message-error");
-            loginMsg.classList.add("message-success");
+            // 登入成功
+            document.getElementById("LoginMessage").innerText = "登入成功！";
 
             setTimeout(() => {
                 const container = document.querySelector(".container");
                 const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
+                // 給所有指定的元素加上 'hidden' 類別
                 elementsToHide.forEach(element => element.classList.add("hidden"));
-                container.classList.add("expand");
+                
+                container.classList.add("expand"); // 0.5 秒後觸發動畫
+            
                 setTimeout(() => {
                     window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
+                    // window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
                 }, 1500);
             }, 500);
         })
         .catch((error) => {
             let errorMessage = translateErrorCode(error.code);
-            loginMsg.innerText = errorMessage;
-            loginMsg.classList.remove("message-success");
-            loginMsg.classList.add("message-error");
+            document.getElementById("LoginMessage").innerText = errorMessage;
         });
 }
 
