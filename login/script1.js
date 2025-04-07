@@ -99,11 +99,11 @@ function login() {
             document.getElementById("LoginMessage").innerText = "登入成功！";
 
             setTimeout(() => {
-                const loginPage = document.getElementById("loginPage");
-                const elementsToHide = loginPage.querySelectorAll("input, h2, button, a, p");
+                const container = document.querySelector(".container");
+                 const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
+                 // 給所有指定的元素加上 'hidden' 類別
                 elementsToHide.forEach(element => element.classList.add("hidden"));
 
-                const container = document.querySelector(".container");
                 container.classList.add("expand"); // 0.5 秒後觸發動畫
             
                 setTimeout(() => {
