@@ -95,21 +95,29 @@ function login() {
 
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            // 登入成功
             document.getElementById("LoginMessage").innerText = "登入成功！";
 
             setTimeout(() => {
                 const container = document.querySelector(".container");
-                 const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
-                 // 給所有指定的元素加上 'hidden' 類別
-                elementsToHide.forEach(element => element.classList.add("hidden"));
+                const loginPage = document.getElementById('loginPage');
+                
+                // 確保 loginPage 是可見的
+                loginPage.style.display = 'block';
+                const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
+                
+                // 清除所有元素的 hidden 類別，確保動畫從可見狀態開始
+                elementsToHide.forEach(element => element.classList.remove("hidden"));
+                elementsToHide.forEach(element => element.classList.add("visible"));
 
-                container.classList.add("expand"); // 0.5 秒後觸發動畫
-            
+                // 500ms 後開始隱藏動畫
                 setTimeout(() => {
-                    window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
-                    // window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
-                }, 1500);
+                    elementsToHide.forEach(element => element.classList.add("hidden"));
+                    container.classList.add("expand");
+
+                    setTimeout(() => {
+                        window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
+                    }, 1500);
+                }, 500);
             }, 500);
         })
         .catch((error) => {
