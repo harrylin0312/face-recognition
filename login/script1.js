@@ -79,7 +79,7 @@ function register() {
         .then((userCredential) => {
             // 註冊成功
             document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
-            document.getElementById("LoginMessage").className = "message-success";
+            document.getElementById("RegisterMessage").className = "message-success";
             setTimeout(() => {
                 togglePage(); // 自動切換回登入頁面
             }, 1000); // 1秒後跳轉到登入頁面
