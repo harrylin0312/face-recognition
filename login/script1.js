@@ -71,6 +71,7 @@ function register() {
 
     if (!email || !password) {
         document.getElementById("RegisterMessage").innerText = "請輸入完整資訊！";
+        document.getElementById("LoginMessage").className = "message-error";
         return;
     }
 
@@ -78,6 +79,7 @@ function register() {
         .then((userCredential) => {
             // 註冊成功
             document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
+            document.getElementById("LoginMessage").className = "message-success";
             setTimeout(() => {
                 togglePage(); // 自動切換回登入頁面
             }, 1000); // 1秒後跳轉到登入頁面
@@ -85,6 +87,7 @@ function register() {
         .catch((error) => {
             let errorMessage = translateErrorCode(error.code);
             document.getElementById("RegisterMessage").innerText = errorMessage;
+            document.getElementById("LoginMessage").className = "message-error";
         });
 }
 
@@ -97,6 +100,7 @@ function login() {
         .then((userCredential) => {
             // 登入成功
             document.getElementById("LoginMessage").innerText = "登入成功！";
+            document.getElementById("LoginMessage").className = "message-success";
 
             setTimeout(() => {
                 const container = document.querySelector(".container");
@@ -117,6 +121,7 @@ function login() {
         .catch((error) => {
             let errorMessage = translateErrorCode(error.code);
             document.getElementById("LoginMessage").innerText = errorMessage;
+            document.getElementById("LoginMessage").className = "message-error";
         });
 }
 
