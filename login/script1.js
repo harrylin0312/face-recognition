@@ -132,6 +132,13 @@ document.addEventListener("keydown", function(event) {
     }
 });
 
+// 回退強制重整強制重整
+window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
+
 // 將函數暴露給全局，以便 HTML 事件處理器使用
 window.togglePage = togglePage;
 window.register = register;
