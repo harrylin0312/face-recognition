@@ -52,6 +52,7 @@ function togglePage() {
             loginElements.forEach(element => element.classList.add('visible'));
         }, 500); // 等待淡出完成 (0.5秒)
     document.querySelectorAll("input").forEach(input => input.value = "");//清空輸入框
+    document.querySelectorAll("input").forEach(input => input.value = "");//清空錯誤訊息
     } else {
         // 從登入切到註冊
         loginElements.forEach(element => element.classList.remove('visible'));
