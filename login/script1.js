@@ -71,7 +71,7 @@ function register() {
 
     if (!email || !password) {
         document.getElementById("RegisterMessage").innerText = "請輸入完整資訊！";
-        document.getElementById("LoginMessage").className = "message-error";
+        document.getElementById("RegisterMessage").className = "message-error";
         return;
     }
 
@@ -87,7 +87,7 @@ function register() {
         .catch((error) => {
             let errorMessage = translateErrorCode(error.code);
             document.getElementById("RegisterMessage").innerText = errorMessage;
-            document.getElementById("LoginMessage").className = "message-error";
+            document.getElementById("RegisterMessage").className = "message-error";
         });
 }
 
