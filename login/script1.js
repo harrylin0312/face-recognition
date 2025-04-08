@@ -50,7 +50,7 @@ function togglePage() {
             loginPage.style.display = 'block';
             loginElements.forEach(element => element.classList.remove('hidden'));
             loginElements.forEach(element => element.classList.add('visible'));
-        }, 300); // 等待淡出完成 (0.5秒)
+        }, 300); // 等待淡出完成 (0.3秒)
     document.querySelectorAll("input").forEach(input => input.value = "");//清空輸入框
     document.getElementById("RegisterMessage").innerText = "";//清空錯誤訊息
     document.getElementById("LoginMessage").innerText = "";
@@ -63,7 +63,7 @@ function togglePage() {
             registerPage.style.display = 'block';
             registerElements.forEach(element => element.classList.remove('hidden'));
             registerElements.forEach(element => element.classList.add('visible'));
-        }, 300); // 等待淡出完成 (0.5秒)
+        }, 300); // 等待淡出完成 (0.3秒)
     }
 }
 
@@ -132,6 +132,7 @@ function login() {
 document.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
         login(); // 呼叫登入函數
+        register();//呼叫註冊函數
     }
 });
 
