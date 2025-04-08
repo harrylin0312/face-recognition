@@ -100,8 +100,10 @@ function login() {
 
             setTimeout(() => {
                 const container = document.querySelector(".container");
-                 const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
+                const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
                  // 給所有指定的元素加上 'hidden' 類別
+                 
+                elementsToHide.forEach(element => element.classList.remove('visible'));
                 elementsToHide.forEach(element => element.classList.add("hidden"));
 
                 container.classList.add("expand"); // 0.5 秒後觸發動畫
