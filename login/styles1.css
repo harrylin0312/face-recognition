@@ -126,12 +126,12 @@ body {
 }
 /*執行隱藏*/
 .hidden { 
-    animation: fadeOut 0.5s ease forwards; /*0.5秒淡出效果*/
+    animation: fadeOut 0.3s ease forwards; /*0.3秒淡出效果*/
     opacity: 0; /*確保淡出後保持隱藏*/
 }
 /*執行顯示*/
 .visible { /*顯示類別*/
-    animation: fadeIn 0.5s ease forwards; /*0.5秒淡入效果*/
+    animation: fadeIn 0.3s ease forwards; /*0.3秒淡入效果*/
     opacity: 1; /*確保淡入後完全顯示*/
 }
 /*設定容器內的子元素初始狀態*/
