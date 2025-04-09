@@ -1,6 +1,7 @@
 // 導入 Firebase 模組
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDDRL_2uAJD63ALwp2uNtAnakA4BayVl30",
@@ -33,6 +34,7 @@ function translateErrorCode(code) {
 // 初始化 Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app); // 初始化 Firestore
 
 // 切換介面
 function togglePage() {
@@ -68,19 +70,22 @@ function togglePage() {
 }
 
 // 註冊功能
-function register() {
+async function register() {
     let email = document.getElementById("registerEmail").value;
     let password = document.getElementById("registerPassword").value;
+    const username = document.getElementById("registerUsername").value; // 新增使用者名稱
 
-    if (!email || !password) {
+    if (!email || !password || !username) {
         document.getElementById("RegisterMessage").innerText = "請輸入完整資訊！";
         document.getElementById("RegisterMessage").className = "message-error";
         return;
     }
 
     createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
             // 註冊成功
+            const uid = userCredential.user.uid;
+            await setDoc(doc(db, "users", uid), { username }); // 儲存使用者名稱
             document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
             document.getElementById("RegisterMessage").className = "message-success";
             setTimeout(() => {
@@ -95,15 +100,20 @@ function register() {
 }
 
 // 登入功能
-function login() {
+async function login() {
     let email = document.getElementById("loginEmail").value;
     let password = document.getElementById("loginPassword").value;
 
     signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
             // 登入成功
-            document.getElementById("LoginMessage").innerText = "登入成功！";
-            document.getElementById("LoginMessage").className = "message-success";
+            const uid = userCredential.user.uid;
+            const docSnap = await getDoc(doc(db, "users", uid)); // 讀取使用者名稱
+            let username = "";
+            if (docSnap.exists()) {
+                username = docSnap.data().username || "";
+            }
+            document.getElementById("LoginMessage").innerText = `登入成功！歡迎 ${username}`; // 顯示歡迎訊息
 
             setTimeout(() => {
                 const container = document.querySelector(".container");
