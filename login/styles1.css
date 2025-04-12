@@ -20,7 +20,6 @@ body {
     max-height: 80%;
     max-width: 90%;
     width: 300px;
-    transition: width 1s ease-in-out, height 1s ease-in-out;
     position: relative; /*相對位置偏移*/
 }
 /*擴張效果設定*/
