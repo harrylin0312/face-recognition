@@ -1,6 +1,6 @@
 // 導入 Firebase 模組
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDDRL_2uAJD63ALwp2uNtAnakA4BayVl30",
@@ -67,12 +67,14 @@ function togglePage() {
     }
 }
 
+
 // 註冊功能
 function register() {
+    let username = document.getElementById("registerUsername").value;
     let email = document.getElementById("registerEmail").value;
     let password = document.getElementById("registerPassword").value;
 
-    if (!email || !password) {
+    if (!username || !email || !password) {
         document.getElementById("RegisterMessage").innerText = "請輸入完整資訊！";
         document.getElementById("RegisterMessage").className = "message-error";
         return;
@@ -80,12 +82,16 @@ function register() {
 
     createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            // 註冊成功
-            document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
-            document.getElementById("RegisterMessage").className = "message-success";
-            setTimeout(() => {
-                togglePage(); // 自動切換回登入頁面
-            }, 1000); // 1秒後跳轉到登入頁面
+            // 註冊成功後更新用戶名稱
+            updateProfile(userCredential.user, {
+                displayName: username
+            }).then(() => {
+                document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
+                document.getElementById("RegisterMessage").className = "message-success";
+                setTimeout(() => {
+                    togglePage(); // 自動切換回登入頁面
+                }, 1000);
+            });
         })
         .catch((error) => {
             let errorMessage = translateErrorCode(error.code);
@@ -102,7 +108,9 @@ function login() {
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // 登入成功
-            document.getElementById("LoginMessage").innerText = "登入成功！";
+            const user = userCredential.user;
+            const displayName = user.displayName || "使用者";
+            document.getElementById("LoginMessage").innerText = `登入成功！歡迎，${displayName}！`;
             document.getElementById("LoginMessage").className = "message-success";
 
             setTimeout(() => {
@@ -113,13 +121,13 @@ function login() {
                 elementsToHide.forEach(element => element.classList.remove('visible'));
                 elementsToHide.forEach(element => element.classList.add("hidden"));
 
-                container.classList.add("expand"); // 0.5 秒後觸發動畫
+                container.classList.add("expand"); // 1秒後觸發動畫
             
                 setTimeout(() => {
                     window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
                     // window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
                 }, 1500);
-            }, 500);
+            }, 1000);
         })
         .catch((error) => {
             let errorMessage = translateErrorCode(error.code);
