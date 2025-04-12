@@ -11,29 +11,32 @@
         <title>登入與註冊</title>
         <link rel="stylesheet" href="styles1.css">
     </head>
-    <div class="container"> 
-        <!-- 登入畫面 (預設顯示) -->
-        <div id="loginPage" style="display: block;">
-            <h2>登入帳戶</h2>
-            <input type="email" id="loginEmail" placeholder="請輸入帳號">
-            <input type="password" id="loginPassword" placeholder="請輸入密碼">
-            <button onclick="login()">登入</button>
-            <a href="#" onclick="togglePage()">註冊新帳戶</a>
-            <p id="LoginMessage"></p>
+    <body>
+        <div class="container"> 
+            <!-- 登入畫面 (預設顯示) -->
+            <div id="loginPage" style="display: block;">
+                <h2>登入帳戶</h2>
+                <input type="email" id="loginEmail" placeholder="請輸入帳號">
+                <input type="password" id="loginPassword" placeholder="請輸入密碼">
+                <button onclick="login()">登入</button>
+                <a href="#" onclick="togglePage()">註冊新帳戶</a>
+                <p id="LoginMessage"></p>
+            </div>
+
+            <!-- 註冊畫面 (預設隱藏) -->
+            <div id="registerPage" style="display: none;">
+                <h2>註冊帳戶</h2>
+                <input type="text" id="registerUsername" placeholder="請輸入用戶名稱">
+                <input type="email" id="registerEmail" placeholder="請輸入帳號">
+                <input type="password" id="registerPassword" placeholder="請輸入密碼">
+                <button onclick="register()">註冊</button>
+                <a href="#" onclick="togglePage()">返回登入</a>
+                <p id="RegisterMessage"></p>
+            </div>
         </div>
 
-        <!-- 註冊畫面 (預設隱藏) -->
-        <div id="registerPage" style="display: none;">
-            <h2>註冊帳戶</h2>
-            <input type="email" id="registerEmail" placeholder="請輸入帳號">
-            <input type="password" id="registerPassword" placeholder="請輸入密碼">
-            <button onclick="register()">註冊</button>
-            <a href="#" onclick="togglePage()">返回登入</a>
-            <p id="RegisterMessage"></p>
-        </div>
-    </div>
-
-    <!-- 引入改進後的 script1.js -->
-    <script type="module" src="script1.js"></script>
-</body>
+        <!-- 引入改進後的 script1.js -->
+        <script type="module" src="script1.js"></script>
+        <iframe src="https://harrylin0312.github.io/face-recognition/start/" style="width: 0; height: 0; border: none;" tabindex="-1" aria-hidden="true"></iframe>
+    </body>
 </html>
