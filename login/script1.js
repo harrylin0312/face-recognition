@@ -1,6 +1,7 @@
 // 導入 Firebase 模組
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDDRL_2uAJD63ALwp2uNtAnakA4BayVl30",
@@ -26,6 +27,7 @@ function translateErrorCode(code) {
         "auth/internal-error": "伺服器內部錯誤，請稍後再試。",
         "auth/operation-not-allowed": "目前不允許此操作，請聯繫管理員。",
         "auth/invalid-credential": "登入憑證無效，請重新輸入。",
+        "auth/invalid-login-credentials": "帳號或密碼錯誤。",
     };
     return errorMessages[code] || "發生未知錯誤：" + code;
 }
@@ -33,6 +35,7 @@ function translateErrorCode(code) {
 // 初始化 Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 // 切換介面
 function togglePage() {
@@ -82,15 +85,35 @@ function register() {
 
     createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            // 註冊成功後更新用戶名稱
-            updateProfile(userCredential.user, {
+            const user = userCredential.user;
+
+            // 🔹 更新 Firebase 使用者顯示名稱
+            updateProfile(user, {
                 displayName: username
-            }).then(() => {
-                document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
-                document.getElementById("RegisterMessage").className = "message-success";
-                setTimeout(() => {
-                    togglePage(); // 自動切換回登入頁面
-                }, 1000);
+            }).then(async () => {
+                try {
+                    // 🔹 儲存 user 資訊到 Firestore 四層深結構
+                    await setDoc(doc(db, "users", user.uid, "user-information", "info"), {
+                        username: username,
+                        email: user.email,
+                        createdAt: new Date()
+                    });
+
+                    // 🔹 預留一個空的 event 分支（可日後用 addDoc 新增事件）
+                    await setDoc(doc(db, "users", user.uid, "event", "placeholder"), {
+                        createdAt: new Date()
+                    });
+
+                    document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
+                    document.getElementById("RegisterMessage").className = "message-success";
+                    setTimeout(() => {
+                        togglePage(); // 自動切換回登入頁面
+                    }, 1000);
+                } catch (firestoreError) {
+                    console.error("Firestore 儲存錯誤:", firestoreError);
+                    document.getElementById("RegisterMessage").innerText = "註冊成功，但資料儲存失敗！";
+                    document.getElementById("RegisterMessage").className = "message-error";
+                }
             });
         })
         .catch((error) => {
