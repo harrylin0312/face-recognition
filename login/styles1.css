@@ -14,7 +14,7 @@ body {
 .container {
     background-color: #116f73;
     padding: 20px 30px; /*設定內邊距*/
-    border-radius: 8px; /*設定圓角邊框*/
+    border-radius: 15px; /*設定圓角邊框*/
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /*設定陰影*/
     text-align: center; /*文字置中對齊*/
     max-height: 80%;
@@ -68,7 +68,7 @@ body {
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #6aa7b6;
-    border-radius: 4px;
+    border-radius: 15px;
     font-size: 16px;
 }
 /*------------------------------------------------------------*/
@@ -76,16 +76,16 @@ body {
 .container button {
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #0071e3;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 15px;
     font-size: 16px;
     cursor: pointer;
 }
 /*懸浮動畫*/
 .container button:hover {
-    background-color: #0056b3;
+    background-color: #007bff;
 }
 /*------------------------------------------------------------*/
 /*切換介面按鈕*/
