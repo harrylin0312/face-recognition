@@ -20,6 +20,7 @@ body {
     max-height: 80%;
     max-width: 90%;
     width: 300px;
+    height: 300px;
     position: relative; /*相對位置偏移*/
 }
 /*擴張效果設定*/
