@@ -29,8 +29,8 @@ body {
         width: 300px;
     }
     to {
-        height: 80vh;
-        width: 90vw; 
+        height: 80%;
+        width: 90%; 
         background-color: #6aa7b6;
     }
 }
@@ -40,8 +40,8 @@ body {
         width: 300px;
     }
     to {
-        height: 80vh;
-        width: 80vw; 
+        height: 80%;
+        width: 80%; 
         background-color: #6aa7b6;
     }
 }
@@ -53,6 +53,35 @@ body {
     .container.expand {
         animation: expandPhone 1.5s forwards; /*1.5秒擴張效果*/
     }
+}
+@keyframes expandToRegister {
+    from {
+        width: 300px;
+        height: 300px;
+    }
+    to {
+        width: 300px;
+        height: 355px;
+    }
+}
+
+@keyframes expandToLogin {
+    from {
+        width: 300px;
+        height: 340px;
+    }
+    to {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+.container.expand2 {
+    animation: expandToRegister 0.5s forwards;
+}
+
+.container.expand3 {
+    animation: expandToLogin 0.5s forwards;
 }
 /*------------------------------------------------------------*/
 /*標題*/
