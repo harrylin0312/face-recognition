@@ -43,30 +43,40 @@ function togglePage() {
     let registerPage = document.getElementById('registerPage');
     let loginElements = loginPage.querySelectorAll('h2, input, button, a, p');
     let registerElements = registerPage.querySelectorAll('h2, input, button, a, p');
+    const container = document.querySelector(".container");
 
     if (loginPage.style.display === 'none') {
         // 從註冊切到登入
+        container.classList.remove("expand2");
+        container.classList.add("expand3");
+
         registerElements.forEach(element => element.classList.remove('visible'));
         registerElements.forEach(element => element.classList.add('hidden'));
+
         setTimeout(() => {
             registerPage.style.display = 'none';
             loginPage.style.display = 'block';
             loginElements.forEach(element => element.classList.remove('hidden'));
             loginElements.forEach(element => element.classList.add('visible'));
-        }, 300); // 等待淡出完成 (0.3秒)
-    document.querySelectorAll("input").forEach(input => input.value = "");//清空輸入框
-    document.getElementById("RegisterMessage").innerText = "";//清空錯誤訊息
-    document.getElementById("LoginMessage").innerText = "";
+        }, 300);
+
+        document.querySelectorAll("input").forEach(input => input.value = "");
+        document.getElementById("RegisterMessage").innerText = "";
+        document.getElementById("LoginMessage").innerText = "";
     } else {
         // 從登入切到註冊
+        container.classList.remove("expand3");
+        container.classList.add("expand2");
+
         loginElements.forEach(element => element.classList.remove('visible'));
         loginElements.forEach(element => element.classList.add('hidden'));
+
         setTimeout(() => {
             loginPage.style.display = 'none';
             registerPage.style.display = 'block';
             registerElements.forEach(element => element.classList.remove('hidden'));
             registerElements.forEach(element => element.classList.add('visible'));
-        }, 300); // 等待淡出完成 (0.3秒)
+        }, 300);
     }
 }
 
@@ -143,12 +153,11 @@ function login() {
                  
                 elementsToHide.forEach(element => element.classList.remove('visible'));
                 elementsToHide.forEach(element => element.classList.add("hidden"));
-
+                container.classList.remove("expand3");
                 container.classList.add("expand"); // 1秒後觸發動畫
             
                 setTimeout(() => {
                     window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
-                    // window.location.href = "file:///Users/linhengyu/Downloads/code/HTML/專案/start/index.html";
                 }, 1500);
             }, 1000);
         })
