@@ -1,7 +1,7 @@
 // 導入 Firebase 模組
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDDRL_2uAJD63ALwp2uNtAnakA4BayVl30",
@@ -80,7 +80,6 @@ function togglePage() {
     }
 }
 
-
 // 註冊功能
 function register() {
     let username = document.getElementById("registerUsername").value;
@@ -94,37 +93,25 @@ function register() {
     }
 
     createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
             const user = userCredential.user;
+            try {
+                await setDoc(doc(db, "users", user.uid), {
+                    userName: username,
+                    email: user.email,
+                    createdAt: new Date()
+                });
 
-            // 🔹 更新 Firebase 使用者顯示名稱
-            updateProfile(user, {
-                displayName: username
-            }).then(async () => {
-                try {
-                    // 🔹 儲存 user 資訊到 Firestore 四層深結構
-                    await setDoc(doc(db, "users", user.uid, "user-information", "info"), {
-                        username: username,
-                        email: user.email,
-                        createdAt: new Date()
-                    });
-
-                    // 🔹 預留一個空的 event 分支（可日後用 addDoc 新增事件）
-                    await setDoc(doc(db, "users", user.uid, "event", "placeholder"), {
-                        createdAt: new Date()
-                    });
-
-                    document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
-                    document.getElementById("RegisterMessage").className = "message-success";
-                    setTimeout(() => {
-                        togglePage(); // 自動切換回登入頁面
-                    }, 1000);
-                } catch (firestoreError) {
-                    console.error("Firestore 儲存錯誤:", firestoreError);
-                    document.getElementById("RegisterMessage").innerText = "註冊成功，但資料儲存失敗！";
-                    document.getElementById("RegisterMessage").className = "message-error";
-                }
-            });
+                document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
+                document.getElementById("RegisterMessage").className = "message-success";
+                setTimeout(() => {
+                    togglePage(); // 自動切換回登入頁面
+                }, 1000);
+            } catch (firestoreError) {
+                console.error("Firestore 儲存錯誤:", firestoreError);
+                document.getElementById("RegisterMessage").innerText = "註冊成功，但資料儲存失敗！";
+                document.getElementById("RegisterMessage").className = "message-error";
+            }
         })
         .catch((error) => {
             let errorMessage = translateErrorCode(error.code);
@@ -139,23 +126,32 @@ function login() {
     let password = document.getElementById("loginPassword").value;
 
     signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // 登入成功
+        .then(async (userCredential) => {
             const user = userCredential.user;
-            const displayName = user.displayName || "使用者";
-            document.getElementById("LoginMessage").innerText = `登入成功！歡迎，${displayName}！`;
+
+            try {
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const userName = docSnap.data().userName;
+                    document.getElementById("LoginMessage").innerText = `登入成功！歡迎，${userName}！`;
+                } else {
+                    document.getElementById("LoginMessage").innerText = `登入成功！歡迎，使用者！`;
+                }
+            } catch (e) {
+                document.getElementById("LoginMessage").innerText = `登入成功！歡迎，使用者！`;
+            }
+            
             document.getElementById("LoginMessage").className = "message-success";
 
             setTimeout(() => {
                 const container = document.querySelector(".container");
                 const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
-                 // 給所有指定的元素加上 'hidden' 類別
-                 
                 elementsToHide.forEach(element => element.classList.remove('visible'));
                 elementsToHide.forEach(element => element.classList.add("hidden"));
                 container.classList.remove("expand3");
-                container.classList.add("expand"); // 1秒後觸發動畫
-            
+                container.classList.add("expand");
+
                 setTimeout(() => {
                     window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
                 }, 1500);
@@ -181,7 +177,7 @@ window.addEventListener('pageshow', function (event) {
     if (event.persisted) {
       window.location.reload();
     }
-  });
+});
 
 // 將函數暴露給全局，以便 HTML 事件處理器使用
 window.togglePage = togglePage;
