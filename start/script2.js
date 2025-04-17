@@ -61,6 +61,7 @@ function toggleSection(sectionId) {
         }
     }, 300); // 與淡出時間同步
 }
+window.toggleSection = toggleSection;
 
 //舉辦活動
 function createEvent() {
@@ -76,6 +77,7 @@ function createEvent() {
     document.getElementById('eventName').value = '';
     loadEventManagement();
 }
+window.createEvent = createEvent;
 
 //加入活動
 function joinEvent() {
@@ -89,13 +91,7 @@ function joinEvent() {
     localStorage.setItem('joinedEvents', JSON.stringify(joinedEvents)); 
     alert('成功加入活動');
 }
-
-async function loadUserName() {
-    userIDElement.textContent = '載入中…';
-    userIDElement.className = '';
-    const userUID = localStorage.getItem("userUID");
-    // 其他邏輯
-}
+window.joinEvent = joinEvent;
 
 function loadCheckInRecords() {
     let joinedEvents = JSON.parse(localStorage.getItem('joinedEvents')) || [];
