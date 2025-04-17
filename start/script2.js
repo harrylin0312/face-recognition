@@ -125,12 +125,12 @@ async function loadUserName() {
             userIDElement.textContent = `用戶：${userData.userName}`;
             userIDElement.className = 'green';
         } else {
-            userIDElement.innerHTML = '尚未登入，請前往<a href="https://harrylin0312.github.io/face-recognition/start/" style="color:blue;">登入</a>';
+            userIDElement.innerHTML = '尚未登入，請前往<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:blue;">登入</a>';
             userIDElement.className = 'red';
         }
     } catch (error) {
         console.error('讀取使用者資料失敗:', error);
-        userIDElement.innerHTML = '尚未登入，請前往<a href="https://harrylin0312.github.io/face-recognition/start/" style="color:blue;">登入</a>';
+        userIDElement.innerHTML = '尚未登入，請前往<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:blue;">登入</a>';
         userIDElement.className = 'red';
     }
 }
