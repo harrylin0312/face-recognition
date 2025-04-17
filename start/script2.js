@@ -111,7 +111,7 @@ async function loadUserName() {
     const userIDElement = document.getElementById('userID');
     const userUID = localStorage.getItem("userUID");
     if (!userUID) {
-        userIDElement.innerHTML = '尚未登入，請前往<a href="https://harrylin0312.github.io/face-recognition/start/" style="color:blue;">登入</a>';
+        userIDElement.innerHTML = '尚未登入，請前往<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:blue;">登入</a>';
         userIDElement.className = 'red';
         return;
     }
