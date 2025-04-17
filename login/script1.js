@@ -128,6 +128,8 @@ function login() {
     signInWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
             const user = userCredential.user;
+            localStorage.removeItem("userUID");
+            localStorage.setItem("userUID", user.uid);//儲存登入者uid
 
             try {
                 const docRef = doc(db, "users", user.uid);
