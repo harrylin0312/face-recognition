@@ -1,4 +1,5 @@
-body { /*背景*/
+/*背景*/
+body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -13,7 +14,7 @@ body { /*背景*/
 .container {
     background-color: #6aa7b6;
     padding: 20px 30px; /*設定內邊距*/
-    border-radius: 8px; /*設定圓角邊框*/
+    border-radius: 15px; /*設定圓角邊框*/
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /*設定陰影*/
     text-align: center; /*文字置中對齊*/
     max-height: 80%;
@@ -29,7 +30,7 @@ body { /*背景*/
 /*手機版容器樣式*/
 @media(max-width:950px){
     .container {
-        width: 80vw;
+        width: 80%;
     }
 }
 /*------------------------------------------------------------*/
@@ -43,7 +44,7 @@ body { /*背景*/
 .button-group {
     display: flex;
     justify-content: center;
-    gap: 12.5vw;
+    gap: 12vw;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -53,7 +54,7 @@ button {
     background-color: white;
     color: #333;
     border: none;
-    border-radius: 20px;
+    border-radius: 40px;
     padding: 20px 40px;
     font-size: 2.5em;
     cursor: pointer;
@@ -69,9 +70,9 @@ button:hover {
 input {
     width: 60%;
     padding: 12px;
-    margin: 10px 0;
+    margin: 60px 0;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 40px;
     font-size: 1.5em;
 }
 /*------------------------------------------------------------*/
@@ -90,14 +91,14 @@ input {
     padding: 10px 20px;
     font-size: 1.5em;
     border: none;
-    border-radius: 10px;
+    border-radius: 40px;
     cursor: pointer;
     opacity: 1; /*固定可見，不參與動畫*/
 }
 /*------------------------------------------------------------*/
 .record-list {
     width: 40%;
-    max-height: 40%;
+    max-height: 50%;
     overflow-y: auto;
     text-align: left;
     font-size: 1.5em;
@@ -118,6 +119,19 @@ input {
 
 .red { color: red; }
 .green { color: green; }
+/*------------------------------------------------------------*/
+/*輸入提示訊息*/
+#Message {
+    font-size: 14px;
+    margin-top: 10px;
+}
+/*------------------------------------------------------------*/
+/*用戶資訊*/
+#Message {
+    font-size: 14px;
+    margin-top: 10px;
+    color: #00FF00;
+}
 /*------------------------------------------------------------*/
 /*淡出動畫*/
 @keyframes fadeOut {
@@ -140,12 +154,12 @@ input {
 /*------------------------------------------------------------*/
 /*動畫類別*/
 .fade-out {
-    animation: fadeOut 0.4s ease forwards;
+    animation: fadeOut 0.3s ease forwards;
 }
 
 /*顯示類別*/
 .fade-in {
-    animation: fadeIn 0.7s ease forwards;
+    animation: fadeIn 0.3s ease forwards;
 }
 
 /*容器內子元素初始狀態（除了 .back-button） */
