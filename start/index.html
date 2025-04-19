@@ -3,67 +3,42 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>劈哩啪啦身份辨識魔法終端連接器</title>
-        <link rel="stylesheet" href="styles2.css"> 
-    <!-- Code injected by Five-server -->
-  <script async data-id="five-server" data-file="/Users/linhengyu/Downloads/code/HTML/專案/start test/index拷貝.html" type="application/javascript" src="/fiveserver.js"></script>
-  </head>
+        <!-- 重載 -->
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        <!-- 重載 -->
+        <title>登入與註冊</title>
+        <link rel="stylesheet" href="styles1.css">
+        <link rel="icon" sizes="180x180" href="./I'm-watching-you.png" type="image/png" />
+        <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./I'm-watching-you.png" type="image/png" />
+    </head>
     <body>
-        <!--主選單-->
-        <div class="container" id="mainMenu">
-            <p id="userID"></p>
-            <div class="button-group">
-                <button onclick="toggleSection('organizer')">管理</button>
-                <button onclick="toggleSection('participant')">參加</button>
+        <div class="container"> 
+            <!-- 登入畫面 (預設顯示) -->
+            <div id="loginPage" style="display: block;">
+                <h2>登入帳戶</h2>
+                <input type="email" id="loginEmail" placeholder="電子郵件">
+                <input type="password" id="loginPassword" placeholder="密碼">
+                <button onclick="login()">登入</button>
+                <a href="#" onclick="togglePage()">註冊新帳戶</a>
+                <p id="LoginMessage"></p>
             </div>
-        </div>
-        <!--舉辦者選單-->
-        <div id="organizer" class="container hidden">
-            <button class="back-button" onclick="toggleSection('mainMenu')">返回</button>
-            <h2 class="title">管理</h2>
-            <div class="button-group">
-                <button onclick="toggleSection('createEvent')">舉辦</button>
-                <button onclick="toggleSection('manageEvent')">紀錄</button>
+
+            <!-- 註冊畫面 (預設隱藏) -->
+            <div id="registerPage" style="display: none;">
+                <h2>註冊帳戶</h2>
+                <input type="text" id="registerUsername" placeholder="用戶名稱">
+                <input type="email" id="registerEmail" placeholder="電子郵件">
+                <input type="password" id="registerPassword" placeholder="密碼">
+                <button onclick="register()">註冊</button>
+                <a href="#" onclick="togglePage()">返回登入</a>
+                <p id="RegisterMessage"></p>
             </div>
-        </div>
-        <!--舉辦-->
-        <div id="createEvent" class="container hidden">
-            <button class="back-button" onclick="toggleSection('organizer')">返回</button>
-            <h2 class="title">舉辦</h2>
-            <input type="text" id="eventName" placeholder="輸入活動名稱">
-            <button id="createEventBtn">確認</button>
-            <p id="Message"></p>
-        </div>
-        <!--舉辦紀錄-->
-        <div id="manageEvent" class="container hidden">
-            <button class="back-button" onclick="toggleSection('organizer')">返回</button>
-            <h2 class="title">紀錄</h2>
-            <div class="record-list" id="eventManagementList"></div>
-        </div>
-        <!--參與者選單-->
-        <div id="participant" class="container hidden">
-            <button class="back-button" onclick="toggleSection('mainMenu')">返回</button>
-            <h2 class="title">參加</h2>
-            <div class="button-group">
-                <button onclick="toggleSection('joinEvent')">加入</button>
-                <button onclick="toggleSection('checkInRecord')">紀錄</button>
-            </div>
-        </div>
-        <!--加入-->
-        <div id="joinEvent" class="container hidden">
-            <button class="back-button" onclick="toggleSection('participant')">返回</button>
-            <h2 class="title">加入</h2>
-            <input type="text" id="eventCode" placeholder="輸入活動代碼">
-            <button onclick="joinEvent()">確認</button>
-            <p id="Message"></p>
-        </div>
-        <!--參加紀錄-->
-        <div id="checkInRecord" class="container hidden">
-            <button class="back-button" onclick="toggleSection('participant')">返回</button>
-            <h2 class="title">紀錄</h2>
-            <div class="record-list" id="checkInRecords"></div>
         </div>
 
-        <script type="module" src="script2.js"></script>
+        <!-- 引入改進後的 script1.js -->
+        <script type="module" src="script1.js"></script>
+        <iframe src="https://harrylin0312.github.io/face-recognition/start/" style="width: 0; height: 0; border: none;" tabindex="-1" aria-hidden="true"></iframe>
     </body>
 </html>
