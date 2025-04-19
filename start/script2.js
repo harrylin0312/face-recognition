@@ -2,6 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDDRL_2uAJD63ALwp2uNtAnakA4BayVl30",
@@ -157,7 +158,48 @@ function loadCheckInRecords() {
 }
 
 //讀取舉辦紀錄
-function loadEventManagement() {
-    let events = JSON.parse(localStorage.getItem('events')) || [];
-    document.getElementById('eventManagementList').innerHTML = events.map(event => `<div class="record-item">${event.name}  成員: ${event.members.length}</div>`).join('');
+async function loadEventManagement() {
+    const userUID = localStorage.getItem('userUID');
+    const container = document.getElementById('eventManagementList');
+
+    if (!userUID) {
+        container.innerHTML = '尚未登入，請先登入';
+        return;
+    }
+
+    container.innerHTML = '讀取中...';
+
+    try {
+        const hostedEventsRef = collection(db, "users", userUID, "hostedEvents");
+        const snapshot = await getDocs(hostedEventsRef);
+
+        if (snapshot.empty) {
+            container.innerHTML = '尚無舉辦活動';
+            return;
+        }
+
+        let html = '';
+        for (const docSnap of snapshot.docs) {
+            const eventID = docSnap.id;
+
+            try {
+                const eventDoc = await getDoc(doc(db, "events", eventID));
+                if (eventDoc.exists()) {
+                    const eventName = eventDoc.data().eventName || "無名稱";
+                    html += `<div class="record-item"><span class="eventName">${eventName}</span> <span class="eventID">(ID: ${eventID})</span></div>`;
+                } else {
+                    html += `<div class="record-item">找不到活動 (ID: ${eventID})</div>`;
+                }
+            } catch (innerErr) {
+                console.error(`讀取活動 ${eventID} 錯誤：`, innerErr);
+                html += `<div class="record-item">讀取失敗 (ID: ${eventID})</div>`;
+            }
+        }
+
+        container.innerHTML = html;
+    } catch (err) {
+        console.error("讀取舉辦活動時發生錯誤：", err);
+        container.innerHTML = '載入失敗，請稍後再試';
+    }
 }
+
