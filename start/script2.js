@@ -1,7 +1,7 @@
 // 導入 Firebase 模組
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDDRL_2uAJD63ALwp2uNtAnakA4BayVl30",
@@ -26,6 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         elements.forEach(element => element.classList.remove('fade-in')); // 清除淡入類別
         loadUserName();
+        
+        const createEventBtn = document.getElementById('createEventBtn');
+        if (createEventBtn) {
+            createEventBtn.addEventListener('click', createEvent);
+        }
     }, 300); // 動畫完成後清除
 });
 
@@ -63,19 +68,65 @@ function toggleSection(sectionId) {
 }
 window.toggleSection = toggleSection;
 
+//顯示用戶名稱
+async function loadUserName() {
+    const userIDElement = document.getElementById('userID');
+    const userUID = localStorage.getItem("userUID");
+    if (!userUID) {
+        userIDElement.innerHTML = '<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+        userIDElement.className = 'red';
+        return;
+    }
+
+    try {
+        const userDocRef = doc(db, "users", userUID);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+            const userData = userDocSnap.data();
+            userIDElement.textContent = `用戶：${userData.userName}`;
+            userIDElement.className = 'green';
+        } else {
+            userIDElement.innerHTML = '<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+            userIDElement.className = 'red';
+        }
+    } catch (error) {
+        console.error('讀取使用者資料失敗:', error);
+        userIDElement.innerHTML = '<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:blue;">登入</a>';
+        userIDElement.className = 'red';
+    }
+}
+
 //舉辦活動
 function createEvent() {
-    let eventName = document.getElementById('eventName').value;
+    const eventName = document.getElementById('eventName').value.trim();
     if (!eventName) {
         alert('請輸入活動名稱');
         return;
     }
-    let events = JSON.parse(localStorage.getItem('events')) || [];
-    events.push({ name: eventName, members: [] });
-    localStorage.setItem('events', JSON.stringify(events)); 
-    alert('活動已建立');
-    document.getElementById('eventName').value = '';
-    loadEventManagement();
+
+    const userUID = localStorage.getItem('userUID');
+    if (!userUID) {
+        alert('請先登入');
+        return;
+    }
+
+    const eventsCollection = collection(db, "events");
+
+    addDoc(eventsCollection, {
+        eventName: eventName,
+        organizerID: userUID,
+        createdAt: serverTimestamp()
+    })
+    .then(() => {
+        alert('活動已成功建立');
+        document.getElementById('eventName').value = '';
+        loadEventManagement();
+    })
+    .catch((error) => {
+        console.error('建立活動失敗：', error);
+        alert('建立活動失敗，請稍後再試');
+    });
 }
 window.createEvent = createEvent;
 
@@ -93,40 +144,14 @@ function joinEvent() {
 }
 window.joinEvent = joinEvent;
 
+//讀取參加紀錄
 function loadCheckInRecords() {
     let joinedEvents = JSON.parse(localStorage.getItem('joinedEvents')) || [];
     document.getElementById('checkInRecords').innerHTML = joinedEvents.map(event => `<div class="record-item">${event.name}  <span class="${event.status === '未打卡' ? 'red' : 'green'}">${event.status}</span></div>`).join('');
 }
 
+//讀取舉辦紀錄
 function loadEventManagement() {
     let events = JSON.parse(localStorage.getItem('events')) || [];
     document.getElementById('eventManagementList').innerHTML = events.map(event => `<div class="record-item">${event.name}  成員: ${event.members.length}</div>`).join('');
-}
-
-async function loadUserName() {
-    const userIDElement = document.getElementById('userID');
-    const userUID = localStorage.getItem("userUID");
-    if (!userUID) {
-        userIDElement.innerHTML = '尚未登入，請前往<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:blue;">登入</a>';
-        userIDElement.className = 'red';
-        return;
-    }
-
-    try {
-        const userDocRef = doc(db, "users", userUID);
-        const userDocSnap = await getDoc(userDocRef);
-
-        if (userDocSnap.exists()) {
-            const userData = userDocSnap.data();
-            userIDElement.textContent = `用戶：${userData.userName}`;
-            userIDElement.className = 'green';
-        } else {
-            userIDElement.innerHTML = '尚未登入，請前往<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:blue;">登入</a>';
-            userIDElement.className = 'red';
-        }
-    } catch (error) {
-        console.error('讀取使用者資料失敗:', error);
-        userIDElement.innerHTML = '尚未登入，請前往<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:blue;">登入</a>';
-        userIDElement.className = 'red';
-    }
 }
