@@ -118,10 +118,16 @@ function createEvent() {
         organizerID: userUID,
         createdAt: serverTimestamp()
     })
-    .then(() => {
+    .then((docRef) => {
         alert('活動已成功建立');
         document.getElementById('eventName').value = '';
         loadEventManagement();
+
+        // 新增儲存到 hostedEvents
+        const hostedEventRef = doc(db, "users", userUID, "hostedEvents", docRef.id);
+        setDoc(hostedEventRef, {
+            eventName: eventName
+        });
     })
     .catch((error) => {
         console.error('建立活動失敗：', error);
