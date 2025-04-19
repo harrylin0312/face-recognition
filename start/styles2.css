@@ -97,26 +97,43 @@ input {
 }
 /*------------------------------------------------------------*/
 .record-list {
-    width: 40%;
-    max-height: 50%;
-    overflow-y: auto;
-    text-align: left;
+    width: 50%; /*寬度*/
+    max-height: 50%; /*最大高度*/
+    overflow-y: auto; /*垂直方向內容過多時自動出現捲軸*/
     font-size: 1.5em;
-    background: white;
+    background: #1aaeb3;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative; /*設定相對定位*/
-    top: 10%;
+    top: 10%; /*元素下移*/
 }
-
+@media(max-width:950px){/*手機版樣式*/
+    .record-list {
+        width: 95%;
+    }
+}
+/*record-item內部排版*//*舉辦清單*/
 .record-item {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #ccc;
-    padding: 10px;
+    display: flex; 
+    align-items: center;/*垂直方向置中*/
+    justify-content: space-between;/*內容兩端對齊*/
+    border-bottom: 1px solid #565656;
+    padding: 12px;
 }
-
+/*活動名稱*/
+.record-item .eventName {
+    font-size: 1em;
+    flex: 1; /*佔用剩餘空間，讓文字區域可彈性延展*/
+    text-align: left;
+    color: #000000;
+}
+/*活動 ID*/
+.record-item .eventID {
+    font-size: 0.5em;
+    text-align: right;
+    color: #575757;
+}
 .red { color: rgb(238, 4, 4); }
 .green { color: green; }
 /*------------------------------------------------------------*/
@@ -172,3 +189,4 @@ input {
 .container:not(.hidden) > *:not(.back-button) {
     opacity: 1; /*確保顯示時可見*/
 }
+/*------------------------------------------------------------*/
