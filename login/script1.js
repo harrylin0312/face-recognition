@@ -1,7 +1,7 @@
 // 導入 Firebase 模組
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDDRL_2uAJD63ALwp2uNtAnakA4BayVl30",
@@ -13,195 +13,175 @@ const firebaseConfig = {
     measurementId: "G-YXSM0L5Z83"
 };
 
+// 錯誤碼轉換函數
+function translateErrorCode(code) {
+    const errorMessages = {
+        "auth/email-already-in-use": "此Email已被註冊。",
+        "auth/invalid-email": "Email格式錯誤。",
+        "auth/weak-password": "密碼至少需要6個字元。",
+        "auth/user-not-found": "找不到此帳號。",
+        "auth/wrong-password": "密碼錯誤。",
+        "auth/missing-password": "請輸入密碼。",
+        "auth/too-many-requests": "嘗試次數過多，請稍後再試。",
+        "auth/network-request-failed": "網路連線錯誤，請檢查您的網路。",
+        "auth/internal-error": "伺服器內部錯誤，請稍後再試。",
+        "auth/operation-not-allowed": "目前不允許此操作，請聯繫管理員。",
+        "auth/invalid-credential": "登入憑證無效，請重新輸入。",
+        "auth/invalid-login-credentials": "帳號或密碼錯誤。",
+    };
+    return errorMessages[code] || "發生未知錯誤：" + code;
+}
+
 // 初始化 Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// 頁面載入時觸發淡入效果
-document.addEventListener('DOMContentLoaded', () => {
-    const mainMenu = document.getElementById('mainMenu');
-    const elements = mainMenu.querySelectorAll('h2, input, button:not(.back-button), div, a');
-    elements.forEach(element => element.classList.add('fade-in')); // 觸發初次淡入
-    setTimeout(() => {
-        elements.forEach(element => element.classList.remove('fade-in')); // 清除淡入類別
-        loadUserName();
-        
-        const createEventBtn = document.getElementById('createEventBtn');
-        if (createEventBtn) {
-            createEventBtn.addEventListener('click', createEvent);
-        }
-    }, 300); // 動畫完成後清除
-});
-
 // 切換介面
-function toggleSection(sectionId) {
-    const allContainers = document.querySelectorAll('.container');
-    const nextSection = document.getElementById(sectionId);
+function togglePage() {
+    let loginPage = document.getElementById('loginPage');
+    let registerPage = document.getElementById('registerPage');
+    let loginElements = loginPage.querySelectorAll('h2, input, button, a, p');
+    let registerElements = registerPage.querySelectorAll('h2, input, button, a, p');
+    const container = document.querySelector(".container");
 
-    allContainers.forEach(container => {
-        if (!container.classList.contains('hidden')) {
-            const elements = container.querySelectorAll('h2, input, button:not(.back-button), div, a');
-            elements.forEach(element => element.classList.add('fade-out')); // 觸發淡出
-            setTimeout(() => {
-                container.classList.add('hidden');
-                elements.forEach(element => element.classList.remove('fade-out')); // 清除淡出類別
-            }, 300); // 等待淡出完成
-        }
-    });
-    document.querySelectorAll("input").forEach(input => input.value = "");
+    if (loginPage.style.display === 'none') {
+        // 從註冊切到登入
+        container.classList.remove("expand2");
+        container.classList.add("expand3");
 
-    setTimeout(() => {
-        nextSection.classList.remove('hidden');
-        const nextElements = nextSection.querySelectorAll('h2, input, button:not(.back-button), div, a');
-        nextElements.forEach(element => element.classList.add('fade-in')); // 觸發淡入
+        registerElements.forEach(element => element.classList.remove('visible'));
+        registerElements.forEach(element => element.classList.add('hidden'));
+
         setTimeout(() => {
-            nextElements.forEach(element => element.classList.remove('fade-in')); // 清除淡入類別
-        }, 500); // 清除動畫類別
-        if (sectionId === 'checkInRecord') {
-            loadCheckInRecords();
-        }
-        if (sectionId === 'manageEvent') {
-            loadEventManagement();
-        }
-    }, 300); // 與淡出時間同步
-}
-window.toggleSection = toggleSection;
+            registerPage.style.display = 'none';
+            loginPage.style.display = 'block';
+            loginElements.forEach(element => element.classList.remove('hidden'));
+            loginElements.forEach(element => element.classList.add('visible'));
+        }, 300);
 
-//顯示用戶名稱
-async function loadUserName() {
-    const userIDElement = document.getElementById('userID');
-    const userUID = localStorage.getItem("userUID");
-    if (!userUID) {
-        userIDElement.innerHTML = '<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
-        userIDElement.className = 'red';
-        return;
-    }
+        document.querySelectorAll("input").forEach(input => input.value = "");
+        document.getElementById("RegisterMessage").innerText = "";
+        document.getElementById("LoginMessage").innerText = "";
+    } else {
+        // 從登入切到註冊
+        container.classList.remove("expand3");
+        container.classList.add("expand2");
 
-    try {
-        const userDocRef = doc(db, "users", userUID);
-        const userDocSnap = await getDoc(userDocRef);
+        loginElements.forEach(element => element.classList.remove('visible'));
+        loginElements.forEach(element => element.classList.add('hidden'));
 
-        if (userDocSnap.exists()) {
-            const userData = userDocSnap.data();
-            userIDElement.textContent = `用戶：${userData.userName}`;
-            userIDElement.className = 'green';
-        } else {
-            userIDElement.innerHTML = '<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
-            userIDElement.className = 'red';
-        }
-    } catch (error) {
-        console.error('讀取使用者資料失敗:', error);
-        userIDElement.innerHTML = '<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:blue;">登入</a>';
-        userIDElement.className = 'red';
+        setTimeout(() => {
+            loginPage.style.display = 'none';
+            registerPage.style.display = 'block';
+            registerElements.forEach(element => element.classList.remove('hidden'));
+            registerElements.forEach(element => element.classList.add('visible'));
+        }, 300);
     }
 }
 
-//舉辦活動
-function createEvent() {
-    const eventName = document.getElementById('eventName').value.trim();
-    if (!eventName) {
-        alert('請輸入活動名稱');
+// 註冊功能
+function register() {
+    let username = document.getElementById("registerUsername").value;
+    let email = document.getElementById("registerEmail").value;
+    let password = document.getElementById("registerPassword").value;
+
+    if (!username || !email || !password) {
+        document.getElementById("RegisterMessage").innerText = "請輸入完整資訊！";
+        document.getElementById("RegisterMessage").className = "message-error";
         return;
     }
 
-    const userUID = localStorage.getItem('userUID');
-    if (!userUID) {
-        alert('請先登入');
-        return;
-    }
+    createUserWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential) => {
+            const user = userCredential.user;
+            try {
+                await setDoc(doc(db, "users", user.uid), {
+                    userName: username,
+                    email: user.email,
+                    createdAt: new Date()
+                });
 
-    const eventsCollection = collection(db, "events");
-
-    addDoc(eventsCollection, {
-        eventName: eventName,
-        organizerID: userUID,
-        createdAt: serverTimestamp()
-    })
-    .then((docRef) => {
-        alert('活動已成功建立');
-        document.getElementById('eventName').value = '';
-        loadEventManagement();
-
-        // 新增儲存到 hostedEvents
-        const hostedEventRef = doc(db, "users", userUID, "hostedEvents", docRef.id);
-        setDoc(hostedEventRef, {
-            eventName: eventName
+                document.getElementById("RegisterMessage").innerText = "註冊成功！請前往登入。";
+                document.getElementById("RegisterMessage").className = "message-success";
+                setTimeout(() => {
+                    togglePage(); // 自動切換回登入頁面
+                }, 1000);
+            } catch (firestoreError) {
+                console.error("Firestore 儲存錯誤:", firestoreError);
+                document.getElementById("RegisterMessage").innerText = "註冊成功，但資料儲存失敗！";
+                document.getElementById("RegisterMessage").className = "message-error";
+            }
+        })
+        .catch((error) => {
+            let errorMessage = translateErrorCode(error.code);
+            document.getElementById("RegisterMessage").innerText = errorMessage;
+            document.getElementById("RegisterMessage").className = "message-error";
         });
-    })
-    .catch((error) => {
-        console.error('建立活動失敗：', error);
-        alert('建立活動失敗，請稍後再試');
-    });
-}
-window.createEvent = createEvent;
-
-//加入活動
-function joinEvent() {
-    let eventCode = document.getElementById('eventCode').value;
-    if (!eventCode) {
-        alert('請輸入活動代碼');    
-        return;
-    }
-    let joinedEvents = JSON.parse(localStorage.getItem('joinedEvents')) || [];
-    joinedEvents.push({ name: eventCode, status: "未打卡" });
-    localStorage.setItem('joinedEvents', JSON.stringify(joinedEvents)); 
-    alert('成功加入活動');
-}
-window.joinEvent = joinEvent;
-
-//讀取參加紀錄
-function loadCheckInRecords() {
-    let joinedEvents = JSON.parse(localStorage.getItem('joinedEvents')) || [];
-    document.getElementById('checkInRecords').innerHTML = joinedEvents.map(event => `<div class="record-item">${event.name}  <span class="${event.status === '未打卡' ? 'red' : 'green'}">${event.status}</span></div>`).join('');
 }
 
-//讀取舉辦紀錄
-async function loadEventManagement() {
-    const userUID = localStorage.getItem('userUID');
-    const container = document.getElementById('eventManagementList');
+// 登入功能
+function login() {
+    let email = document.getElementById("loginEmail").value;
+    let password = document.getElementById("loginPassword").value;
 
-    // 若沒登入
-    if (!userUID) {
-        container.innerHTML = '<div class="record-item red">尚未登入，請先登入</div>';
-        return;
-    }
-
-    // 顯示 loading 動畫（使用 CSS class 加動畫效果）
-    container.innerHTML = `<div class="record-item loading">讀取中...</div>`;
-
-    try {
-        const hostedEventsRef = collection(db, "users", userUID, "hostedEvents");
-        const snapshot = await getDocs(hostedEventsRef);
-
-        if (snapshot.empty) {
-            container.innerHTML = `<div class="record-item">尚無舉辦活動</div>`;
-            return;
-        }
-
-        const result = [];
-
-        for (const docSnap of snapshot.docs) {
-            const eventID = docSnap.id;
+    signInWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential) => {
+            const user = userCredential.user;
+            localStorage.removeItem("userUID");
+            localStorage.setItem("userUID", user.uid);//儲存登入者uid
 
             try {
-                const eventDoc = await getDoc(doc(db, "events", eventID));
-                if (eventDoc.exists()) {
-                    const eventName = eventDoc.data().eventName || "無名稱";
-                    result.push(`<div class="record-item">${eventName} (ID: ${eventID})</div>`);
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const userName = docSnap.data().userName;
+                    document.getElementById("LoginMessage").innerText = `登入成功！歡迎，${userName}！`;
                 } else {
-                    result.push(`<div class="record-item">找不到活動 (ID: ${eventID})</div>`);
+                    document.getElementById("LoginMessage").innerText = `登入成功！歡迎，使用者！`;
                 }
-            } catch (err) {
-                console.error(`讀取活動 ${eventID} 失敗:`, err);
-                result.push(`<div class="record-item red">讀取活動失敗 (ID: ${eventID})</div>`);
+            } catch (e) {
+                document.getElementById("LoginMessage").innerText = `登入成功！歡迎，使用者！`;
             }
-        }
+            
+            document.getElementById("LoginMessage").className = "message-success";
 
-        container.innerHTML = result.join('');
-    } catch (error) {
-        console.error('載入舉辦活動失敗：', error);
-        container.innerHTML = `<div class="record-item red">載入失敗，請稍後再試</div>`;
-    }
+            setTimeout(() => {
+                const container = document.querySelector(".container");
+                const elementsToHide = container.querySelectorAll("input, h2, button, a, p");
+                elementsToHide.forEach(element => element.classList.remove('visible'));
+                elementsToHide.forEach(element => element.classList.add("hidden"));
+                container.classList.remove("expand3");
+                container.classList.add("expand");
+
+                setTimeout(() => {
+                    window.location.href = "https://harrylin0312.github.io/face-recognition/start/";
+                }, 1500);
+            }, 1000);
+        })
+        .catch((error) => {
+            let errorMessage = translateErrorCode(error.code);
+            document.getElementById("LoginMessage").innerText = errorMessage;
+            document.getElementById("LoginMessage").className = "message-error";
+        });
 }
 
+// 監聽 Enter 鍵以執行登入
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        login(); // 呼叫登入函數
+        register();//呼叫註冊函數
+    }
+});
+
+// 回退強制重整強制重整
+window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+});
+
+// 將函數暴露給全局，以便 HTML 事件處理器使用
+window.togglePage = togglePage;
+window.register = register;
+window.login = login;
