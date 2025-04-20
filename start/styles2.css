@@ -54,7 +54,7 @@ button {
     background-color: white;
     color: #333;
     border: none;
-    border-radius: 40px;
+    border-radius: 50px;
     padding: 20px 40px;
     font-size: 2.5em;
     cursor: pointer;
@@ -66,7 +66,7 @@ button:hover {
     transform: scale(1.1);
 }
 /*------------------------------------------------------------*/
-/*輸入*/
+/*輸入框*/
 input {
     width: 60%;
     padding: 12px;
@@ -74,6 +74,11 @@ input {
     border: 1px solid #ccc;
     border-radius: 40px;
     font-size: 1.5em;
+}
+@media(max-width:950px){/*手機版樣式*/
+    input{
+        width: 90%;
+    }
 }
 /*------------------------------------------------------------*/
 /*隱藏*/
@@ -96,30 +101,25 @@ input {
     opacity: 1; /*固定可見，不參與動畫*/
 }
 /*------------------------------------------------------------*/
+/*顯示清單*/
 .record-list {
-    width: 50%; /*寬度*/
-    max-height: 50%; /*最大高度*/
-    overflow-y: auto; /*垂直方向內容過多時自動出現捲軸*/
+    width: 50%;/*寬度*/
+    max-height: 50%;/*最大高度*/
+    overflow-y: auto;/*垂直方向內容過多時自動出現捲軸*/
     font-size: 1.5em;
     background: #ffffff;
     padding: 10px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative; /*設定相對定位*/
-    top: 10%; /*元素下移*/
-    backdrop-filter: blur(40px); /* 毛玻璃關鍵：背景模糊 */
-    background-color: rgba(255, 255, 255, 0.2); /* 半透明背景 */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* 半透明邊框讓毛玻璃更明顯 */
+    top: 10%;
+    backdrop-filter: blur(40px); /*背景模糊*/
+    background-color: rgba(255, 255, 255, 0.2); /*半透明背景*/
+    border: 1px solid rgba(255, 255, 255, 0.2); /*半透明邊框*/
 }
-@media(max-width:950px){/*手機版樣式*/
+@media(max-width:950px) {/*手機版樣式*/
     .record-list {
         width: 105%;
-    }
-    .record-item .eventDate {
-        position: static; /* 取消絕對定位！ */
-        transform: none; /* 取消位移！ */
-        text-align: left;
-        flex: 1;
     }
 }
 /*record-item內部排版*//*舉辦清單*/
@@ -167,9 +167,15 @@ input {
 #userID {
     font-size: 20px;
     position: absolute;
-    top: 10px;
-    right: 15px;
+    position: fixed;
+    top: 8.5%;
+    right:  5%;
+    z-index: 1000; /*確保在最上層*/
+    background-color: rgba(255,255,255,0.7);
+    padding: 5px 10px;
+    border-radius: 15px;
 }
+
 /*------------------------------------------------------------*/
 /*淡出動畫*/
 @keyframes fadeOut {
