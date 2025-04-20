@@ -101,38 +101,58 @@ input {
     max-height: 50%; /*最大高度*/
     overflow-y: auto; /*垂直方向內容過多時自動出現捲軸*/
     font-size: 1.5em;
-    background: #1aaeb3;
-    padding: 20px;
+    background: #ffffff;
+    padding: 10px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative; /*設定相對定位*/
     top: 10%; /*元素下移*/
+    backdrop-filter: blur(40px); /* 毛玻璃關鍵：背景模糊 */
+    background-color: rgba(255, 255, 255, 0.2); /* 半透明背景 */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* 半透明邊框讓毛玻璃更明顯 */
 }
 @media(max-width:950px){/*手機版樣式*/
     .record-list {
-        width: 95%;
+        width: 105%;
+    }
+    .record-item .eventDate {
+        position: static; /* 取消絕對定位！ */
+        transform: none; /* 取消位移！ */
+        text-align: left;
+        flex: 1;
     }
 }
 /*record-item內部排版*//*舉辦清單*/
 .record-item {
     display: flex; 
-    align-items: center;/*垂直方向置中*/
+    align-items:flex-end;
     justify-content: space-between;/*內容兩端對齊*/
     border-bottom: 1px solid #565656;
     padding: 12px;
+    position: relative;/*內部絕對定位*/
 }
 /*活動名稱*/
 .record-item .eventName {
     font-size: 1em;
-    flex: 1; /*佔用剩餘空間，讓文字區域可彈性延展*/
+    flex: 1; /* 比 eventDate 稍寬 */
     text-align: left;
     color: #000000;
 }
-/*活動 ID*/
+/*活動日期*/
+.record-item .eventDate {
+    font-size: 0.7em;
+    color: #575757;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+/*活動ID*/
 .record-item .eventID {
     font-size: 0.5em;
-    text-align: right;
     color: #575757;
+    text-align: right;
+    flex: 1;
 }
 .red { color: rgb(238, 4, 4); }
 .green { color: green; }
