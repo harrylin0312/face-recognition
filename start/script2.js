@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 切換介面
-function toggleSection(sectionId) {
+function toggleSection(sectionId, eventId = null) {
     const allContainers = document.querySelectorAll('.container');
     const nextSection = document.getElementById(sectionId);
 
@@ -65,6 +65,9 @@ function toggleSection(sectionId) {
         }
         if (sectionId === 'manageEvent') {
             loadEventManagement();
+        }
+        if (sectionId === 'eventDetail' && eventId) {
+            loadEventDetail(eventId);
         }
     }, 300); // 與淡出時間同步
 }
@@ -295,10 +298,10 @@ async function loadEventManagement() {
                     const formattedDate = createdAt
                         ? `${createdAt.getFullYear()}/${createdAt.getMonth() + 1}/${createdAt.getDate()}`
                         : "未知日期";
-                    html += `<div class="record-item">
+                    html += `<div class="record-item" onclick="toggleSection('eventDetail', '${eventID}')">
                                 <span class="eventName">${eventName}</span>
                                 <span class="eventDate">${formattedDate}</span>
-                                <span class="eventID">(ID: ${eventID})</span>
+                                <span class="arrow">&gt;</span>
                             </div>`;
                 } else {
                     html += `<div class="record-item">找不到活動 (ID: ${eventID})</div>`;
@@ -315,3 +318,69 @@ async function loadEventManagement() {
         container.innerHTML = '載入失敗，請稍後再試';
     }
 }
+//讀取活動詳情
+async function loadEventDetail(eventID) {
+    const titleElement = document.querySelector('#eventDetail .title');
+    const container = document.getElementById('EventDetailList');
+
+    container.innerHTML = '讀取中...';
+
+    try {
+        // 讀取活動名稱
+        const eventDocRef = doc(db, "events", eventID);
+        const eventDocSnap = await getDoc(eventDocRef);
+
+        if (eventDocSnap.exists()) {
+            const eventData = eventDocSnap.data();
+            titleElement.textContent = eventData.eventName || "無名稱";
+        } else {
+            titleElement.textContent = "找不到活動資料";
+            container.innerHTML = '找不到活動';
+            return;
+        }
+
+        // 讀取所有參加者
+        const participantsRef = collection(db, "events", eventID, "participants");
+        const participantsSnap = await getDocs(participantsRef);
+
+        if (participantsSnap.empty) {
+            container.innerHTML = '尚無參加者';
+            return;
+        }
+
+        let html = '';
+        for (const participantDoc of participantsSnap.docs) {
+            const participantData = participantDoc.data();
+            const userName = participantData.userName || "無名稱";
+            const checkStatus = participantData.checkStatus || "未打卡";
+            const checkTimeStamp = participantData.checkTime?.toDate?.();
+            const checkTime = checkTimeStamp
+                ? `${checkTimeStamp.getFullYear()}/${checkTimeStamp.getMonth() + 1}/${checkTimeStamp.getDate()}`
+                : "未知日期";
+
+            html += `<div class="record-item">
+                        <span class="eventName">${userName}</span>
+                        <span class="eventDate">${checkTime}</span>
+                        <span class="${checkStatus === '未打卡' ? 'red' : 'green'}">${checkStatus}</span>
+                    </div>`;
+        }
+
+        const totalParticipants = participantsSnap.size;
+        let checkedInCount = 0;
+        participantsSnap.forEach(doc => {
+            const data = doc.data();
+            if (data.checkStatus && data.checkStatus !== '未打卡') {
+                checkedInCount++;
+            }
+        });
+
+        const progressElement = document.getElementById('checkInProgress');
+        progressElement.textContent = `打卡進度：${checkedInCount}/${totalParticipants}`;
+        container.innerHTML = html;
+
+    } catch (error) {
+        console.error("讀取活動詳情錯誤：", error);
+        container.innerHTML = '載入失敗，請稍後再試';
+    }
+}
+//<span class="eventID">(ID: ${eventID})</span>
