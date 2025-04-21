@@ -17,7 +17,7 @@
                 <button onclick="toggleSection('participant')">參加</button>
             </div>
         </div>
-        <!--舉辦者選單-->
+        <!--管理選單-->
         <div id="organizer" class="container hidden">
             <button class="back-button" onclick="toggleSection('mainMenu')">返回</button>
             <h2 class="title">管理</h2>
@@ -40,7 +40,14 @@
             <h2 class="title">紀錄</h2>
             <div class="record-list" id="eventManagementList"></div>
         </div>
-        <!--參與者選單-->
+        <!--舉辦活動詳情-->
+        <div id="eventDetail" class="container hidden">
+            <button class="back-button" onclick="toggleSection('manageEvent')">返回</button>
+            <h2 class="title"></h2>
+            <div id="checkInProgress"></div>
+            <div class="record-list" id="EventDetailList"></div>
+        </div>
+        <!--參加選單-->
         <div id="participant" class="container hidden">
             <button class="back-button" onclick="toggleSection('mainMenu')">返回</button>
             <h2 class="title">參加</h2>
@@ -57,7 +64,7 @@
             <button onclick="joinEvent()">確認</button>
             <p id="Message"></p>
         </div>
-        <!--參加紀錄-->
+        <!--加入紀錄-->
         <div id="checkInRecord" class="container hidden">
             <button class="back-button" onclick="toggleSection('participant')">返回</button>
             <h2 class="title">紀錄</h2>
