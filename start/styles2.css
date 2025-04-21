@@ -103,19 +103,14 @@ input {
 /*------------------------------------------------------------*/
 /*顯示清單*/
 .record-list {
+    background-color: #6aa7b600;
     width: 50%;/*寬度*/
     max-height: 50%;/*最大高度*/
     overflow-y: auto;/*垂直方向內容過多時自動出現捲軸*/
     font-size: 1.5em;
-    background: #ffffff;
-    padding: 10px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;/*內邊距*/
     position: relative; /*設定相對定位*/
     top: 10%;
-    backdrop-filter: blur(40px); /*背景模糊*/
-    background-color: rgba(255, 255, 255, 0.2); /*半透明背景*/
-    border: 1px solid rgba(255, 255, 255, 0.2); /*半透明邊框*/
 }
 @media(max-width:950px) {/*手機版樣式*/
     .record-list {
@@ -125,11 +120,21 @@ input {
 /*record-item內部排版*//*舉辦清單*/
 .record-item {
     display: flex; 
-    align-items:flex-end;
-    justify-content: space-between;/*內容兩端對齊*/
-    border-bottom: 1px solid #565656;
-    padding: 12px;
-    position: relative;/*內部絕對定位*/
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 25px;
+    background-color: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2); /*邊框*/
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15); /*陰影*/
+    padding: 12px 20px; /* 內邊距 */
+    margin: 25px 0; /* 每列之間留間隔 */
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+/*懸浮動畫*/
+.record-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 /*活動名稱*/
 .record-item .eventName {
@@ -154,6 +159,15 @@ input {
     text-align: right;
     flex: 1;
 }
+/*箭頭*/
+.record-item .arrow {
+    font-size: 1em;
+    color: #575757b0;
+    text-align: right;
+    flex: 1;
+    font-weight:lighter;
+}
+/*------------------------------------------------------------*/
 .red { color: rgb(238, 4, 4); }
 .green { color: green; }
 /*------------------------------------------------------------*/
@@ -168,14 +182,28 @@ input {
     font-size: 20px;
     position: absolute;
     position: fixed;
-    top: 8.5%;
+    top: 8.2%;
     right:  5%;
     z-index: 1000; /*確保在最上層*/
-    background-color: rgba(255,255,255,0.7);
+    background-color: rgba(255, 255, 255, 0.75);
     padding: 5px 10px;
-    border-radius: 15px;
+    border-radius: 40px;
 }
-
+/* 打卡進度區塊 */
+#checkInProgress {
+    margin: 10px 0;
+    font-size: 1.5em;
+    color: #333; /* 顏色可自訂 */
+    text-align: center; /* 置中對齊 */
+}
+/*------------------------------------------------------------*/
+/* 打卡進度 */
+#checkInProgress {
+    margin: 10px 0;
+    font-size: 1.5em;
+    color: #333; /* 顏色可自訂 */
+    text-align: center; /* 置中對齊 */
+}
 /*------------------------------------------------------------*/
 /*淡出動畫*/
 @keyframes fadeOut {
