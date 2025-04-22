@@ -1,3 +1,6 @@
+html, body {
+    overflow: hidden;
+}
 /*背景*/
 body {
     margin: 0;
