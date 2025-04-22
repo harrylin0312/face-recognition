@@ -34,6 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 300); // 動畫完成後清除
 });
+//動態視窗高度
+function setVH() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+window.addEventListener('load', setVH);
+window.addEventListener('resize', setVH);
 
 // 切換介面
 function toggleSection(sectionId, eventId = null) {
