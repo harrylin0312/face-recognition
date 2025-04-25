@@ -19,7 +19,7 @@ body {
 .container {
     background-color: #6aa7b6;
     padding: 20px 30px; /*設定內邊距*/
-    border-radius: 15px; /*設定圓角邊框*/
+    border-radius: 30px; /*設定圓角邊框*/
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /*設定陰影*/
     text-align: center; /*文字置中對齊*/
     max-height: 80%;
@@ -30,7 +30,7 @@ body {
     flex-direction: column; /*設定子元素排列方向為垂直 */
     justify-content: center; /*垂直方向置中對齊 */
     align-items: center; /*水平方向置中對齊 */
-    position: relative; /*設定相對定位*/
+    position: relative; /*定位錨點*/
 }
 /*手機版容器樣式*/
 @media(max-width:950px){
@@ -52,14 +52,14 @@ body {
     gap: 12vw;
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%);/*自身高度校正*/
 }
 /*按鈕*/
 button {
     background-color: white;
     color: #333;
     border: none;
-    border-radius: 50px;
+    border-radius: 970px;
     padding: 20px 40px;
     font-size: 2.5em;
     cursor: pointer;
@@ -70,14 +70,20 @@ button:hover {
     background-color: #f0f0f0;
     transform: scale(1.1);
 }
+@media(max-width:950px){
+    .button-group{
+        gap: 12vw;
+        font-size: 0.8em;
+    }
+}
 /*------------------------------------------------------------*/
 /*輸入框*/
 input {
     width: 60%;
     padding: 12px;
-    margin: 60px 0;
+    margin: 100px 0;
     border: 1px solid #ccc;
-    border-radius: 40px;
+    border-radius: 970px;
     font-size: 1.5em;
 }
 @media(max-width:950px){/*手機版樣式*/
@@ -89,21 +95,6 @@ input {
 /*隱藏*/
 .hidden {
     display: none;
-}
-/*------------------------------------------------------------*/
-/*返回按鈕*/
-.back-button {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    background-color: #5b7d85;
-    color: white;
-    padding: 10px 20px;
-    font-size: 1.5em;
-    border: none;
-    border-radius: 40px;
-    cursor: pointer;
-    opacity: 1; /*固定可見，不參與動畫*/
 }
 /*------------------------------------------------------------*/
 /*顯示清單*/
@@ -186,20 +177,43 @@ input {
 #userID {
     font-size: 20px;
     position: absolute;
-    position: fixed;
-    top: 8.2%;
-    right:  5%;
+    top: 9.7vh;
+    right:  5vw;
+    transform: translateY(-50%);/*自身高度校正*/
     z-index: 1000; /*確保在最上層*/
     background-color: rgba(255, 255, 255, 0.75);
     padding: 5px 10px;
     border-radius: 40px;
 }
-/* 打卡進度區塊 */
-#checkInProgress {
-    margin: 10px 0;
+/*------------------------------------------------------------*/
+/*返回按鈕*/
+.back-button {
+    position: absolute;
+    top: 4.3vh;
+    left: 1vw;
+    transform: translateY(-50%);/*自身高度校正*/
+    background-color: #5b7d85;
+    color: white;
+    padding: 10px 20px;
     font-size: 1.5em;
-    color: #333; /* 顏色可自訂 */
-    text-align: center; /* 置中對齊 */
+    border: none;
+    border-radius: 970px;
+    cursor: pointer;
+    opacity: 1; /*固定可見，不參與動畫*/
+}
+.back-button:hover {
+    background-color: #4a6b72; /* 懸浮時變深色 */
+    transform: translateY(-50%) scale(1.05); /* 微放大 */
+    transition: background-color 0.3s, transform 0.2s;
+}
+@media(max-width:950px) {/*手機版樣式*/
+    .userID{
+        right: 7vw;
+        top: 7vh;
+    }
+    .back-button{
+        left: 1vw;
+    }
 }
 /*------------------------------------------------------------*/
 /* 打卡進度 */
