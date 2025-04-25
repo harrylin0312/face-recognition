@@ -32,8 +32,36 @@ document.addEventListener('DOMContentLoaded', () => {
         if (createEventBtn) {
             createEventBtn.addEventListener('click', createEvent);
         }
+
+        const sectionBtnMap = [
+            ['btnToOrganizer', 'organizer'],
+            ['btnToParticipant', 'participant'],
+            ['btnBackToMainFromOrganizer', 'mainMenu'],
+            ['btnToCreateEvent', 'createEvent'],
+            ['btnToManageEvent', 'manageEvent'],
+            ['btnBackToOrganizerFromCreate', 'organizer'],
+            ['btnBackToOrganizerFromManage', 'organizer'],
+            ['btnBackToManageFromDetail', 'manageEvent'],
+            ['btnToJoinEvent', 'joinEvent'],
+            ['btnToCheckInRecord', 'checkInRecord'],
+            ['btnBackToMainFromParticipant', 'mainMenu'],
+            ['btnBackToParticipantFromJoin', 'participant'],
+            ['btnBackToParticipantFromRecord', 'participant']
+        ];
+        sectionBtnMap.forEach(([id, target]) => {
+            const btn = document.getElementById(id);
+            if (btn) {
+                btn.addEventListener('click', () => toggleSection(target));
+            }
+        });
+
+        const joinEventBtn = document.getElementById('joinEventBtn');
+        if (joinEventBtn) {
+            joinEventBtn.addEventListener('click', joinEvent);
+        }
     }, 300); // 動畫完成後清除
 });
+
 //動態視窗高度
 function setVH() {
     let vh = window.innerHeight * 0.01;
