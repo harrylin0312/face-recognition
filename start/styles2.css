@@ -10,36 +10,36 @@ body {
     font-family: Arial, sans-serif;
     background-color: #698F99;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center;/*垂直方向置中對齊*/
+    align-items: center;/*水平方向置中對齊*/
     height: calc(var(--vh) * 100);
 }
 /*------------------------------------------------------------*/
 /*預設容器樣式*/
 .container {
-    background-color: #6aa7b6;
-    padding: 20px 30px; /*設定內邊距*/
-    border-radius: 30px; /*設定圓角邊框*/
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /*設定陰影*/
-    text-align: center; /*文字置中對齊*/
     max-height: 80%;
     max-width: 90%;
     height: 80%;
     width: 90%;
+    padding: 20px 20px;/*設定內邊距*/
+    background-color: #6aa7b6;
+    border-radius: 30px;/*設定圓角邊框*/
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);/*設定陰影*/
+    text-align: center;/*文字置中對齊*/
     display: flex; 
-    flex-direction: column; /*設定子元素排列方向為垂直 */
-    justify-content: center; /*垂直方向置中對齊 */
-    align-items: center; /*水平方向置中對齊 */
-    position: relative; /*定位錨點*/
+    flex-direction: column;/*設定子元素排列方向為垂直*/
+    justify-content: center;/*垂直方向置中對齊*/
+    align-items: center;/*水平方向置中對齊*/
+    position: relative;/*定位錨點*/
 }
 /*手機版容器樣式*/
-@media(max-width:950px){
+@media(max-width:700px){
     .container {
         width: 80%;
     }
 }
 /*------------------------------------------------------------*/
-.title { /*-標題*/
+.title {/*-標題*/
     font-size: 4em;
     position: absolute;
     top: 12%;
@@ -59,7 +59,7 @@ button {
     background-color: white;
     color: #333;
     border: none;
-    border-radius: 970px;
+    border-radius: 980px;
     padding: 20px 40px;
     font-size: 2.5em;
     cursor: pointer;
@@ -70,23 +70,39 @@ button:hover {
     background-color: #f0f0f0;
     transform: scale(1.1);
 }
-@media(max-width:950px){
+@media(max-width:700px){
     .button-group{
-        gap: 12vw;
+        gap: 10vw;
         font-size: 0.8em;
     }
+    button{
+        padding: 15px 30px;
+    }
+}
+/* 確認按鈕定位 */
+#createEventBtn,
+#joinEventBtn {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2em;
 }
 /*------------------------------------------------------------*/
 /*輸入框*/
 input {
     width: 60%;
     padding: 12px;
-    margin: 100px 0;
+    margin: 0;
     border: 1px solid #ccc;
     border-radius: 970px;
     font-size: 1.5em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
-@media(max-width:950px){/*手機版樣式*/
+@media(max-width:700px){/*手機版樣式*/
     input{
         width: 90%;
     }
@@ -99,16 +115,16 @@ input {
 /*------------------------------------------------------------*/
 /*顯示清單*/
 .record-list {
-    background-color: #6aa7b600;
+    top: 10%;
     width: 50%;/*寬度*/
     max-height: 50%;/*最大高度*/
+    padding: 10px;/*內邊距*/
+    background-color: #6aa7b600;
     overflow-y: auto;/*垂直方向內容過多時自動出現捲軸*/
     font-size: 1.5em;
-    padding: 10px;/*內邊距*/
     position: relative; /*設定相對定位*/
-    top: 10%;
 }
-@media(max-width:950px) {/*手機版樣式*/
+@media(max-width:700px) {/*手機版樣式*/
     .record-list {
         width: 105%;
     }
@@ -119,11 +135,10 @@ input {
     align-items: center;
     justify-content: space-between;
     border-radius: 25px;
-    background-color: rgba(255, 255, 255, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.2); /*邊框*/
+    background-color: rgba(255, 255, 255, 0.35);
     box-shadow: 0 2px 4px rgba(0,0,0,0.15); /*陰影*/
-    padding: 12px 20px; /* 內邊距 */
-    margin: 25px 0; /* 每列之間留間隔 */
+    padding: 30px 20px; /* 內邊距 */
+    margin: 20px 0; /* 每列之間留間隔 */
     position: relative;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -131,6 +146,12 @@ input {
 .record-item:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+/*取消懸浮動畫*/
+.record-item.no-hover:hover {
+    transform: none !important;
+    transition: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 /*活動名稱*/
 .record-item .eventName {
@@ -163,11 +184,24 @@ input {
     flex: 1;
     font-weight:lighter;
 }
+/*舉辦活動按鈕樣式*/
+.record-item .btnCreateEvent {
+    font-size: 1em;
+    flex: 1;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.5);
+}
+.record-item .btnJoinEvent {
+    font-size: 1em;
+    flex: 1;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.5);
+}
 /*------------------------------------------------------------*/
 .red { color: rgb(238, 4, 4); }
 .green { color: green; }
 /*------------------------------------------------------------*/
-/*輸入提示訊息*/
+/*輸入提示訊息*//*暫時*/
 #Message {
     font-size: 14px;
     margin-top: 10px;
@@ -175,45 +209,35 @@ input {
 /*------------------------------------------------------------*/
 /*用戶資訊*/
 #userID {
-    font-size: 20px;
     position: absolute;
-    top: 9.7vh;
-    right:  5vw;
+    top: 20px;
+    right: 20px;
     transform: translateY(-50%);/*自身高度校正*/
-    z-index: 1000; /*確保在最上層*/
-    background-color: rgba(255, 255, 255, 0.75);
     padding: 5px 10px;
-    border-radius: 40px;
+    background-color: rgba(255, 255, 255, 0.75);
+    border-radius: 970px;
+    font-size: 20px;
+    z-index: 1000; /*確保在最上層*/
 }
 /*------------------------------------------------------------*/
 /*返回按鈕*/
 .back-button {
     position: absolute;
-    top: 4.3vh;
-    left: 1vw;
-    transform: translateY(-50%);/*自身高度校正*/
-    background-color: #5b7d85;
+    top: 20px;
+    left: 20px;
+    padding: 8px 20px;
+    background-color: #698F99;
+    border-radius: 980px;
+    font-size: 20px;
     color: white;
-    padding: 10px 20px;
-    font-size: 1.5em;
     border: none;
-    border-radius: 970px;
     cursor: pointer;
     opacity: 1; /*固定可見，不參與動畫*/
 }
 .back-button:hover {
     background-color: #4a6b72; /* 懸浮時變深色 */
-    transform: translateY(-50%) scale(1.05); /* 微放大 */
+    transform: translateY(-5%) scale(1.05); /* 微放大 */
     transition: background-color 0.3s, transform 0.2s;
-}
-@media(max-width:950px) {/*手機版樣式*/
-    .userID{
-        right: 7vw;
-        top: 7vh;
-    }
-    .back-button{
-        left: 1vw;
-    }
 }
 /*------------------------------------------------------------*/
 /* 打卡進度 */
@@ -262,4 +286,3 @@ input {
 .container:not(.hidden) > *:not(.back-button) {
     opacity: 1; /*確保顯示時可見*/
 }
-/*------------------------------------------------------------*/
