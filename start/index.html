@@ -9,66 +9,50 @@
         <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./I'm-watching-you.png" type="image/png" />
     </head>
     <body>
-        <p id="userID"></p>
         <!--主選單-->
         <div class="container" id="mainMenu">
+            <p id="userID"></p>
             <div class="button-group">
-                <button id="btnToOrganizer">管理</button>
-                <button id="btnToParticipant">參加</button>
+                <button id="toManageEvent">管理</button>
+                <button id="toJoinRecord">參加</button>
             </div>
         </div>
-        <!--管理選單-->
-        <div id="organizer" class="container hidden">
-            <button class="back-button" id="btnBackToMainFromOrganizer">返回</button>
-            <h2 class="title">管理</h2>
-            <div class="button-group">
-                <button id="btnToCreateEvent">舉辦</button>
-                <button id="btnToManageEvent">紀錄</button>
-            </div>
+
+        <!--舉辦紀錄-->
+        <div id="manageEvent" class="container hidden">
+            <button class="back-button" id="bckToMainMenuFrmManage">返回</button>
+            <h2 class="title">紀錄</h2>
+            <div class="record-list" id="eventManagementList"></div>
         </div>
         <!--舉辦-->
         <div id="createEvent" class="container hidden">
-            <button class="back-button" id="btnBackToOrganizerFromCreate">返回</button>
+            <button class="back-button" id="bckToManageEventFrmCreateEvent">返回</button>
             <h2 class="title">舉辦</h2>
             <input type="text" id="eventName" placeholder="輸入活動名稱">
             <button id="createEventBtn">確認</button>
             <p id="Message"></p>
         </div>
-        <!--舉辦紀錄-->
-        <div id="manageEvent" class="container hidden">
-            <button class="back-button" id="btnBackToOrganizerFromManage">返回</button>
-            <h2 class="title">紀錄</h2>
-            <div class="record-list" id="eventManagementList"></div>
-        </div>
         <!--舉辦活動詳情-->
         <div id="eventDetail" class="container hidden">
-            <button class="back-button" id="btnBackToManageFromDetail">返回</button>
+            <button class="back-button" id="bckToManageEventFrmEventDetail">返回</button>
             <h2 class="title"></h2>
             <div id="checkInProgress"></div>
             <div class="record-list" id="EventDetailList"></div>
         </div>
-        <!--參加選單-->
-        <div id="participant" class="container hidden">
-            <button class="back-button" id="btnBackToMainFromParticipant">返回</button>
-            <h2 class="title">參加</h2>
-            <div class="button-group">
-                <button id="btnToJoinEvent">加入</button>
-                <button id="btnToCheckInRecord">紀錄</button>
-            </div>
+
+        <!--加入紀錄-->
+        <div id="joinRecord" class="container hidden">
+            <button class="back-button" id="bckToMainMenuFrmJoin">返回</button>
+            <h2 class="title">紀錄</h2>
+            <div class="record-list" id="checkInRecords"></div>
         </div>
         <!--加入-->
         <div id="joinEvent" class="container hidden">
-            <button class="back-button" id="btnBackToParticipantFromJoin">返回</button>
+            <button class="back-button" id="bckToManageEventFrmJoinEvent">返回</button>
             <h2 class="title">加入</h2>
             <input type="text" id="eventCode" placeholder="輸入活動代碼">
             <button id="joinEventBtn">確認</button>
             <p id="Message"></p>
-        </div>
-        <!--加入紀錄-->
-        <div id="checkInRecord" class="container hidden">
-            <button class="back-button" id="btnBackToParticipantFromRecord">返回</button>
-            <h2 class="title">紀錄</h2>
-            <div class="record-list" id="checkInRecords"></div>
         </div>
 
         <script type="module" src="script2.js"></script>
