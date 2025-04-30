@@ -1,7 +1,3 @@
-/*動態視窗高度*/
-:root {
-    --vh: 1vh;
-  }
 /*背景*/
 body {
     margin: 0;
@@ -11,21 +7,21 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(var(--vh) * 100);
+    height: 100vh;
 }
 /*------------------------------------------------------------*/
 /*容器*/
 .container {
     background-color: #116f73;
     padding: 20px 30px; /*設定內邊距*/
-    border-radius: 15px; /*設定圓角邊框*/
+    border-radius: 30px; /*設定圓角邊框*/
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /*設定陰影*/
     text-align: center; /*文字置中對齊*/
     max-height: 80%;
     max-width: 90%;
     height: 300px;
     width: 300px;
-    position: relative; /*相對位置偏移*/
+    position: relative; /*設定相對定位*/
 }
 /*擴張效果設定*/
 @keyframes expandDesktop { /*預設版擴張動畫*/
@@ -37,6 +33,7 @@ body {
         height: 80%;
         width: 90%; 
         background-color: #6aa7b6;
+        padding: 20px 20px;
     }
 }
 @keyframes expandPhone { /*手機版擴張動畫*/
@@ -48,6 +45,7 @@ body {
         height: 80%;
         width: 80%; 
         background-color: #6aa7b6;
+        padding: 20px 20px;
     }
 }
 /*執行擴張效果*/
@@ -69,7 +67,6 @@ body {
         height: 355px;
     }
 }
-
 @keyframes expandToLogin {
     from {
         width: 300px;
