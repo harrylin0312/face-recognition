@@ -141,6 +141,7 @@ input {
     margin: 20px 0; /* 每列之間留間隔 */
     position: relative;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
 }
 /*懸浮動畫*/
 .record-item:hover {
