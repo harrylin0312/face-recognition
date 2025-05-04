@@ -100,6 +100,9 @@ function register() {
         return;
     }
 
+    document.getElementById("RegisterMessage").innerText = "處理中...";
+    document.getElementById("RegisterMessage").className = "message-success";
+
     createUserWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
             const user = userCredential.user;
@@ -132,6 +135,9 @@ function register() {
 function login() {
     let email = document.getElementById("loginEmail").value;
     let password = document.getElementById("loginPassword").value;
+
+    document.getElementById("LoginMessage").innerText = "處理中...";
+    document.getElementById("LoginMessage").className = "message-success";
 
     signInWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
