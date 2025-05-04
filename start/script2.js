@@ -339,10 +339,6 @@ async function loadCheckInRecords() {
         const joinedEventsRef = collection(db, "users", userUID, "joinedEvents");
         const joinedSnapshot = await getDocs(joinedEventsRef);
 
-        if (joinedSnapshot.empty) {
-            container.innerHTML = '尚無參加活動';
-            return;
-        }
 
         // 先將 joinedSnapshot.docs 轉成陣列並依據活動的 createdAt 時間排序
         const sortedJoinedDocs = await Promise.all(joinedSnapshot.docs.map(async (joinedDoc) => {
