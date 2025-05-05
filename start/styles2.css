@@ -44,7 +44,8 @@ body {
 .title {/*-標題*/
     font-size: 4em;
     position: absolute;
-    top: 12%;
+    top: 15%;
+    transform: translateY(-50%);/*自身高度校正*/
     color:#1e1e1e;
 }
 /*------------------------------------------------------------*/
