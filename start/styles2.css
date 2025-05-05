@@ -132,7 +132,6 @@ input {
 @media(max-width:700px) {/*手機版樣式*/
     .record-list {
         width: 105%;
-        left: 2.5%;
     }
 }
 /*record-item內部排版*//*舉辦清單*/
