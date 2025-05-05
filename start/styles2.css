@@ -124,6 +124,7 @@ input {
     width: 50%;/*寬度*/
     max-height: 59%;/*最大高度*/
     padding: 10px;/*內邊距*/
+    border-radius: 30px;
     background-color: #6aa7b600;
     overflow-y: auto;/*垂直方向內容過多時自動出現捲軸*/
     font-size: 1.5em;
@@ -230,7 +231,6 @@ input {
     font-size: 20px;
     z-index: 1000; /*確保在最上層*/
 }
-/*------------------------------------------------------------*/
 /*返回按鈕*/
 .back-button {
     position: absolute;
@@ -249,6 +249,16 @@ input {
     background-color: #4a6b72; /* 懸浮時變深色 */
     transform: translateY(-5%) scale(1.05); /* 微放大 */
     transition: background-color 0.3s, transform 0.2s;
+}
+@media(max-width:700px) {/*手機版樣式*/
+    #userID {
+        top: 10px;
+        right: 10px;
+    }
+    .back-button {
+        top: 10px;
+        left: 10px;
+    }
 }
 /*------------------------------------------------------------*/
 /*打卡進度*/
