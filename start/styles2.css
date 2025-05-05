@@ -35,6 +35,8 @@ body {
 /*手機版容器樣式*/
 @media(max-width:700px){
     .container {
+        max-height: 85%;
+        height: 85%;
         width: 80%;
     }
 }
@@ -43,6 +45,7 @@ body {
     font-size: 4em;
     position: absolute;
     top: 12%;
+    color:#1e1e1e;
 }
 /*------------------------------------------------------------*/
 /*按鈕群組*/
@@ -115,7 +118,8 @@ input {
 /*------------------------------------------------------------*/
 /*顯示清單*/
 .record-list {
-    top: 10%;
+    top: -10%;
+    transform: translateY(50%);
     width: 50%;/*寬度*/
     max-height: 50%;/*最大高度*/
     padding: 10px;/*內邊距*/
@@ -142,6 +146,12 @@ input {
     position: relative;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
+}
+@media(max-width:700px) {/*手機版樣式*/
+    .record-item {
+    padding: 20px 20px; /* 內邊距 */
+    margin: 18px 0; /* 每列之間留間隔 */
+    }
 }
 /*懸浮動畫*/
 .record-item:hover {
@@ -205,7 +215,6 @@ input {
 /*輸入提示訊息*//*暫時*/
 #Message {
     font-size: 14px;
-    margin-top: 10px;
 }
 /*------------------------------------------------------------*/
 /*用戶資訊*/
@@ -243,10 +252,17 @@ input {
 /*------------------------------------------------------------*/
 /* 打卡進度 */
 #checkInProgress {
-    margin: 10px 0;
+    position: absolute;
+    top: 37%;
+    right: 28%;
+    transform: translateY(-50%);
     font-size: 1.5em;
     color: #333; /* 顏色可自訂 */
-    text-align: center; /* 置中對齊 */
+}
+@media(max-width:700px) {/*手機版樣式*/
+    #checkInProgress {
+        right: 6%;
+    }
 }
 /*------------------------------------------------------------*/
 /*淡出動畫*/
