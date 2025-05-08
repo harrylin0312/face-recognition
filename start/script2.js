@@ -514,3 +514,9 @@ async function joinEvent() {
     }
 }
 window.joinEvent = joinEvent;
+// 回退強制重整強制重整
+window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+});
