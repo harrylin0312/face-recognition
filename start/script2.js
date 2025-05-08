@@ -27,7 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         elements.forEach(element => element.classList.remove('fade-in')); // 清除淡入類別
         loadUserName();
-        
+
+        // 新增 userID 點擊展開/收合
+        const userIDElement = document.getElementById('userID');
+        if (userIDElement) {
+            userIDElement.addEventListener('click', expandContract);
+        }
+
         const createEventBtn = document.getElementById('createEventBtn');
         if (createEventBtn) {
             createEventBtn.addEventListener('click', createEvent);
@@ -73,19 +79,19 @@ window.addEventListener('resize', setVH);
 function toggleSection(sectionId, eventId = null) {
     const allContainers = document.querySelectorAll('.container');
     const nextSection = document.getElementById(sectionId);
-    const userID = document.getElementById('userID');
+    const userID = document.getElementById('userContainer');
     // 儲存 userID 原本的 parent
     // const originalParent = userID.parentNode;
-    let movedUserID = false;
+    let movedUserContainer = false;
     allContainers.forEach(container => {
         if (!container.classList.contains('hidden')) {
             const elements = container.querySelectorAll('h2, input, button:not(.back-button), div, a, p:not(#userID)');
             elements.forEach(element => element.classList.add('fade-out')); // 觸發淡出
             setTimeout(() => {
                 // 移動 userID 到 body（暫時移出要隱藏的 container）
-                if (userID.parentNode === container) {
-                    document.body.appendChild(userID);
-                    movedUserID = true;
+                if (userContainer && userContainer.parentNode === container) {
+                    document.body.appendChild(userContainer);
+                    movedUserContainer = true;
                 }
                 container.classList.add('hidden');
                 elements.forEach(element => element.classList.remove('fade-out')); // 清除淡出類別
@@ -100,7 +106,7 @@ function toggleSection(sectionId, eventId = null) {
         const nextElements = nextSection.querySelectorAll('h2, input, button:not(.back-button), div, a');
         nextElements.forEach(element => element.classList.add('fade-in')); // 觸發淡入
         // 將 userID 插回到新可見 container 最上面
-        if (movedUserID) {
+        if (movedUserContainer && userContainer) {
             nextSection.insertBefore(userID, nextSection.firstChild);
         }
         setTimeout(() => {
@@ -129,6 +135,9 @@ async function loadUserName() {
         return;
     }
 
+    userIDElement.textContent = '載入中...';
+    userIDElement.className = '';
+
     try {
         const userDocRef = doc(db, "users", userUID);
         const userDocSnap = await getDoc(userDocRef);
@@ -145,6 +154,24 @@ async function loadUserName() {
         console.error('讀取使用者資料失敗:', error);
         userIDElement.innerHTML = '<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:blue;">登入</a>';
         userIDElement.className = 'red';
+    }
+}
+
+// 用戶資訊欄
+let autoCollapseTimer = null;
+
+function expandContract() {
+    const content = $("#expand-contract");
+    content.stop(true, true).slideToggle(300);
+
+    if (autoCollapseTimer) {
+        clearTimeout(autoCollapseTimer);
+    }
+
+    if (content.is(":visible")) {
+        autoCollapseTimer = setTimeout(() => {
+            content.slideUp(300);
+        }, 2000);
     }
 }
 
@@ -314,7 +341,7 @@ async function loadEventDetail(eventID) {
         });
 
         const progressElement = document.getElementById('checkInProgress');
-        progressElement.textContent = `打卡進度：${checkedInCount}/${totalParticipants}`;
+        progressElement.textContent = `打卡進度${checkedInCount}/${totalParticipants}`;
         container.innerHTML = html;
 
     } catch (error) {
@@ -338,7 +365,6 @@ async function loadCheckInRecords() {
     try {
         const joinedEventsRef = collection(db, "users", userUID, "joinedEvents");
         const joinedSnapshot = await getDocs(joinedEventsRef);
-
 
         // 先將 joinedSnapshot.docs 轉成陣列並依據活動的 createdAt 時間排序
         const sortedJoinedDocs = await Promise.all(joinedSnapshot.docs.map(async (joinedDoc) => {
