@@ -11,7 +11,20 @@
     <body>
         <!--主選單-->
         <div class="container" id="mainMenu">
-            <p id="userID"></p>
+            <div id="userContainer">
+                <div id="top-section">
+                    <p id="userID" class="header"></p>
+                </div>
+                <div id="expand-container">
+                    <div class="expanded" id="expand-contract">
+                        <div class="user-action">
+                            <div class="action-item">用戶資料</div>
+                            <hr class="line">
+                            <div class="action-item">登出</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="button-group">
                 <button id="toManageEvent">管理</button>
                 <button id="toJoinRecord">參加</button>
@@ -56,6 +69,7 @@
             <p id="Message"></p>
         </div>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="module" src="script2.js"></script>
     </body>
 </html>
