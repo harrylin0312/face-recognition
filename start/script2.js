@@ -34,10 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
             userIDElement.addEventListener('click', expandContract);
         }
 
-        // 滑鼠懸浮監聽（userContainer hover 展開/收合）
+        // 滑鼠懸浮監聽（userContainer hover 展開/收合），僅於非觸控裝置註冊
         const userContainer = document.getElementById('userContainer');
         const expandContent = $("#expand-contract");
-        if (userContainer) {
+        if (userContainer && !('ontouchstart' in window)) {
             userContainer.addEventListener('mouseenter', () => {
                 expandContent.stop(true, true).slideDown(300);
                 if (autoCollapseTimer) {
