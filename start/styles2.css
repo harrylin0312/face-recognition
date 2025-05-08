@@ -255,6 +255,12 @@ input {
 #expand-contract {
     margin: 2px 0;;
 }
+.logout {
+    color: rgba(255, 0, 0, 0.85); 
+}
+.detail {
+    color: 000000;
+}
 .line {
     padding: 0 0;
     margin: 0 0;
@@ -370,4 +376,12 @@ input {
 /*非隱藏容器內的子元素保持可見*/
 .container:not(.hidden) > *:not(.back-button) {
     opacity: 1; /*確保顯示時可見*/
+}
+/*------------------------------------------------------------*/
+/*選取禁止*/
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
