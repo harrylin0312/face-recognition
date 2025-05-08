@@ -384,7 +384,7 @@ async function loadCheckInRecords() {
     const container = document.getElementById('checkInRecords');
 
     if (!userUID) {
-        container.innerHTML = '尚未登入，請先登入';
+        container.innerHTML = '尚未登入，請先 <a href="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
         return;
     }
 
