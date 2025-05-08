@@ -220,18 +220,53 @@ input {
     font-size: 14px;
 }
 /*------------------------------------------------------------*/
-/*用戶資訊*/
-#userID {
+#userContainer {
     position: absolute;
     top: 20px;
     right: 20px;
-    transform: translateY(-50%);/*自身高度校正*/
-    padding: 5px 10px;
-    background-color: rgba(255, 255, 255, 0.75);
-    border-radius: 970px;
+    border:1px solid rgba(255, 255, 255, 0.45);
+    padding: 0 0;
+    border-radius: 20px;
     font-size: 20px;
-    z-index: 1000; /*確保在最上層*/
+    z-index: 1000;
+    background-color: rgba(210, 210, 210, 0.75);
 }
+#userContainer .expanded {
+    display: none;
+    padding : 0px;
+}
+/*用戶資訊*/
+#userID {
+    padding: 5px 10px;
+    margin: 0 0;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.65);
+}
+.header {
+    background-color:#d3d3d3;
+    padding: 2px;
+    cursor: pointer;
+    font-weight: bold;
+}
+#expand-container {
+    width: 100%;
+    transition: height 0.3s ease;
+}
+#expand-contract {
+    margin: 2px 0;;
+}
+.line {
+    padding: 0 0;
+    margin: 0 0;
+    color: rgba(255, 255, 255, 0.45);
+}
+@media(max-width:700px) {/*手機版樣式*/
+    #userContainer {
+        top: 10px;
+        right: 10px;
+    }
+}
+/*------------------------------------------------------------*/
 /*返回按鈕*/
 .back-button {
     position: absolute;
@@ -252,10 +287,6 @@ input {
     transition: background-color 0.3s, transform 0.2s;
 }
 @media(max-width:700px) {/*手機版樣式*/
-    #userID {
-        top: 10px;
-        right: 10px;
-    }
     .back-button {
         top: 10px;
         left: 10px;
