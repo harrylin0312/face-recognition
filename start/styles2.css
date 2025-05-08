@@ -251,6 +251,7 @@ input {
 #expand-container {
     width: 100%;
     transition: height 0.3s ease;
+    cursor: pointer;
 }
 #expand-contract {
     margin: 2px 0;;
