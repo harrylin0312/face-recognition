@@ -22,7 +22,7 @@ const db = getFirestore(app);
 // 頁面載入時觸發淡入效果
 document.addEventListener('DOMContentLoaded', () => {
     const mainMenu = document.getElementById('mainMenu');
-    const elements = mainMenu.querySelectorAll('h2, input, button:not(.back-button), div, a');
+    const elements = mainMenu.querySelectorAll('h2, input, button:not(.back-button), div:not(#userContainer):not(#userContainer *), a');
     elements.forEach(element => element.classList.add('fade-in')); // 觸發初次淡入
     setTimeout(() => {
         elements.forEach(element => element.classList.remove('fade-in')); // 清除淡入類別
@@ -32,6 +32,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const userIDElement = document.getElementById('userID');
         if (userIDElement) {
             userIDElement.addEventListener('click', expandContract);
+        }
+
+        // 滑鼠懸浮監聽（userContainer hover 展開/收合）
+        const userContainer = document.getElementById('userContainer');
+        const expandContent = $("#expand-contract");
+        if (userContainer) {
+            userContainer.addEventListener('mouseenter', () => {
+                expandContent.stop(true, true).slideDown(300);
+                if (autoCollapseTimer) {
+                    clearTimeout(autoCollapseTimer);
+                    autoCollapseTimer = null;
+                }
+            });
+
+            userContainer.addEventListener('mouseleave', () => {
+                expandContent.stop(true, true).slideUp(300);
+            });
         }
 
         const createEventBtn = document.getElementById('createEventBtn');
@@ -85,7 +102,7 @@ function toggleSection(sectionId, eventId = null) {
     let movedUserContainer = false;
     allContainers.forEach(container => {
         if (!container.classList.contains('hidden')) {
-            const elements = container.querySelectorAll('h2, input, button:not(.back-button), div, a, p:not(#userID)');
+            const elements = container.querySelectorAll('h2, input, button:not(.back-button), div:not(#userContainer):not(#userContainer *), a, p:not(#userID)');
             elements.forEach(element => element.classList.add('fade-out')); // 觸發淡出
             setTimeout(() => {
                 // 移動 userID 到 body（暫時移出要隱藏的 container）
@@ -103,7 +120,7 @@ function toggleSection(sectionId, eventId = null) {
 
     setTimeout(() => {
         nextSection.classList.remove('hidden');
-        const nextElements = nextSection.querySelectorAll('h2, input, button:not(.back-button), div, a');
+        const nextElements = nextSection.querySelectorAll('h2, input, button:not(.back-button), div:not(#userContainer):not(#userContainer *), a');
         nextElements.forEach(element => element.classList.add('fade-in')); // 觸發淡入
         // 將 userID 插回到新可見 container 最上面
         if (movedUserContainer && userContainer) {
@@ -171,7 +188,7 @@ function expandContract() {
     if (content.is(":visible")) {
         autoCollapseTimer = setTimeout(() => {
             content.slideUp(300);
-        }, 2000);
+        }, 3000);
     }
 }
 
