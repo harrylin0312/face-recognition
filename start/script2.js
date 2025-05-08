@@ -54,7 +54,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const createEventBtn = document.getElementById('createEventBtn');
         if (createEventBtn) {
             createEventBtn.addEventListener('click', createEvent);
-        }//?
+        }
+
+        const logoutBtn = document.querySelector('.logout');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                const confirmLogout = confirm('確定要登出嗎?');
+                if (confirmLogout) {
+                    localStorage.removeItem('userUID');
+                    window.location.href = 'https://harrylin0312.github.io/face-recognition/login/';
+                }
+            });
+        }
 
         const sectionBtnMap = [
             ['bckToMainMenuFrmManage', 'mainMenu'],//回到主選單
