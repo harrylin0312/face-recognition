@@ -1,0 +1,25 @@
+/*------------------------------------------------------------*/
+/*淡出動畫*/
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+.fade-out {
+    animation: fadeOut 0.3s ease forwards;
+}
+/*淡入動畫*/
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.fade-in {
+    animation: fadeIn 0.3s ease forwards;
+}

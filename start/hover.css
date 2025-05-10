@@ -1,0 +1,38 @@
+/*------------------------------------------------------------*/
+/*按鈕*/
+button:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.1);
+}
+/*------------------------------------------------------------*/
+/*顯示清單*/
+.record-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+/*取消懸浮動畫*/
+.record-item.no-hover:hover {
+    transform: none !important;
+    transition: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+/*------------------------------------------------------------*/
+/*用戶資訊*/
+.detail:hover, 
+.logout:hover {
+    color: rgba(00, 00, 00, 0.60);
+}
+/*------------------------------------------------------------*/
+/*返回按鈕*/
+.back-button:hover {
+    background-color: #4a6b72;
+    transform: translateY(-5%) scale(1.05);
+    transition: background-color 0.3s, transform 0.2s;
+}
+/*------------------------------------------------------------*/
+/*開始打卡按鈕*/
+.startButton:hover {
+    background-color: #4a6b72;
+    transform: translateY(-50%) scale(1.05);
+    transition: background-color 0.3s, transform 0.2s;
+}
