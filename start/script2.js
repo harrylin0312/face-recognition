@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const expandContent = $("#expand-contract");
         if (userContainer && !('ontouchstart' in window)) {
             userContainer.addEventListener('mouseenter', () => {
-                expandContent.stop(true, true).slideDown(300);
+                expandContent.stop(true, true).slideDown(200);
                 if (autoCollapseTimer) {
                     clearTimeout(autoCollapseTimer);
                     autoCollapseTimer = null;
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             userContainer.addEventListener('mouseleave', () => {
-                expandContent.stop(true, true).slideUp(300);
+                expandContent.stop(true, true).slideUp(100);
             });
         }
 
@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
             createEventBtn.addEventListener('click', createEvent);
         }
 
+        //登出
         const logoutBtn = document.querySelector('.logout');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => {
@@ -74,7 +75,66 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+        
+        let currentHeight, currentWidth, finalHeight, finalWidth;
+        const userDetail = document.querySelector('.detail');
+        const closeBtn = document.getElementById('closeBtn');
 
+        if (userDetail && closeBtn) {
+            // 打開用戶資料
+            userDetail.addEventListener('click', () => {
+                const userContainer = document.getElementById('userContainer');
+                const expandContent = $("#expand-contract");
+
+                // 收起展開內容後再展開 userContainer
+                expandContent.stop(true, true).slideUp(20, () => {
+                    currentHeight = window.getComputedStyle(userContainer).height; // 獲取收起後的高度
+                    currentWidth = window.getComputedStyle(userContainer).width;
+
+                    userContainer.style.height = currentHeight;
+                    userContainer.style.width = currentWidth;
+                    userContainer.classList.add('expand');
+
+                    const elementsToHide = document.querySelectorAll("#userID, #expand-container");
+                    elementsToHide.forEach(element => element.classList.remove("fade-in"));
+                    elementsToHide.forEach(element => element.classList.add("fade-out"));
+                    setTimeout(() => {
+                        closeBtn.style.display = 'block';
+                        closeBtn.classList.add('fade-in');
+                    }, 700);
+                });
+            });
+            // 關閉用戶資料
+            closeBtn.addEventListener('click', () => {
+                const userContainer = document.getElementById('userContainer');
+                finalHeight = window.getComputedStyle(userContainer).height;// 獲取當前長寬
+                finalWidth = window.getComputedStyle(userContainer).width;
+                userContainer.style.height = finalHeight;
+                userContainer.style.width = finalWidth;
+                userContainer.style.setProperty('--target-height', currentHeight);
+                userContainer.style.setProperty('--target-width', currentWidth);
+                userContainer.classList.remove('expand');
+                userContainer.classList.add('expand2');
+
+                const elementsToHide = document.querySelectorAll("#userID, #expand-container");
+                elementsToHide.forEach(element => element.style.opacity = 0);
+                elementsToHide.forEach(element => element.classList.remove("fade-out"));
+                setTimeout(() => {
+                    elementsToHide.forEach(element => element.classList.add("fade-in"));
+                }, 400);
+                
+
+                closeBtn.classList.remove('fade-in');
+                closeBtn.style.display = 'none';
+                
+                setTimeout(() => {
+                    userContainer.classList.remove('expand2');
+                    userContainer.style.height = '';
+                    userContainer.style.width = '';
+                }, 700);
+            });
+        }
+        
         const sectionBtnMap = [
             ['bckToMainMenuFrmManage', 'mainMenu'],//回到主選單
             ['bckToMainMenuFrmJoin', 'mainMenu'],//回到主選單
