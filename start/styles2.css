@@ -249,10 +249,34 @@ input {
     margin: 0 0;
     color: rgba(55, 55, 55, 0.60);
 }
+#closeBtn {
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 20px 20px;
+    background-color: #698F99;
+    border-radius: 980px;
+    font-size: 20px;
+    color: white;
+    display: none;
+    z-index: 2000
+}
+#closeBtn svg {
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    color: #333;
+}
 @media(max-width:700px) {/*手機版樣式*/
     #userContainer {
         top: 10px;
         right: 10px;
+    }
+    #closBbtn {
+        top: 10px;
+        left: 10px;
     }
 }
 /*------------------------------------------------------------*/
