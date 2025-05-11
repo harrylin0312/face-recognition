@@ -1,4 +1,3 @@
-/*------------------------------------------------------------*/
 /*淡出動畫*/
 @keyframes fadeOut {
     from {
@@ -23,3 +22,32 @@
 .fade-in {
     animation: fadeIn 0.3s ease forwards;
 }
+/*------------------------------------------------------------*/
+/*擴張動畫*/
+@keyframes expand {
+    to {
+        top: 0px;
+        right: 0px;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        border-radius: 30px;
+        background-color: #99BAC3;
+    }
+}
+.expand {
+    animation: expand 0.6s ease forwards;
+}
+@keyframes expand2 {
+    to {
+        height: var(--target-height);
+        width: var(--target-width);
+        border-radius: 30px;
+        background-color: #99BAC3;
+    }
+}
+.expand2 {
+    animation: expand2 0.6s ease forwards;
+}
+/*------------------------------------------------------------*/
