@@ -2,7 +2,7 @@
 /*按鈕*/
 button:hover {
     background-color: #f0f0f0;
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 /*------------------------------------------------------------*/
 /*顯示清單*/
@@ -22,12 +22,14 @@ button:hover {
 .logout:hover {
     color: rgba(00, 00, 00, 0.60);
 }
+/*關閉按鈕*/
+#closeBtn:hover {
+    background-color: #4a6b72;
+}
 /*------------------------------------------------------------*/
 /*返回按鈕*/
 .back-button:hover {
     background-color: #4a6b72;
-    transform: translateY(-5%) scale(1.05);
-    transition: background-color 0.3s, transform 0.2s;
 }
 /*------------------------------------------------------------*/
 /*開始打卡按鈕*/
