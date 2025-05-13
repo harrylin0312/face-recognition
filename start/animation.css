@@ -37,7 +37,7 @@
     }
 }
 .expand {
-    animation: expand 0.6s ease forwards;
+    animation: expand 0.5s ease forwards;
 }
 @keyframes expand2 {
     to {
@@ -48,6 +48,6 @@
     }
 }
 .expand2 {
-    animation: expand2 0.6s ease forwards;
+    animation: expand2 0.5s ease forwards;
 }
 /*------------------------------------------------------------*/
