@@ -308,7 +308,7 @@ input {
     right: 28%;
     transform: translateY(-50%);
     font-size: 1.5em;
-    color: #333; /* 顏色可自訂 */
+    color: #343434; /* 顏色可自訂 */
 }
 @media(max-width:700px) {/*手機版樣式*/
     #checkInProgress {
@@ -320,22 +320,31 @@ input {
 .startButton {
     position: absolute;
     top: 37%;
-    left: 26%;
     transform: translateY(-50%);
     padding: 8px 16px;
-    background-color: #40575d;
+    background-color: #698F99;
     border-radius: 980px;
     font-size: 1.5em;
     color: white;
     border: none;
     cursor: pointer;
 }
+/*------------------------------------------------------------*/
+/*圖例*/
+.legend {
+    position: absolute;
+    top: 37%;
+    left: 28%;
+    transform: translateY(-50%);
+    font-size: 1.5em;
+    color: #343434; /* 顏色可自訂 */
+}
 @media(max-width:700px) {/*手機版樣式*/
-    .startButton {
+    .legend {
         left: 4%;
     }
 }
-
+/*------------------------------------------------------------*/
 /*容器內子元素初始狀態（除了 .back-button） */
 .container > *:not(.back-button) {
     opacity: 0; /*初始透明，等待淡入*/
