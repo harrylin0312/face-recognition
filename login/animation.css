@@ -1,5 +1,5 @@
 /*------------------------------------------------------------*/
-/*擴張動畫*/
+/*登入成功擴張動畫*/
 @keyframes expandDesktop {
     from {
         height: 300px;
@@ -26,6 +26,16 @@
         border-radius: 30px;
     }
 }
+.container.expand {
+    animation: expandDesktop 1.5s forwards;
+}
+@media (max-width: 700px) {
+    .container.expand {
+        animation: expandPhone 1.5s forwards;
+    }
+}
+/*------------------------------------------------------------*/
+/*切換界面*/
 @keyframes expandToRegister {
     from {
         width: 300px;
@@ -46,16 +56,6 @@
         height: 300px;
     }
 }
-/*------------------------------------------------------------*/
-/*應用動畫類別*/
-.container.expand {
-    animation: expandDesktop 1.5s forwards;
-}
-@media (max-width: 700px) {
-    .container.expand {
-        animation: expandPhone 1.5s forwards;
-    }
-}
 .container.expand2 {
     animation: expandToRegister 0.5s forwards;
 }
@@ -73,7 +73,6 @@
     from { opacity: 0; }
     to { opacity: 1; }
 }
-/*------------------------------------------------------------*/
 .hidden {
     animation: fadeOut 0.3s ease forwards;
     opacity: 0;
