@@ -1,0 +1,89 @@
+/*------------------------------------------------------------*/
+/*擴張動畫*/
+@keyframes expandDesktop {
+    from {
+        height: 300px;
+        width: 300px;
+    }
+    to {
+        height: 80%;
+        width: 90%; 
+        background-color: #6aa7b6;
+        padding: 20px 20px;
+        border-radius: 30px;
+    }
+}
+@keyframes expandPhone {
+    from {
+        height: 300px;
+        width: 300px;
+    }
+    to {
+        height: 85%;
+        width: 80%; 
+        background-color: #6aa7b6;
+        padding: 20px 20px;
+        border-radius: 30px;
+    }
+}
+@keyframes expandToRegister {
+    from {
+        width: 300px;
+        height: 300px;
+    }
+    to {
+        width: 300px;
+        height: 355px;
+    }
+}
+@keyframes expandToLogin {
+    from {
+        width: 300px;
+        height: 355px;
+    }
+    to {
+        width: 300px;
+        height: 300px;
+    }
+}
+/*------------------------------------------------------------*/
+/*應用動畫類別*/
+.container.expand {
+    animation: expandDesktop 1.5s forwards;
+}
+@media (max-width: 950px) {
+    .container.expand {
+        animation: expandPhone 1.5s forwards;
+    }
+}
+.container.expand2 {
+    animation: expandToRegister 0.5s forwards;
+}
+.container.expand3 {
+    animation: expandToLogin 0.5s forwards;
+}
+/*------------------------------------------------------------*/
+/*淡入淡出動畫*/
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/*------------------------------------------------------------*/
+.hidden {
+    animation: fadeOut 0.3s ease forwards;
+    opacity: 0;
+}
+.visible {
+    animation: fadeIn 0.3s ease forwards;
+    opacity: 1;
+}
+/*------------------------------------------------------------*/
+.container > * { 
+    opacity: 1;
+    transition: opacity 0.1s ease;
+}
