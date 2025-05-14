@@ -144,6 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ['bckToManageEventFrmCreateEvent', 'manageEvent'],//回到舉辦紀錄
             ['toEventDetail', 'eventDetail'],//活動詳情
             ['bckToManageEventFrmEventDetail', 'manageEvent'],//回到舉辦紀錄
+            ['start','checkIn'],//打卡
+            ['bckToEventDetailFrmCheckIn', 'eventDetail'],//回到活動詳情
 
             ['toJoinRecord', 'joinRecord'],//參加紀錄
             ['toJoinEvent', 'joinEvent'],//參加
@@ -176,9 +178,9 @@ function toggleSection(sectionId, eventId = null) {
     const allContainers = document.querySelectorAll('.container');
     const nextSection = document.getElementById(sectionId);
     const userID = document.getElementById('userContainer');
-    // 儲存 userID 原本的 parent
-    // const originalParent = userID.parentNode;
+    const closeBtn = document.getElementById('closeBtn');
     let movedUserContainer = false;
+    let movedCloseBtn = false;
     allContainers.forEach(container => {
         if (!container.classList.contains('hidden')) {
             const elements = container.querySelectorAll('h2, input, button:not(.back-button), div:not(#userContainer):not(#userContainer *), a, p:not(#userID)');
@@ -188,6 +190,11 @@ function toggleSection(sectionId, eventId = null) {
                 if (userContainer && userContainer.parentNode === container) {
                     document.body.appendChild(userContainer);
                     movedUserContainer = true;
+                }
+                // 移動 closeBtn 到 body（暫時移出要隱藏的 container）
+                if (closeBtn && closeBtn.parentNode === container) {
+                    document.body.appendChild(closeBtn);
+                    movedCloseBtn = true;
                 }
                 container.classList.add('hidden');
                 elements.forEach(element => element.classList.remove('fade-out')); // 清除淡出類別
@@ -204,6 +211,10 @@ function toggleSection(sectionId, eventId = null) {
         // 將 userID 插回到新可見 container 最上面
         if (movedUserContainer && userContainer) {
             nextSection.insertBefore(userID, nextSection.firstChild);
+        }
+        // 將 closeBtn 插回到新可見 container 最上面
+        if (movedCloseBtn && closeBtn) {
+            nextSection.insertBefore(closeBtn, nextSection.firstChild);
         }
         setTimeout(() => {
             nextElements.forEach(element => element.classList.remove('fade-in')); // 清除淡入類別
