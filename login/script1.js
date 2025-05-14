@@ -199,3 +199,14 @@ window.addEventListener('pageshow', function (event) {
 window.togglePage = togglePage;
 window.register = register;
 window.login = login;
+
+// 初次淡入效果
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector(".container");
+    if (container) {
+        const elements = container.querySelectorAll("h2, input, button, a, p");
+        elements.forEach(element => {
+            element.classList.add("visible");
+        });
+    }
+});
