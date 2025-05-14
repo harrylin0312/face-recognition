@@ -1,3 +1,4 @@
+import { navigateWithAnimation } from './script2.js';
 import { collection, doc, getDoc, getDocs, setDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { db } from './script2.js';
 
@@ -6,7 +7,7 @@ export async function loadEventManagement() {
     const container = document.getElementById('eventManagementList');
 
     if (!userUID) {
-        container.innerHTML = '尚未登入，請先 <a href="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+        container.innerHTML = '尚未登入，請先 <a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
         return;
     }
 
