@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const confirmLogout = confirm('確定要登出嗎?');
                 if (confirmLogout) {
                     localStorage.removeItem('userUID');
-                    window.location.href = 'https://harrylin0312.github.io/face-recognition/login/';
+                    navigateWithAnimation('https://harrylin0312.github.io/face-recognition/login/');
                 }
             });
         }
@@ -163,6 +163,15 @@ document.addEventListener('DOMContentLoaded', () => {
             joinEventBtn.addEventListener('click', joinEvent);
         }
     }, 300); // 動畫完成後清除
+
+    // 新增全域點擊監聽，處理帶有 .animated-link 且有 data-url 的連結
+    document.addEventListener('click', function (e) {
+        const target = e.target.closest('.animated-link');
+        if (target && target.dataset.url) {
+            e.preventDefault();
+            navigateWithAnimation(target.dataset.url);
+        }
+    });
 });
 
 //動態視窗高度
@@ -237,7 +246,7 @@ async function loadUserName() {
     const userIDElement = document.getElementById('userID');
     const userUID = localStorage.getItem("userUID");
     if (!userUID) {
-        userIDElement.innerHTML = '<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+        userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
         userIDElement.className = 'red';
         return;
     }
@@ -254,12 +263,12 @@ async function loadUserName() {
             userIDElement.textContent = `用戶：${userData.userName}`;
             userIDElement.className = 'green';
         } else {
-            userIDElement.innerHTML = '<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+            userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
             userIDElement.className = 'red';
         }
     } catch (error) {
         console.error('讀取使用者資料失敗:', error);
-        userIDElement.innerHTML = '<a href="https://harrylin0312.github.io/face-recognition/login/" style="color:blue;">登入</a>';
+        userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
         userIDElement.className = 'red';
     }
 }
@@ -288,3 +297,19 @@ window.addEventListener('pageshow', function (event) {
       window.location.reload();
     }
 });
+// 導頁動畫函式
+export function navigateWithAnimation(url) {
+    const container = document.querySelector('.container:not(.hidden)');
+    if (!container) {
+        window.location.href = url;
+        return;
+    }
+
+    const innerElements = container.querySelectorAll(':scope *');    
+    container.classList.add('expand-logOut');
+    innerElements.forEach(el => el.classList.add('fade-out'));
+
+    setTimeout(() => {
+        window.location.href = url;
+    }, 1600); // 1.6秒
+}
