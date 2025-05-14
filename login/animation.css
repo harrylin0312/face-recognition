@@ -51,7 +51,7 @@
 .container.expand {
     animation: expandDesktop 1.5s forwards;
 }
-@media (max-width: 950px) {
+@media (max-width: 700px) {
     .container.expand {
         animation: expandPhone 1.5s forwards;
     }
