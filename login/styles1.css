@@ -28,70 +28,7 @@ body {
     width: 300px;
     position: relative; /*設定相對定位*/
 }
-/*擴張效果設定*/
-@keyframes expandDesktop { /*預設版擴張動畫*/
-    from {
-        height: 300px;
-        width: 300px;
-    }
-    to {
-        height: 80%;
-        width: 90%; 
-        background-color: #6aa7b6;
-        padding: 20px 20px;
-        border-radius: 30px;
-    }
-}
-@keyframes expandPhone { /*手機版擴張動畫*/
-    from {
-        height: 300px;
-        width: 300px;
-    }
-    to {
-        height: 85%;
-        width: 80%; 
-        background-color: #6aa7b6;
-        padding: 20px 20px;
-        border-radius: 30px;
-    }
-}
-/*執行擴張效果*/
-.container.expand { /*執行預設版擴張效果*/
-    animation: expandDesktop 1.5s forwards; /*1.5秒擴張效果*/
-}
-@media (max-width: 950px) { /*執行手機版擴張效果*/
-    .container.expand {
-        animation: expandPhone 1.5s forwards; /*1.5秒擴張效果*/
-    }
-}
-@keyframes expandToRegister {
-    from {
-        width: 300px;
-        height: 300px;
-    }
-    to {
-        width: 300px;
-        height: 355px;
-    }
-}
-@keyframes expandToLogin {
-    from {
-        width: 300px;
-        height: 355px;
-    }
-    to {
-        width: 300px;
-        height: 300px;
-    }
-}
 
-.container.expand2 {
-    animation: expandToRegister 0.5s forwards;
-}
-
-.container.expand3 {
-    animation: expandToLogin 0.5s forwards;
-}
 /*------------------------------------------------------------*/
 /*標題*/
 .container h2 {
@@ -151,28 +88,4 @@ body {
 .message-error {
     color: #ff4d4d;
 }
-/*------------------------------------------------------------*/
-/*切換動畫設定*/
-@keyframes fadeOut { /*淡出動畫*/
-    from {opacity: 1;}
-    to {opacity: 0;}
-}
-@keyframes fadeIn { /*淡入動畫*/
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-/*執行隱藏*/
-.hidden { 
-    animation: fadeOut 0.3s ease forwards; /*0.3秒淡出效果*/
-    opacity: 0; /*確保淡出後保持隱藏*/
-}
-/*執行顯示*/
-.visible { /*顯示類別*/
-    animation: fadeIn 0.3s ease forwards; /*0.3秒淡入效果*/
-    opacity: 1; /*確保淡入後完全顯示*/
-}
-/*設定容器內的子元素初始狀態*/
-.container > * { 
-    opacity: 1; /*預設可見*/
-    transition: opacity 0.1s ease; /*添加平滑過渡，避免突變*/
-}
+
