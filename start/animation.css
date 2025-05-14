@@ -51,3 +51,46 @@
     animation: expand2 0.5s ease forwards;
 }
 /*------------------------------------------------------------*/
+/*登出擴張動畫*/
+@keyframes expandDesktop {
+    from {
+        height: 80%;
+        width: 90%;
+        background-color: #6aa7b6;
+        padding: 20px 20px;
+        border-radius: 30px;
+    }
+    to {
+        height: 300px;
+        width: 300px;
+        padding: 20px 30px;
+        border-radius: 15px;
+        background-color: #116f73;
+    }
+}
+@keyframes expandPhone {
+    from {
+        max-height: 85%;
+        height: 85%;
+        width: 80%; 
+        background-color: #6aa7b6;
+        padding: 20px 20px;
+        border-radius: 30px;
+    }
+    to {
+        height: 300px;
+        width: 300px;
+        padding: 20px 30px;
+        border-radius: 15px;
+        background-color: #116f73;
+        
+    }
+}
+.container.expand-logOut {
+    animation: expandDesktop 1.5s forwards;
+}
+@media (max-width: 700px) {
+    .container.expand-logOut {
+        animation: expandPhone 1.5s forwards;
+    }
+}
