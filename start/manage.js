@@ -159,7 +159,7 @@ export async function loadEventDetail(eventID) {
         });
 
         const progressElement = document.getElementById('checkInProgress');
-        progressElement.textContent = `打卡進度${checkedInCount}/${totalParticipants}`;
+        progressElement.textContent = `進度${checkedInCount}/${totalParticipants}`;
         container.innerHTML = html;
 
     } catch (error) {
