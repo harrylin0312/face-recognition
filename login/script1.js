@@ -28,7 +28,7 @@ function translateErrorCode(code) {
         "auth/operation-not-allowed": "目前不允許此操作，請聯繫管理員。",
         "auth/invalid-credential": "登入憑證無效，請重新輸入。",
         "auth/invalid-login-credentials": "帳號或密碼錯誤。",
-    };
+    };  
     return errorMessages[code] || "發生未知錯誤：" + code;
 }
 
