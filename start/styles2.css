@@ -213,7 +213,7 @@ input {
     padding: 0 0;
     border-radius: 20px;
     font-size: 20px;
-    z-index: 1000;
+    z-index: 1000;/*確保在最上層*/
     background-color: rgba(210, 210, 210, 0.75);
 }
 #userContainer .expanded {
@@ -343,6 +343,45 @@ input {
     .legend {
         left: 4%;
     }
+}
+/*------------------------------------------------------------*/
+/*相機*/
+#cameraContainer {
+    width: 100%;
+    height: 66%;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+#camera {
+    width: 45%;
+    border-radius: 12px;
+    transform: scaleX(-1);
+}
+@media(max-width:700px) {/*手機版樣式*/
+    #cameraContainer {
+        position: absolute;
+        top: 30%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0;
+    }
+    #camera {
+        width: 95%;
+        border-radius: 12px;
+        transform: scaleX(-1);
+    }
+
 }
 /*------------------------------------------------------------*/
 /*容器內子元素初始狀態（除了 .back-button） */
