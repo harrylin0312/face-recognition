@@ -44,7 +44,7 @@ export async function loadEventManagement() {
                     const formattedDate = createdAt
                         ? `${createdAt.getFullYear()}/${createdAt.getMonth() + 1}/${createdAt.getDate()}`
                         : "未知日期";
-                    html += `<div class="record-item" onclick="toggleSection('eventDetail', '${eventID}')">
+                    html += `<div class="record-item" onclick="toggleSection('eventDetail', '${eventID}', '${eventName}')">
                                 <span class="eventName">${eventName}</span>
                                 <span class="eventDate">${formattedDate}</span>
                                 <span class="arrow">&gt;</span>
@@ -107,6 +107,7 @@ export function createEvent() {
 }
 
 export async function loadEventDetail(eventID) {
+    window.currentEventId = eventID;
     const titleElement = document.querySelector('#eventDetail .title');
     const container = document.getElementById('EventDetailList');
 
