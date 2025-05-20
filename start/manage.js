@@ -1,5 +1,5 @@
 import { navigateWithAnimation } from './script2.js';
-import { collection, doc, getDoc, getDocs, setDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { collection, doc, getDoc, getDocs, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { db } from './script2.js';
 
 export async function loadEventManagement() {
@@ -70,7 +70,36 @@ export async function loadEventManagement() {
     }
 }
 
-export function createEvent() {
+// ✅ 產生隨機 eventID（格式：3字母 + 3數字）
+function generateCustomEventID() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    let id = '';
+    for (let i = 0; i < 3; i++) {
+        id += letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+    for (let i = 0; i < 3; i++) {
+        id += numbers.charAt(Math.floor(Math.random() * numbers.length));
+    }
+    return id;
+}
+
+// ✅ 確保唯一的 eventID
+async function getUniqueEventID() {
+    let eventID;
+    let exists = true;
+
+    while (exists) {
+        eventID = generateCustomEventID();
+        const docRef = doc(db, "events", eventID);
+        const docSnap = await getDoc(docRef);
+        exists = docSnap.exists();
+    }
+
+    return eventID;
+}
+
+export async function createEvent() {
     const eventName = document.getElementById('eventName').value.trim();
     if (!eventName) {
         alert('請輸入活動名稱');
@@ -83,27 +112,27 @@ export function createEvent() {
         return;
     }
 
-    const eventsCollection = collection(db, "events");
+    try {
+        const eventID = await getUniqueEventID(); // 使用自訂 ID
 
-    addDoc(eventsCollection, {
-        eventName: eventName,
-        organizerID: userUID,
-        createdAt: serverTimestamp()
-    })
-    .then((docRef) => {
+        await setDoc(doc(db, "events", eventID), {
+            eventName: eventName,
+            organizerID: userUID,
+            createdAt: serverTimestamp()
+        });
+
+        await setDoc(doc(db, "users", userUID, "hostedEvents", eventID), {
+            eventName: eventName
+        });
+
         alert('活動已成功建立');
         document.getElementById('eventName').value = '';
         loadEventManagement();
 
-        const hostedEventRef = doc(db, "users", userUID, "hostedEvents", docRef.id);
-        setDoc(hostedEventRef, {
-            eventName: eventName
-        });
-    })
-    .catch((error) => {
+    } catch (error) {
         console.error('建立活動失敗：', error);
         alert('建立活動失敗，請稍後再試');
-    });
+    }
 }
 
 export async function loadEventDetail(eventID) {
