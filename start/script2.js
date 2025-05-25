@@ -21,11 +21,13 @@ export const db = getFirestore(app);
 // 引入外部模組
 import { loadEventManagement, createEvent, loadEventDetail } from './manage.js';
 import { loadCheckInRecords, joinEvent } from './join.js';
+import { loadPersonalData } from './personalData.js';
 window.createEvent = createEvent;
 window.loadEventManagement = loadEventManagement;
 window.loadEventDetail = loadEventDetail;
 window.loadCheckInRecords = loadCheckInRecords;
 window.joinEvent = joinEvent;
+window.loadPersonalData = loadPersonalData;
 
 // 攝影機功能
 async function startCamera() {
@@ -90,18 +92,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         let currentHeight, currentWidth, finalHeight, finalWidth;
-        const userDetail = document.querySelector('.detail');
-        const close_btn = document.getElementById('closeBtn');
 
-        if (userDetail && close_btn) {
-            // 打開用戶資料
-            userDetail.addEventListener('click', () => {
+        const close_btn = document.getElementById('closeBtn');
+        const detailBtn = document.querySelector('.detail');
+
+        if (detailBtn && close_btn) {
+            //打開用戶資料
+            detailBtn.addEventListener('click', () => {
                 const userContainer = document.getElementById('userContainer');
                 const expandContent = $("#expand-contract");
 
-                // 收起展開內容後再展開 userContainer
+                //收起展開內容後再展開
                 expandContent.stop(true, true).slideUp(20, () => {
-                    currentHeight = window.getComputedStyle(userContainer).height; // 獲取收起後的高度
+                    currentHeight = window.getComputedStyle(userContainer).height;//獲取收起後的高度
                     currentWidth = window.getComputedStyle(userContainer).width;
 
                     userContainer.style.height = currentHeight;
@@ -112,15 +115,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     elementsToHide.forEach(element => element.classList.remove("fade-in"));
                     elementsToHide.forEach(element => element.classList.add("fade-out"));
                     setTimeout(() => {
+                        document.getElementById('PDpersonalPage').classList.remove('hidden');
+                        document.getElementById('PDpersonalPage').classList.add('fade-in');
+                        loadPersonalData();
+
                         close_btn.style.display = 'block';
                         close_btn.classList.add('fade-in');
                     }, 700);
                 });
             });
-            // 關閉用戶資料
+
             close_btn.addEventListener('click', () => {
                 const userContainer = document.getElementById('userContainer');
-                finalHeight = window.getComputedStyle(userContainer).height;// 獲取當前長寬
+                finalHeight = window.getComputedStyle(userContainer).height;//獲取當前高度
                 finalWidth = window.getComputedStyle(userContainer).width;
                 userContainer.style.height = finalHeight;
                 userContainer.style.width = finalWidth;
@@ -135,11 +142,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     elementsToHide.forEach(element => element.classList.add("fade-in"));
                 }, 400);
-                
+
+                const personalPage = document.getElementById('PDpersonalPage');
+                personalPage.classList.remove('fade-in');
+                personalPage.classList.add('fade-out');
+                setTimeout(() => {
+                    personalPage.classList.add('hidden');
+                    personalPage.classList.remove('fade-out');
+                }, 300);
 
                 close_btn.classList.remove('fade-in');
                 close_btn.style.display = 'none';
-                
+
                 setTimeout(() => {
                     userContainer.classList.remove('expand2');
                     userContainer.style.height = '';
@@ -163,6 +177,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ['toJoinRecord', 'joinRecord'],//參加紀錄
             ['toJoinEvent', 'joinEvent'],//參加
             ['bckToManageEventFrmJoinEvent', 'joinRecord'],//回到參加紀錄
+            ['bckToJoinEventFrmJoinEventDetail', 'joinRecord'], // 從詳細頁返回參加紀錄
+            
         ];
         sectionBtnMap.forEach(([id, target]) => {
             const btn = document.getElementById(id);
@@ -260,6 +276,13 @@ function toggleSection(sectionId, eventId = null, eventName = '') {
         }
         if (sectionId === 'eventDetail' && eventId) {
             loadEventDetail(eventId);
+        }
+        if (sectionId === 'joinEventDetail' && eventId) {
+            const detailTitle = document.querySelector('#joinEventDetail .title');
+            if (detailTitle) {
+                detailTitle.textContent = eventName;
+            }
+            // TODO: 可加入 loadJoinEventDetail(eventId) 等細節載入函式
         }
         if (sectionId === 'checkIn') {
             const checkInTitle = document.querySelector('#checkIn .title');
