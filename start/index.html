@@ -3,15 +3,17 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- 重載 -->
+        <!--重載-->
         <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
         <meta http-equiv="Pragma" content="no-cache">
         <meta http-equiv="Expires" content="0">
-        <!-- 重載 -->
+        <!--重載-->
         <title>劈哩啪啦身份辨識魔法終端連接器</title>
         <link rel="stylesheet" href="styles2.css">
         <link rel="stylesheet" href="hover.css">
         <link rel="stylesheet" href="animation.css">
+        <link rel="stylesheet" href="personalData.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
         <link rel="icon" sizes="180x180" href="./I'm-watching-you.png" type="image/png" />
         <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./I'm-watching-you.png" type="image/png" />
     </head>
@@ -24,8 +26,7 @@
                 </svg>
             </button>
             <div class="userDetailGroup"><!--顯示用戶資訊-->
-                <p id="showUserName"></p>
-                <p id="showUserEmail"></p>
+                
             </div>
             <div id="userContainer" class="no-select">
                 <div id="top-section">
@@ -93,6 +94,36 @@
             <input type="text" id="eventCode" placeholder="輸入活動代碼">
             <button id="joinEventBtn">確認</button>
             <p id="Message"></p>
+        </div>
+        <!--參加活動詳情-->
+        <div id="joinEventDetail" class="container hidden">
+            <button class="back-button" id="bckToJoinEventFrmJoinEventDetail">返回</button>
+            <h2 class="title"></h2>
+        </div>
+        
+        <!--個人資料頁面-->
+        <div class="PDcontainer container hidden" id="PDpersonalPage">
+                <div class="PDcard-header">
+                    <h2>用戶資料</h2>
+                </div>
+                <div class="PDcard-content">
+                    <div class="PDfield">
+                        <label for="PDusername">用戶名稱</label>
+                        <div class="PDfield-input PDrightItem" id="PDusername-container"></div>
+                    </div>
+                    <div class="PDfield">
+                        <label for="PDemail">電子郵件</label>
+                        <div id="PDemail" class="PDstatic-text PDrightItem"></div>
+                    </div>
+                    <div class="PDfield">
+                        <label for="PDpassword">密碼</label>
+                        <div class="PDfield-input PDrightItem" id="PDpassword-container"></div>
+                    </div>
+                    <div class="PDfield">
+                        <label for="PDregistrationDate">註冊日期</label>
+                        <div id="PDregistrationDate" class="PDstatic-text PDrightItem"></div>
+                    </div>
+                </div>
         </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
