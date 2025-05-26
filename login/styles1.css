@@ -65,7 +65,7 @@ body {
 /*------------------------------------------------------------*/
 /*切換介面按鈕*/
 .container a {
-    display: block;
+    display: inline-block;
     margin-top: 15px;
     color: #ffffff;
     text-decoration: none;
@@ -88,4 +88,39 @@ body {
 .message-error {
     color: #ff4d4d;
 }
+/*------------------------------------------------------------*/
+/*提示*/
+#promptContainer {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    height: 25px;
+    width: 25px;
+}
+#prompt{
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    height: 25px;
+    width: 25px;
+    margin: 0 0 0 0;
+    background-color: #698F99;
+    color: #094244;
+    border-radius: 980px;
+}/*------------------------------------------------------------*/
+#promptIcon svg {
+    display: block;
+    margin: auto;
+    color: #094244;
+}
+/*------------------------------------------------------------*/
+/*選取禁止*/
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
 
