@@ -38,3 +38,8 @@ button:hover {
     transform: translateY(-50%) scale(1.05);
     transition: background-color 0.3s, transform 0.2s;
 }
+/*------------------------------------------------------------*/
+/*個人資訊按鈕*/
+#PDpersonalPage button:hover {
+	color: #4a4a4a;
+}
