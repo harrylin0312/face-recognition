@@ -51,29 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
         elements.forEach(element => element.classList.remove('fade-in')); // 清除淡入類別
         loadUserName();
 
-        // 新增 userID 點擊展開/收合
-        const userIDElement = document.getElementById('userID');
-        if (userIDElement) {
-            userIDElement.addEventListener('click', expandContract);
-        }
-
-        // 滑鼠懸浮監聽（userContainer hover 展開/收合），僅於非觸控裝置註冊
-        const userContainer = document.getElementById('userContainer');
-        const expandContent = $("#expand-contract");
-        if (userContainer && !('ontouchstart' in window)) {
-            userContainer.addEventListener('mouseenter', () => {
-                expandContent.stop(true, true).slideDown(200);
-                if (autoCollapseTimer) {
-                    clearTimeout(autoCollapseTimer);
-                    autoCollapseTimer = null;
-                }
-            });
-
-            userContainer.addEventListener('mouseleave', () => {
-                expandContent.stop(true, true).slideUp(100);
-            });
-        }
-
         const createEventBtn = document.getElementById('createEventBtn');
         if (createEventBtn) {
             createEventBtn.addEventListener('click', createEvent);
@@ -316,13 +293,35 @@ async function loadUserName() {
             const userData = userDocSnap.data();
             userIDElement.textContent = `用戶：${userData.userName}`;
             userIDElement.className = 'green';
+            userIDElement.addEventListener('click', expandContract);
+
+            // ✅ 加入滑鼠懸浮展開選單事件
+            const userContainer = document.getElementById('userContainer');
+            const expandContent = $("#expand-contract");
+            if (userContainer && !('ontouchstart' in window)) {
+                userContainer.addEventListener('mouseenter', () => {
+                    expandContent.stop(true, true).slideDown(200);
+                    if (autoCollapseTimer) {
+                        clearTimeout(autoCollapseTimer);
+                        autoCollapseTimer = null;
+                    }
+                });
+
+                userContainer.addEventListener('mouseleave', () => {
+                    expandContent.stop(true, true).slideUp(100);
+                });
+            }
         } else {
             userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
             userIDElement.className = 'red';
         }
     } catch (error) {
         console.error('讀取使用者資料失敗:', error);
-        userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+        if (error.code === 'unavailable' || !navigator.onLine) {
+            userIDElement.textContent = '網路連線錯誤';
+        } else {
+            userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+        }
         userIDElement.className = 'red';
     }
 }
