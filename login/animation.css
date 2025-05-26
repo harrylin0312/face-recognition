@@ -1,4 +1,3 @@
-/*------------------------------------------------------------*/
 /*登入成功擴張動畫*/
 @keyframes expandDesktop {
     from {
@@ -80,6 +79,81 @@
 .visible {
     animation: fadeIn 0.3s ease forwards;
     opacity: 1;
+}
+/*------------------------------------------------------------*/
+/*提示容器縮放*/
+@keyframes promptExpand1 {
+    from {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        height: 25px;
+        width: 25px;
+    }
+    to {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        background-color: #91b5c1;
+        padding: 20px 30px; /*設定內邊距*/
+        border-radius: 15px; /*設定圓角邊框*/
+        text-align: center; /*文字置中對齊*/
+        height: 355px;
+        width: 300px;
+    }
+}
+@keyframes promptExpand2 {
+    from {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        background-color: #91b5c1;
+        padding: 20px 30px; /*設定內邊距*/
+        border-radius: 15px; /*設定圓角邊框*/
+        text-align: center; /*文字置中對齊*/
+        height: 355px;
+        width: 300px;
+    }
+    to {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        height: 25px;
+        width: 25px;
+    }
+}
+.promptExpand1 {
+    animation: promptExpand1 0.5s forwards;
+}
+.promptExpand2 {
+    animation: promptExpand2 0.5s forwards;
+}
+/*提示按鈕定位*/
+@keyframes promptPosition1 {
+    from {
+        bottom: 0px;
+        right: 0px;
+    }
+    to {
+        top: 15px;
+        left: 15px;
+    }
+}
+@keyframes promptPosition2 {
+    from {
+        top: 15px;
+        left: 15px;
+    }
+    to {
+        bottom: 0px;
+        right: 0px;
+    }
+}
+.promptPosition1 {
+    animation: promptPosition1 0.5s forwards;
+}
+.promptPosition2 {
+    animation: promptPosition2 0.5s forwards;
 }
 /*------------------------------------------------------------*/
 .container > * { 
