@@ -30,8 +30,8 @@
         right: 0px;
         margin: 0;
         padding: 0;
-        height: 100%;
-        width: 100%;
+        height: calc(100% - 1px);
+        width: calc(100% - 1px);
         border-radius: 30px;
         background-color: #99BAC3;
     }
@@ -40,6 +40,10 @@
     animation: expand 0.5s ease forwards;
 }
 @keyframes expand2 {
+    from {
+        height: calc(100% - 50px);
+        width: calc(100% - 50px);
+    }
     to {
         height: var(--target-height);
         width: var(--target-width);
