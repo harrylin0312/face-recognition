@@ -120,7 +120,6 @@ input {
     width: 50%;/*寬度*/
     max-height: 59%;/*最大高度*/
     padding: 10px;/*內邊距*/
-    border-radius: 30px;
     background-color: #6aa7b600;
     overflow-y: auto;/*垂直方向內容過多時自動出現捲軸*/
     font-size: 1.5em;
@@ -129,6 +128,7 @@ input {
 @media(max-width:700px) {/*手機版樣式*/
     .record-list {
         width: 105%;
+        border-radius: 30px;
     }
 }
 /*record-item內部排版*//*舉辦清單*/
@@ -298,7 +298,7 @@ input {
         top: 10px;
         right: 10px;
     }
-    #closBtn {
+    #closeBtn {
         top: 10px;
         left: 10px;
     }
