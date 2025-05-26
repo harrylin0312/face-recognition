@@ -195,6 +195,37 @@ window.addEventListener('pageshow', function (event) {
     }
 });
 
+let promptContainerStatus = false;
+document.getElementById("prompt").addEventListener("click", function () {
+    const promptContainer = document.getElementById("promptContainer");
+    const prompt = document.getElementById("prompt");
+    const promptIcon = document.getElementById("promptIcon");
+
+    if (promptContainerStatus) {
+        promptContainer.classList.remove("promptExpand1");
+        promptContainer.classList.add("promptExpand2");
+
+        prompt.classList.remove("promptPosition1");
+        prompt.classList.add("promptPosition2");
+
+        promptIcon.innerHTML = "？";
+        promptContainerStatus = false;
+    } else {
+        promptContainer.classList.remove("promptExpand2");
+        promptContainer.classList.add("promptExpand1");
+
+        prompt.classList.remove("promptPosition2");
+        prompt.classList.add("promptPosition1");
+
+        promptIcon.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="24" height="24">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        `;
+        promptContainerStatus = true;
+    }
+});
+
 // 將函數暴露給全局，以便 HTML 事件處理器使用
 window.togglePage = togglePage;
 window.register = register;
