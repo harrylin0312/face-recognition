@@ -87,10 +87,10 @@
         position: absolute;
         bottom: 10px;
         right: 10px;
-        height: 1px;
-        width: 1px;
-        background-color: #91b5c1;
-        border-radius: 10px;
+        height: 25px;
+        width: 25px;
+        background-color: #698F99;
+        border-radius: 20px;
     }
     to {
         position: absolute;
@@ -120,10 +120,10 @@
         position: absolute;
         bottom: 10px;
         right: 10px;
-        height: 1px;
-        width: 1px;
-        background-color: #91b5c1;
-        border-radius: 10px;
+        height: 25px;
+        width: 25px;
+        background-color: #698F99;
+        border-radius: 20px;
     }
 }
 .promptExpand1 {
@@ -134,30 +134,46 @@
 }
 /*提示按鈕定位*/
 @keyframes promptPosition1 {
-    from {
+    0% {
         bottom: 0px;
         right: 0px;
+        opacity: 1;
     }
-    to {
+    10% {
+        opacity: 0;
+    }
+    70% {
+        opacity: 0;
+    }
+    100% {
         top: 15px;
         left: 15px;
+        opacity: 1;
     }
 }
 @keyframes promptPosition2 {
-    from {
+    0% {
         top: 15px;
         left: 15px;
+        opacity: 1;
     }
-    to {
+    20% {
+        opacity: 0;
+    }
+    70% {
+        opacity: 0;
+    }
+    100% {
         bottom: 0px;
         right: 0px;
+        opacity: 1;
     }
 }
 .promptPosition1 {
-    animation: promptPosition1 0.5s forwards;
+    animation: promptPosition1 0.8s forwards;
 }
 .promptPosition2 {
-    animation: promptPosition2 0.5s forwards;
+    animation: promptPosition2 0.7s forwards;
 }
 /*------------------------------------------------------------*/
 .container > * { 
