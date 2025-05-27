@@ -100,6 +100,18 @@ function register() {
         return;
     }
 
+    if (username.length > 20) {
+        document.getElementById("RegisterMessage").innerText = "用戶名稱需小於20個字元";
+        document.getElementById("RegisterMessage").className = "message-error";
+        return;
+    }
+
+    if (password.length < 6) {
+        document.getElementById("RegisterMessage").innerText = "密碼至少需要6個字元";
+        document.getElementById("RegisterMessage").className = "message-error";
+        return;
+    }
+
     document.getElementById("RegisterMessage").innerText = "處理中...";
     document.getElementById("RegisterMessage").className = "message-success";
 
@@ -200,6 +212,11 @@ document.getElementById("prompt").addEventListener("click", function () {
     const promptContainer = document.getElementById("promptContainer");
     const prompt = document.getElementById("prompt");
     const promptIcon = document.getElementById("promptIcon");
+    const oppearElements = [
+        document.getElementById("limit"),
+        document.getElementById("userNameLimit"),
+        document.getElementById("passWordLimit")
+    ];
 
     if (promptContainerStatus) {
         promptContainer.classList.remove("promptExpand1");
@@ -207,6 +224,15 @@ document.getElementById("prompt").addEventListener("click", function () {
 
         prompt.classList.remove("promptPosition1");
         prompt.classList.add("promptPosition2");
+
+        oppearElements.forEach(el => {
+            el.classList.remove("visible");
+            el.classList.add("hidden");
+            setTimeout(() => {
+                el.classList.remove("hidden");
+                el.classList.add("unvisible");
+            }, 300);
+        });
 
         promptIcon.innerHTML = "？";
         promptContainerStatus = false;
@@ -216,6 +242,13 @@ document.getElementById("prompt").addEventListener("click", function () {
 
         prompt.classList.remove("promptPosition2");
         prompt.classList.add("promptPosition1");
+
+        oppearElements.forEach(el => {
+            setTimeout(() => {
+                el.classList.remove("unvisible");
+                el.classList.add("visible");
+            }, 300);
+        });
 
         promptIcon.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="24" height="24">
