@@ -89,6 +89,8 @@
         right: 10px;
         height: 25px;
         width: 25px;
+        background-color: #91b5c1;
+        border-radius: 980px;
     }
     to {
         position: absolute;
@@ -120,6 +122,8 @@
         right: 10px;
         height: 25px;
         width: 25px;
+        background-color: #91b5c1;
+        border-radius: 980px;
     }
 }
 .promptExpand1 {
