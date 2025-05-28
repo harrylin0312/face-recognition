@@ -1,0 +1,67 @@
+:root {
+    --vh: 1vh;
+}
+body, html {
+    margin: 0;
+    padding: 0;
+    height: calc(var(--vh) * 100);
+    overflow: hidden;
+}
+/*------------------------------------------------------------*/
+/*背景圖片*/
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-image: url('cover1.jpeg'); /* 預設電腦版背景 */
+    z-index: -1;
+    font-family: Arial, sans-serif;
+}
+@media (max-width: 768px) {
+    .background {
+        background-image: url('cover2.jpeg');
+    }
+}
+/*------------------------------------------------------------*/
+/*按鈕*/
+#getStart {
+    position: absolute;
+    bottom: 30%;
+    right: 5%;
+    padding: 20px 40px;
+    background-color: #D6F1F5;
+    color: #000000;
+    border: none;
+    border-radius: 980px;
+    font-size: 24px;
+    font-weight: 500;
+}
+@media (max-width: 768px) {
+    #getStart {
+        bottom:37%; 
+    }
+    
+}
+#getStart:hover {
+    background-color: #d6f1f5e4;
+    cursor: pointer;
+}
+/*------------------------------------------------------------*/
+/*關於我們超連結*/
+#aboutUs {
+    position: absolute;
+    bottom: 2%;
+    right: 2%;
+    color: #000000;
+    border: none;
+    font-size: 18px;
+    font-weight: 500;
+}
+#aboutUs:hover {
+    color: #393939;
+}
