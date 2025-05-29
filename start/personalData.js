@@ -48,6 +48,9 @@ export async function loadPersonalData() {
   function renderUsername() {
     usernameContainer.innerHTML = "";
     if (editingUsername) {
+      document.querySelectorAll(".PDfield").forEach(field => {
+        if (!field.contains(usernameContainer)) field.style.display = "none";
+      });
       //創建編輯輸入框
       const input = document.createElement("input");
       input.type = "text";
@@ -59,12 +62,18 @@ export async function loadPersonalData() {
           user.username = newUsername;
           editingUsername = false;
           renderUsername();
+          document.querySelectorAll(".PDfield").forEach(field => {
+            field.style.display = "";
+          });
         }
       });
       const cancelBtn = createIconButton("✖", () => {
         newUsername = user.username;
         editingUsername = false;
         renderUsername();
+        document.querySelectorAll(".PDfield").forEach(field => {
+          field.style.display = "";
+        });
       });
       usernameContainer.append(input, saveBtn, cancelBtn);
     } else {
@@ -82,6 +91,9 @@ export async function loadPersonalData() {
   function renderPassword() {
     passwordContainer.innerHTML = "";
     if (editingPassword) {
+      document.querySelectorAll(".PDfield").forEach(field => {
+        if (!field.contains(passwordContainer)) field.style.display = "none";
+      });
       const oldInput = document.createElement("input");
       oldInput.type = showPassword ? "text" : "password";
       oldInput.placeholder = "舊密碼";
@@ -109,6 +121,9 @@ export async function loadPersonalData() {
           editingPassword = false;
           showPassword = false;
           renderPassword();
+          document.querySelectorAll(".PDfield").forEach(field => {
+            field.style.display = "";
+          });
         }
       });
 
@@ -118,6 +133,9 @@ export async function loadPersonalData() {
         editingPassword = false;
         showPassword = false;
         renderPassword();
+        document.querySelectorAll(".PDfield").forEach(field => {
+          field.style.display = "";
+        });
       });
 
       // 顯示舊密碼與新密碼輸入欄位，切換可視按鈕，儲存與取消按鈕
