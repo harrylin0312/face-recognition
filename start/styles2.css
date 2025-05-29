@@ -33,7 +33,7 @@ body {
     position: relative;/*定位錨點*/
 }
 /*手機版容器樣式*/
-@media(max-width:700px){
+@media(max-width:768px){
     .container {
         max-height: 85%;
         height: 85%;
@@ -69,7 +69,7 @@ button {
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
 }
-@media(max-width:700px){
+@media(max-width:768px){
     .button-group{
         gap: 10vw;
         font-size: 0.8em;
@@ -101,7 +101,7 @@ input {
     left: 50%;
     transform: translate(-50%, -50%);
 }
-@media(max-width:700px){/*手機版樣式*/
+@media(max-width:768px){/*手機版樣式*/
     input{
         width: 90%;
     }
@@ -129,7 +129,7 @@ input::placeholder {
     font-size: 1.5em;
     position: relative; /*設定相對定位*/
 }
-@media(max-width:700px) {/*手機版樣式*/
+@media(max-width:768px) {/*手機版樣式*/
     .record-list {
         width: 105%;
         border-radius: 30px;
@@ -149,7 +149,7 @@ input::placeholder {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
 }
-@media(max-width:700px) {/*手機版樣式*/
+@media(max-width:768px) {/*手機版樣式*/
     .record-item {
     padding: 20px 20px; /* 內邊距 */
     margin: 18px 0; /* 每列之間留間隔 */
@@ -218,7 +218,7 @@ input::placeholder {
     padding: 20px 20px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
     .delete-button {
         width: 30%;
     }
@@ -297,7 +297,7 @@ input::placeholder {
     height: 20px;
     color: #333;
 }
-@media(max-width:700px) {/*手機版樣式*/
+@media(max-width:768px) {/*手機版樣式*/
     #userContainer {
         top: 10px;
         right: 10px;
@@ -322,7 +322,7 @@ input::placeholder {
     cursor: pointer;
     opacity: 1; /*固定可見，不參與動畫*/
 }
-@media(max-width:700px) {/*手機版樣式*/
+@media(max-width:768px) {/*手機版樣式*/
     .back-button {
         top: 10px;
         left: 10px;
@@ -338,7 +338,7 @@ input::placeholder {
     font-size: 1.5em;
     color: #343434; /* 顏色可自訂 */
 }
-@media(max-width:700px) {/*手機版樣式*/
+@media(max-width:768px) {/*手機版樣式*/
     #checkInProgress {
         right: 6%;
     }
@@ -367,7 +367,7 @@ input::placeholder {
     font-size: 1.5em;
     color: #343434; /* 顏色可自訂 */
 }
-@media(max-width:700px) {/*手機版樣式*/
+@media(max-width:768px) {/*手機版樣式*/
     .legend {
         left: 4%;
     }
@@ -392,7 +392,7 @@ input::placeholder {
     border-radius: 12px;
     transform: scaleX(-1);
 }
-@media(max-width:700px) {/*手機版樣式*/
+@media(max-width:768px) {/*手機版樣式*/
     #cameraContainer {
         position: absolute;
         top: 30%;
