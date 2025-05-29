@@ -272,7 +272,7 @@ function toggleSection(sectionId, eventId = null, eventName = '') {
 window.toggleSection = toggleSection;
 
 //顯示用戶名稱
-async function loadUserName() {
+export async function loadUserName() {
     const userIDElement = document.getElementById('userID');
     const userUID = localStorage.getItem("userUID");
     if (!userUID) {
