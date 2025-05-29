@@ -1,5 +1,7 @@
 import { db } from "./script2.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { loadUserName } from './script2.js';
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 export async function loadPersonalData() {
   const userUID = localStorage.getItem("userUID");
@@ -48,32 +50,29 @@ export async function loadPersonalData() {
   function renderUsername() {
     usernameContainer.innerHTML = "";
     if (editingUsername) {
-      document.querySelectorAll(".PDfield").forEach(field => {
-        if (!field.contains(usernameContainer)) field.style.display = "none";
-      });
       //創建編輯輸入框
       const input = document.createElement("input");
       input.type = "text";
       input.className = "PD1stInput";
       input.value = newUsername;
       input.addEventListener("input", (e) => newUsername = e.target.value);
-      const saveBtn = createIconButton("✔", () => {
+      const saveBtn = createIconButton("✔", async () => {
         if (newUsername.trim()) {
-          user.username = newUsername;
+          try {
+            await updateDoc(doc(db, "users", userUID), { userName: newUsername });
+            user.username = newUsername;
+            loadUserName();
+          } catch (error) {
+            console.error("更新用戶名稱失敗：", error);
+          }
           editingUsername = false;
           renderUsername();
-          document.querySelectorAll(".PDfield").forEach(field => {
-            field.style.display = "";
-          });
         }
       });
       const cancelBtn = createIconButton("✖", () => {
         newUsername = user.username;
         editingUsername = false;
         renderUsername();
-        document.querySelectorAll(".PDfield").forEach(field => {
-          field.style.display = "";
-        });
       });
       usernameContainer.append(input, saveBtn, cancelBtn);
     } else {
@@ -91,9 +90,6 @@ export async function loadPersonalData() {
   function renderPassword() {
     passwordContainer.innerHTML = "";
     if (editingPassword) {
-      document.querySelectorAll(".PDfield").forEach(field => {
-        if (!field.contains(passwordContainer)) field.style.display = "none";
-      });
       const oldInput = document.createElement("input");
       oldInput.type = showPassword ? "text" : "password";
       oldInput.placeholder = "舊密碼";
@@ -113,17 +109,41 @@ export async function loadPersonalData() {
         renderPassword();
       });
 
-      const saveBtn = createIconButton("✔", () => {
+      const saveBtn = createIconButton("✔", async () => {
         if (oldPassword.trim() && newPassword.trim()) {
-          user.password = "••••••••";
-          oldPassword = "";
-          newPassword = "";
-          editingPassword = false;
-          showPassword = false;
+          const auth = getAuth();
+          const currentUser = auth.currentUser;
+          if (!currentUser) {
+            user.password = "尚未登入";
+            renderPassword();
+            return;
+          }
+          const credential = EmailAuthProvider.credential(currentUser.email, oldPassword);
+          try {
+            await reauthenticateWithCredential(currentUser, credential);
+            await updatePassword(currentUser, newPassword);
+            user.password = "••••••••";
+            oldPassword = "";
+            newPassword = "";
+            editingPassword = false;
+            showPassword = false;
+          } catch (error) {
+            console.error("密碼更新失敗：", error);
+            switch (error.code) {
+              case "auth/wrong-password":
+                user.password = "舊密碼錯誤，請再試一次。";
+                break;
+              case "auth/too-many-requests":
+                user.password = "請稍後再試，登入次數過多。";
+                break;
+              case "auth/weak-password":
+                user.password = "新密碼太弱，請使用更複雜的密碼。";
+                break;
+              default:
+                user.password = "密碼更新失敗，請稍後再試。";
+            }
+          }
           renderPassword();
-          document.querySelectorAll(".PDfield").forEach(field => {
-            field.style.display = "";
-          });
         }
       });
 
@@ -133,9 +153,6 @@ export async function loadPersonalData() {
         editingPassword = false;
         showPassword = false;
         renderPassword();
-        document.querySelectorAll(".PDfield").forEach(field => {
-          field.style.display = "";
-        });
       });
 
       // 顯示舊密碼與新密碼輸入欄位，切換可視按鈕，儲存與取消按鈕
