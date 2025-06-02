@@ -3,6 +3,7 @@ import { loadUserName } from './script2.js';
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
+
 export async function loadPersonalData() {
   const userUID = localStorage.getItem("userUID");
   if (!userUID) {
@@ -184,3 +185,43 @@ export async function loadPersonalData() {
   renderUsername();
   renderPassword();
 }
+
+// 綁定圖標點擊觸發檔案選擇與上傳
+document.addEventListener("DOMContentLoaded", () => {
+  const uploadBtn = document.querySelector(".PDuploadBtn");
+  const fileInput = document.getElementById("PDfileInput");
+
+  if (uploadBtn && fileInput) {
+    uploadBtn.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", "face recognition");
+      formData.append("folder", "Upload"); // 將圖片儲存於 Upload 資料夾
+      formData.append("tags", "user_upload,PD_section"); // 加入標籤
+
+      try {
+        const res = await fetch("https://api.cloudinary.com/v1_1/dmuwxzzlk/image/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+
+        if (data.secure_url) {
+          console.log("上傳成功！圖片網址：", data.secure_url);
+          alert("圖片上傳成功！");
+        } else {
+          console.error("Cloudinary 回傳錯誤：", data);
+          alert("圖片上傳失敗。");
+        }
+      } catch (error) {
+        console.error("圖片上傳錯誤：", error);
+        alert("圖片上傳失敗。");
+      }
+    });
+  }
+});
