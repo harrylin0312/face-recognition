@@ -27,7 +27,7 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	gap: 80px;
+	gap: 0px;
 }
 /*------------------------------------------------------------*/
 /*標題*/
@@ -72,7 +72,7 @@
 	padding: 8px 0;
 }
 /*編輯元件套組*/
-#PDpersonalPage .PDfield-input {
+#PDpersonalPage .PDfield-input , #PDpersonalPage .PDuploadContainer{
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -121,48 +121,30 @@ input[type="password"] {
 }
 
 .PDcard-content {
+    position: absolute;
     top: 0%;
     left: 0%;
     width: 100%;
     height: 100%;
 }
 .PDfield {
-    position: absolute;
+    position: relative;
     top: 0%;
     left: 0%;
     width: 100%;
-    height: 100%;
+    height: 15%;
+    padding: 0px 0px;
 }
 /*------------------------------------------------------------*/
-#PDtitalOfUsername-container {
+#PDtitalOfEmail, #PDemail,#PDtitalOfUsername-container, #PDusername-container, #PDtitalOfPassword-container, 
+#PDpassword-container,#PDtitalOfRegistrationDate, #PDregistrationDate, #PDtitalOfUpload, #PDupload {
     position: absolute;
-    top: 25%;
-}#PDusername-container {
-    position: absolute;
-    top: 25%;
-}
-/*-------------------------------*/
-#PDtitalOfEmail {
-    position: absolute;
-    top: 40%;
-}#PDemail {
-    position: absolute;
-    top: 40%;
-}
-/*-------------------------------*/
-#PDtitalOfPassword-container {
-    position: absolute;
-    top: 55%;
-}#PDpassword-container {
-    position: absolute;
-    top: 55%;
-}
-/*-------------------------------*/
-#PDtitalOfRegistrationDate {
-    position: absolute;
-    top: 70%;
-}#PDregistrationDate {
-    position: absolute;
-    top: 70%;
+    top: 50%;
+    transform: translateY(-50%);
 }
 /*------------------------------------------------------------*/
+.PDuploadBtn {
+    padding: 10px 8px;
+    background-color: #698F99;
+    border-radius: 980px;
+}
