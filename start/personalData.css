@@ -78,7 +78,6 @@
 	align-items: center;
 	gap: 8px;
 	flex-wrap: wrap;
-	/*transform: translate(135px,0%);*/
 }
 /*輸入框*/
 #PDpersonalPage .PDfield-input input[type="text"],
@@ -147,4 +146,9 @@ input[type="password"] {
     padding: 10px 8px;
     background-color: #698F99;
     border-radius: 980px;
+}
+/*------------------------------------------------------------*/
+#uploadSign {
+    font-size: 1.2rem;
+    color: #000000;
 }
