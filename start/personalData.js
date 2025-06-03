@@ -186,7 +186,7 @@ export async function loadPersonalData() {
   renderPassword();
 }
 
-// 綁定圖標點擊觸發檔案選擇與上傳
+//綁定圖標點擊觸發檔案選擇與上傳
 document.addEventListener("DOMContentLoaded", () => {
   const uploadBtn = document.querySelector(".PDuploadBtn");
   const fileInput = document.getElementById("PDfileInput");
@@ -201,8 +201,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("upload_preset", "face recognition");
-      formData.append("folder", "Upload"); // 將圖片儲存於 Upload 資料夾
-      formData.append("tags", "user_upload,PD_section"); // 加入標籤
+      const userUID = localStorage.getItem("userUID") || "anonymous";
+      formData.append("tags", `user_upload,PD_section,${userUID}`);
 
       try {
         const res = await fetch("https://api.cloudinary.com/v1_1/dmuwxzzlk/image/upload", {
