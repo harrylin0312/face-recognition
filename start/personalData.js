@@ -3,6 +3,42 @@ import { loadUserName } from './script2.js';
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
+async function checkUploadedImages() {
+  const uploadSign = document.getElementById("uploadSign");
+  const uploadBtn = document.querySelector(".PDuploadBtn");
+  const userUID = localStorage.getItem("userUID");
+
+  if (!uploadSign || !uploadBtn || !userUID) return;
+
+  uploadSign.textContent = "載入中";
+  uploadSign.style.color = "black";
+  uploadBtn.style.display = "none";
+
+  const baseUrl = `https://res.cloudinary.com/dmuwxzzlk/image/upload/Upload/`;
+  const extensions = [".jpg", ".jpeg", ".png", ".webp"];
+  const timestamp = new Date().getTime();
+
+  for (const ext of extensions) {
+    const imageUrl = `${baseUrl}${userUID}${ext}?t=${timestamp}`;
+    const imageExists = await new Promise((resolve) => {
+      const img = new window.Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+      img.src = imageUrl;
+    });
+
+    if (imageExists) {
+      uploadSign.textContent = "已完成上傳";
+      uploadSign.style.color = "green";
+      uploadBtn.style.display = "none";
+      return;
+    }
+  }
+
+  uploadSign.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> 請上傳清晰的個人臉部影像`;
+  uploadSign.style.color = "red";
+  uploadBtn.style.display = "inline-block";
+}
 
 export async function loadPersonalData() {
   const userUID = localStorage.getItem("userUID");
@@ -188,6 +224,8 @@ export async function loadPersonalData() {
 
 //綁定圖標點擊觸發檔案選擇與上傳
 document.addEventListener("DOMContentLoaded", () => {
+  checkUploadedImages();
+
   const uploadBtn = document.querySelector(".PDuploadBtn");
   const fileInput = document.getElementById("PDfileInput");
 
@@ -203,6 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append("upload_preset", "face recognition");
       const userUID = localStorage.getItem("userUID") || "anonymous";
       formData.append("tags", `user_upload,PD_section,${userUID}`);
+      formData.append("public_id", `${userUID}.jpg`);
 
       try {
         const res = await fetch("https://api.cloudinary.com/v1_1/dmuwxzzlk/image/upload", {
@@ -212,8 +251,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await res.json();
 
         if (data.secure_url) {
-          console.log("上傳成功！圖片網址：", data.secure_url);
+          console.log("上傳成功！");
+          console.log("圖片網址：", data.secure_url);
+          console.log("public_id：", data.public_id);
           alert("圖片上傳成功！");
+          checkUploadedImages();
         } else {
           console.error("Cloudinary 回傳錯誤：", data);
           alert("圖片上傳失敗。");
