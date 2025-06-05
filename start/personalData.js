@@ -15,7 +15,7 @@ async function checkUploadedImages() {
 
   if (!uploadSign || !uploadBtn || !userUID) return;
 
-  uploadSign.textContent = "載入中";
+  uploadSign.textContent = "載入中...";
   uploadSign.style.color = "black";
   uploadBtn.style.display = "none";
 
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const uploadSign = document.getElementById("uploadSign");
       const uploadBtn = document.querySelector(".PDuploadBtn");
       if (uploadSign) {
-        uploadSign.textContent = "處理中";
+        uploadSign.textContent = "處理中...";
         uploadSign.style.color = "black";
         if (uploadBtn) uploadBtn.style.display = "none";
       }
