@@ -2,6 +2,11 @@ import { db } from "./script2.js";
 import { loadUserName } from './script2.js';
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const BUCKET_NAME = "face123";
+
+const supabase = createClient("https://wiqldwmpszfinwbdegrs.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpcWxkd21wc3pmaW53YmRlZ3JzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg5NTUyNTQsImV4cCI6MjA2NDUzMTI1NH0.gbPCAFdTdEcl8-1C4OnNlp2G0YGue6kd1N9cvxmqiUA");
 
 async function checkUploadedImages() {
   const uploadSign = document.getElementById("uploadSign");
@@ -14,30 +19,20 @@ async function checkUploadedImages() {
   uploadSign.style.color = "black";
   uploadBtn.style.display = "none";
 
-  const baseUrl = `https://res.cloudinary.com/dmuwxzzlk/image/upload/Upload/`;
-  const extensions = [".jpg", ".jpeg", ".png", ".webp"];
-  const timestamp = new Date().getTime();
+  const { data, error } = await supabase
+    .storage
+    .from(BUCKET_NAME)
+    .list("", { search: `${userUID}.jpg` });
 
-  for (const ext of extensions) {
-    const imageUrl = `${baseUrl}${userUID}${ext}?t=${timestamp}`;
-    const imageExists = await new Promise((resolve) => {
-      const img = new window.Image();
-      img.onload = () => resolve(true);
-      img.onerror = () => resolve(false);
-      img.src = imageUrl;
-    });
-
-    if (imageExists) {
-      uploadSign.textContent = "已完成上傳";
-      uploadSign.style.color = "green";
-      uploadBtn.style.display = "none";
-      return;
-    }
+  if (error || !data || data.length === 0) {
+    uploadSign.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> 請上傳清晰的個人臉部影像`;
+    uploadSign.style.color = "red";
+    uploadBtn.style.display = "inline-block";
+  } else {
+    uploadSign.textContent = "已完成上傳";
+    uploadSign.style.color = "green";
+    uploadBtn.style.display = "none";
   }
-
-  uploadSign.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> 請上傳清晰的個人臉部影像`;
-  uploadSign.style.color = "red";
-  uploadBtn.style.display = "inline-block";
 }
 
 export async function loadPersonalData() {
@@ -236,34 +231,33 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = event.target.files[0];
       if (!file) return;
 
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "face recognition");
       const userUID = localStorage.getItem("userUID") || "anonymous";
-      formData.append("tags", `user_upload,PD_section,${userUID}`);
-      formData.append("public_id", `${userUID}.jpg`);
+      const fileExt = file.name.split(".").pop();
+      const filePath = `${userUID}.jpg`;
 
-      try {
-        const res = await fetch("https://api.cloudinary.com/v1_1/dmuwxzzlk/image/upload", {
-          method: "POST",
-          body: formData,
-        });
-        const data = await res.json();
-
-        if (data.secure_url) {
-          console.log("上傳成功！");
-          console.log("圖片網址：", data.secure_url);
-          console.log("public_id：", data.public_id);
-          alert("圖片上傳成功！");
-          checkUploadedImages();
-        } else {
-          console.error("Cloudinary 回傳錯誤：", data);
-          alert("圖片上傳失敗。");
-        }
-      } catch (error) {
-        console.error("圖片上傳錯誤：", error);
-        alert("圖片上傳失敗。");
+      const uploadSign = document.getElementById("uploadSign");
+      const uploadBtn = document.querySelector(".PDuploadBtn");
+      if (uploadSign) {
+        uploadSign.textContent = "處理中";
+        uploadSign.style.color = "black";
+        if (uploadBtn) uploadBtn.style.display = "none";
       }
+
+      const { error: uploadError } = await supabase.storage
+        .from(BUCKET_NAME)
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) {
+        console.error("圖片上傳失敗：", uploadError);
+        console.log("Supabase 上傳錯誤訊息：", uploadError);
+        alert("圖片上傳失敗。");
+        alert("錯誤訊息：" + uploadError.message);
+        console.error("上傳失敗詳情：", uploadError);
+        return;
+      }
+
+      alert("圖片上傳成功！");
+      checkUploadedImages();
     });
   }
 });
