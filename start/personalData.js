@@ -24,7 +24,11 @@ async function checkUploadedImages() {
     .from(BUCKET_NAME)
     .list("", { search: `${userUID}.jpg` });
 
-  if (error || !data || data.length === 0) {
+  if (error) {
+    uploadSign.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> 網路連線錯誤，請稍後再試`;
+    uploadSign.style.color = "red";
+    uploadBtn.style.display = "inline-block";
+  } else if (!data || data.length === 0) {
     uploadSign.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> 請上傳清晰的個人臉部影像`;
     uploadSign.style.color = "red";
     uploadBtn.style.display = "inline-block";
