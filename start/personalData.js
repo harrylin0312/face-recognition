@@ -222,8 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (uploadError) {
         console.error("圖片上傳失敗：", uploadError);
         console.log("Supabase 上傳錯誤訊息：", uploadError);
-        alert("圖片上傳失敗。");
-        alert("錯誤訊息：" + uploadError.message);
+        alert(`圖片上傳失敗：${uploadError.message}`);
         console.error("上傳失敗詳情：", uploadError);
         return;
       }
