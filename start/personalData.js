@@ -1,43 +1,11 @@
-import { db } from "./script2.js";
-import { loadUserName } from './script2.js';
+import { db, loadUserName, supabase ,checkUploadedImages } from "./script2.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 const BUCKET_NAME = "face123";
 
-const supabase = createClient("https://wiqldwmpszfinwbdegrs.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpcWxkd21wc3pmaW53YmRlZ3JzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg5NTUyNTQsImV4cCI6MjA2NDUzMTI1NH0.gbPCAFdTdEcl8-1C4OnNlp2G0YGue6kd1N9cvxmqiUA");
 
-async function checkUploadedImages() {
-  const uploadSign = document.getElementById("uploadSign");
-  const uploadBtn = document.querySelector(".PDuploadBtn");
-  const userUID = localStorage.getItem("userUID");
 
-  if (!uploadSign || !uploadBtn || !userUID) return;
-
-  uploadSign.textContent = "載入中...";
-  uploadSign.style.color = "black";
-  uploadBtn.style.display = "none";
-
-  const { data, error } = await supabase
-    .storage
-    .from(BUCKET_NAME)
-    .list("", { search: `${userUID}.jpg` });
-
-  if (error) {
-    uploadSign.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> 網路連線錯誤，請稍後再試`;
-    uploadSign.style.color = "red";
-    uploadBtn.style.display = "inline-block";
-  } else if (!data || data.length === 0) {
-    uploadSign.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> 請上傳清晰的個人臉部影像`;
-    uploadSign.style.color = "red";
-    uploadBtn.style.display = "inline-block";
-  } else {
-    uploadSign.textContent = "已完成上傳";
-    uploadSign.style.color = "green";
-    uploadBtn.style.display = "none";
-  }
-}
 
 export async function loadPersonalData() {
   const userUID = localStorage.getItem("userUID");
