@@ -2,6 +2,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+const BUCKET_NAME = "face123";
+export const supabase = createClient("https://wiqldwmpszfinwbdegrs.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpcWxkd21wc3pmaW53YmRlZ3JzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg5NTUyNTQsImV4cCI6MjA2NDUzMTI1NH0.gbPCAFdTdEcl8-1C4OnNlp2G0YGue6kd1N9cvxmqiUA");
 
 // 初始化 Firebase
 const firebaseConfig = {
@@ -290,6 +294,7 @@ export async function loadUserName() {
 
         if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
+            localStorage.setItem("userData", JSON.stringify(userData));
             userIDElement.textContent = `用戶：${userData.userName}`;
             userIDElement.className = 'green';
             userIDElement.addEventListener('click', expandContract);
@@ -322,6 +327,60 @@ export async function loadUserName() {
             userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
         }
         userIDElement.className = 'red';
+    }
+}
+export async function checkUploadedImages() {
+    // 檢查是否有上傳個人臉部影像
+    const uploadSign = document.getElementById("uploadSign");
+    const uploadBtn = document.querySelector(".PDuploadBtn");
+    const userUID = localStorage.getItem("userUID");
+
+    if (!uploadSign || !uploadBtn || !userUID) return;
+
+    uploadSign.textContent = "載入中...";
+    uploadSign.style.color = "black";
+    uploadBtn.style.display = "none";
+
+    const { data, error } = await supabase
+        .storage
+        .from(BUCKET_NAME)
+        .list("", { search: `${userUID}.jpg` });
+
+    if (error || !data || data.length === 0) {
+        uploadSign.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> 請上傳用戶臉部影像`;
+        uploadSign.style.color = "red";
+        uploadBtn.style.display = "inline-block";
+        // 取得 userData 並更新 #userID，顯示警示圖示
+        const userIDElement = document.getElementById("userID");
+        const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+        userIDElement.innerHTML = `用戶：${userData.userName} <span style="color:red;"><i class="fa-solid fa-triangle-exclamation"></i></span>`;
+
+        // 在 .detail 後加入警示圖示
+        const detailElement = document.querySelector(".detail");
+        if (detailElement && !detailElement.querySelector(".warning-icon")) {
+            const warningIcon = document.createElement("i");
+            warningIcon.className = "fa-solid fa-triangle-exclamation warning-icon";
+            warningIcon.style.color = "red";
+            warningIcon.style.marginLeft = "6px";
+            detailElement.appendChild(warningIcon);
+        }
+    } else {
+        uploadSign.textContent = "已完成上傳";
+        uploadSign.style.color = "green";
+        uploadBtn.style.display = "none";
+        // 取得 userData 並更新 #userID，移除警示圖示
+        const userIDElement = document.getElementById("userID");
+        const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+        if (userIDElement && userData.userName) {
+            userIDElement.textContent = `用戶：${userData.userName}`;
+            userIDElement.className = 'green';
+        }
+        // 查詢成功且圖片存在時，清除 .detail 旁的警示圖示
+        const detailElement = document.querySelector(".detail");
+        if (detailElement) {
+            const warningIcon = detailElement.querySelector(".warning-icon");
+            if (warningIcon) detailElement.removeChild(warningIcon);
+        }
     }
 }
 
