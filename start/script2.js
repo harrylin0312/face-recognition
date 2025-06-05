@@ -328,6 +328,7 @@ export async function loadUserName() {
         }
         userIDElement.className = 'red';
     }
+    checkUploadedImages()
 }
 export async function checkUploadedImages() {
     // 檢查是否有上傳個人臉部影像
