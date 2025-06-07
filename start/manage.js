@@ -67,7 +67,11 @@ export async function loadEventManagement() {
 
     } catch (err) {
         console.error("讀取舉辦活動時發生錯誤：", err);
-        container.innerHTML = '載入失敗，請稍後再試';
+        if (!navigator.onLine || err.code === 'unavailable') {
+            container.innerHTML = '<span style="color:red;">網路連線錯誤</span>';
+        } else {
+            container.innerHTML = '載入失敗，請稍後再試';
+        }
     }
 }
 
@@ -253,6 +257,10 @@ export async function loadEventDetail(eventID) {
 
     } catch (error) {
         console.error("讀取活動詳情錯誤：", error);
-        container.innerHTML = '載入失敗，請稍後再試';
+        if (!navigator.onLine || error.code === 'unavailable') {
+            container.innerHTML = '<span style="color:red;">網路連線錯誤</span>';
+        } else {
+            container.innerHTML = '載入失敗，請稍後再試';
+        }
     }
 }
