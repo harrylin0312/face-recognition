@@ -58,7 +58,7 @@ export async function loadCheckInRecords() {
                                 <span class="arrow">&gt;</span>
                             </div>`;
                 } else {
-                    html += `<div class="record-item">資料異常 (ID: ${eventID})</div>`;
+                    html += `<div class="record-item">活動已被刪除 (ID: ${eventID})</div>`;
                 }
             } catch (innerErr) {
                 console.error(`讀取活動 ${eventID} 或打卡資料錯誤：`, innerErr);
@@ -73,7 +73,11 @@ export async function loadCheckInRecords() {
         }
     } catch (err) {
         console.error("讀取參加活動時發生錯誤：", err);
-        container.innerHTML = '載入失敗，請稍後再試';
+        if (!navigator.onLine || err.code === 'unavailable') {
+            container.innerHTML = '<span style="color:red;">網路連線錯誤</span>';
+        } else {
+            container.innerHTML = '載入失敗，請稍後再試';
+        }
     }
 }
 
