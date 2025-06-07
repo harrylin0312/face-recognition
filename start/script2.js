@@ -26,99 +26,16 @@ export const db = getFirestore(app);
 import { loadEventManagement, createEvent, loadEventDetail } from './manage.js';
 import { loadCheckInRecords, joinEvent } from './join.js';
 import { loadPersonalData } from './personalData.js';
+import { toggleSection } from './toggleSection.js';
 window.createEvent = createEvent;
 window.loadEventManagement = loadEventManagement;
 window.loadEventDetail = loadEventDetail;
 window.loadCheckInRecords = loadCheckInRecords;
 window.joinEvent = joinEvent;
 window.loadPersonalData = loadPersonalData;
+window.toggleSection = toggleSection;
 
-// 攝影機功能
-let socket = null;
-let captureInterval = null;
-async function startCamera() {
-  // （一）先確認使用者已登入，並且 camera DOM 存在
-  const userUID = localStorage.getItem("userUID");
-  if (!userUID) {
-    alert("請先登入才能打卡");
-    return;
-  }
-  const video = document.getElementById('camera');
-  if (!video) {
-    console.error("找不到 <video id='camera'>");
-    return;
-  }
-  // （二）打開攝影機
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-    video.srcObject = stream;
-    await video.play();
-  } catch (err) {
-    console.error("無法開啟攝影機：", err);
-    alert("無法開啟攝影機，請確認權限設定");
-    return;
-  }
-  // （三）建立 WebSocket 連線（只有在打卡頁打開時才做）
-  socket = new WebSocket("ws://localhost:8080");
 
-  socket.onopen = () => {
-    console.log("🔌 WebSocket 已連線 (startCamera)");
-    startCaptureLoop(video);
-  };
-  socket.onmessage = evt => {
-    // 處理後端回傳
-    console.log("👈 來自後端：", evt.data);
-  };
-  socket.onclose = () => {
-    console.log("🔌 WebSocket 已斷開");
-    stopCamera(); // 如果你想連線斷了就自動停止擷取
-  };
-  socket.onerror = err => {
-    console.error("🔌 WebSocket 發生錯誤：", err);
-  };
-}
-function startCaptureLoop(video) {
-  // 如果已經有舊的 interval，就先清掉
-  if (captureInterval) {
-    clearInterval(captureInterval);
-    captureInterval = null;
-  }
-  // 建立隱藏 Canvas，用來擷取影像
-  const offscreenCanvas = document.createElement("canvas");
-  const ctx = offscreenCanvas.getContext("2d");
-  offscreenCanvas.width = video.videoWidth;
-  offscreenCanvas.height = video.videoHeight;
-
-  captureInterval = setInterval(() => {
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
-      console.warn("⚠️ WebSocket 尚未 open，跳過本次傳送");
-      return;
-    }
-    ctx.drawImage(video, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
-    const dataURL = offscreenCanvas.toDataURL("image/jpeg", 0.7);
-    const payload = { type: "base64", data: dataURL };
-    console.log("➡️ 傳送影像給後端，size =", dataURL.length);
-    socket.send(JSON.stringify(payload));
-  }, 3000);
-}
-function stopCamera() {
-  // 清掉 interval
-  if (captureInterval) {
-    clearInterval(captureInterval);
-    captureInterval = null;
-  }
-  // 停掉 MediaStream
-  const video = document.getElementById('camera');
-  if (video && video.srcObject) {
-    video.srcObject.getTracks().forEach(t => t.stop());
-    video.srcObject = null;
-  }
-  // 關閉 WebSocket
-  if (socket && socket.readyState === WebSocket.OPEN) {
-    socket.close();
-  }
-  socket = null;
-}
 
 // 頁面載入時觸發淡入效果
 document.addEventListener('DOMContentLoaded', () => {
@@ -275,79 +192,6 @@ function setVH() {
 }
 window.addEventListener('load', setVH);
 window.addEventListener('resize', setVH);
-
-// 切換介面
-function toggleSection(sectionId, eventId = null, eventName = '') {
-    const allContainers = document.querySelectorAll('.container');
-    const nextSection = document.getElementById(sectionId);
-    const userID = document.getElementById('userContainer');
-    const close_btn = document.getElementById('closeBtn');
-    let movedUserContainer = false;
-    let movedCloseBtn = false;
-    allContainers.forEach(container => {
-        if (!container.classList.contains('hidden')) {
-            const elements = container.querySelectorAll('h2, input, button:not(.back-button), div:not(#userContainer):not(#userContainer *), a, p:not(#userID)');
-            elements.forEach(element => element.classList.add('fade-out')); // 觸發淡出
-            setTimeout(() => {
-                const userContainer = document.getElementById('userContainer');
-                // 移動 userID 到 body（暫時移出要隱藏的 container）
-                if (userContainer && userContainer.parentNode === container) {
-                    document.body.appendChild(userContainer);
-                    movedUserContainer = true;
-                }
-                // 移動 closeBtn 到 body（暫時移出要隱藏的 container）
-                if (close_btn && close_btn.parentNode === container) {
-                    document.body.appendChild(close_btn);
-                    movedCloseBtn = true;
-                }
-                container.classList.add('hidden');
-                elements.forEach(element => element.classList.remove('fade-out')); // 清除淡出類別
-            }, 300); // 等待淡出完成
-        }
-    });
-    document.querySelectorAll("input").forEach(input => input.value = "");
-    document.getElementById("Message").innerText = "";
-
-    setTimeout(() => {
-        nextSection.classList.remove('hidden');
-        const nextElements = nextSection.querySelectorAll('h2, input, button:not(.back-button), div:not(#userContainer):not(#userContainer *), a');
-        nextElements.forEach(element => element.classList.add('fade-in')); // 觸發淡入
-        // 將 userID 插回到新可見 container 最上面
-        if (movedUserContainer && userContainer) {
-            nextSection.insertBefore(userID, nextSection.firstChild);
-        }
-        // 將 closeBtn 插回到新可見 container 最上面
-        if (movedCloseBtn && close_btn) {
-            nextSection.insertBefore(close_btn, nextSection.firstChild);
-        }
-        setTimeout(() => {
-            nextElements.forEach(element => element.classList.remove('fade-in')); // 清除淡入類別
-        }, 500); // 清除動畫類別
-        if (sectionId === 'joinRecord') {
-            loadCheckInRecords();
-        }
-        if (sectionId === 'manageEvent') {
-            loadEventManagement();
-        }
-        if (sectionId === 'eventDetail' && eventId) {
-            loadEventDetail(eventId);
-        }
-        if (sectionId === 'joinEventDetail' && eventId) {
-            const detailTitle = document.querySelector('#joinEventDetail .title');
-            if (detailTitle) {
-                detailTitle.textContent = eventName;
-            }
-        }
-        if (sectionId === 'checkIn') {
-            const checkInTitle = document.querySelector('#checkIn .title');
-            if (checkInTitle) {
-                checkInTitle.textContent = eventName;
-            }
-            startCamera();
-        }
-    }, 300); // 與淡出時間同步
-}
-window.toggleSection = toggleSection;
 
 //顯示用戶名稱
 export async function loadUserName() {
