@@ -51,10 +51,11 @@ export async function loadCheckInRecords() {
                         : "未知日期";
                     const checkStatus = participantData.checkStatus || "未打卡";
 
-                    html += `<div class="record-item">
+                    html += `<div class="record-item" onclick="toggleSection('joinEventDetail', '${eventID}', '${eventName}')">
                                 <span class="eventName">${eventName}</span>
                                 <span class="eventDate">${formattedDate}</span>
                                 <span class="${checkStatus === '未打卡' ? 'red' : 'green'}">${checkStatus}</span>
+                                <span class="arrow">&gt;</span>
                             </div>`;
                 } else {
                     html += `<div class="record-item">資料異常 (ID: ${eventID})</div>`;
