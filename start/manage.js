@@ -1,8 +1,7 @@
-import { navigateWithAnimation } from './script2.js';
-import { collection, doc, getDoc, getDocs, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-import { db } from './script2.js';
+import { collection, doc, getDoc, getDocs, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";import { db } from './script2.js';
 
 export async function loadEventManagement() {
+    //取得目前登入使用者的 UID
     const userUID = localStorage.getItem('userUID');
     const container = document.getElementById('eventManagementList');
 
@@ -14,7 +13,9 @@ export async function loadEventManagement() {
     container.innerHTML = '讀取中...';
 
     try {
+        //取得使用者舉辦的所有活動文件集合
         const hostedEventsRef = collection(db, "users", userUID, "hostedEvents");
+        //取得活動詳細資料並依建立時間排序
         const snapshot = await getDocs(hostedEventsRef);
 
         const sortedDocs = await Promise.all(snapshot.docs.map(async (docSnap) => {
@@ -70,7 +71,7 @@ export async function loadEventManagement() {
     }
 }
 
-// ✅ 產生隨機 eventID（格式：3字母 + 3數字）
+//產生隨機活動
 function generateCustomEventID() {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     const numbers = '0123456789';
@@ -84,7 +85,7 @@ function generateCustomEventID() {
     return id;
 }
 
-// ✅ 確保唯一的 eventID
+//產生唯一的活動ID
 async function getUniqueEventID() {
     let eventID;
     let exists = true;
@@ -100,21 +101,32 @@ async function getUniqueEventID() {
 }
 
 export async function createEvent() {
-    const eventName = document.getElementById('eventName').value.trim();
+    const eventNameInput = document.getElementById('eventName');
+    const eventName = eventNameInput.value.trim();
+    const submitBtn = document.getElementById('createEventBtn');
+
     if (!eventName) {
         alert('請輸入活動名稱');
         return;
     }
 
+    // 鎖定按鈕
+    submitBtn.disabled = true;
+    submitBtn.textContent = "建立中...";
+
+    //確認使用者是否已登入
     const userUID = localStorage.getItem('userUID');
     if (!userUID) {
         alert('請先登入');
+        submitBtn.disabled = false;
+        submitBtn.textContent = "確認";
         return;
     }
 
     try {
-        const eventID = await getUniqueEventID(); // 使用自訂 ID
+        const eventID = await getUniqueEventID(); //使用隨機ID
 
+        //寫入活動資料至events集合與使用者hostedEvents子集合
         await setDoc(doc(db, "events", eventID), {
             eventName: eventName,
             organizerID: userUID,
@@ -132,6 +144,10 @@ export async function createEvent() {
     } catch (error) {
         console.error('建立活動失敗：', error);
         alert('建立活動失敗，請稍後再試');
+    } finally {
+        // 解鎖按鈕
+        submitBtn.disabled = false;
+        submitBtn.textContent = "確認";
     }
 }
 
@@ -147,6 +163,7 @@ export async function loadEventDetail(eventID) {
         const eventDocSnap = await getDoc(eventDocRef);
 
         if (eventDocSnap.exists()) {
+            //顯示活動名稱
             const eventData = eventDocSnap.data();
             titleElement.textContent = eventData.eventName || "無名稱";
         } else {
@@ -155,6 +172,7 @@ export async function loadEventDetail(eventID) {
             return;
         }
 
+        //取得活動參加者清單
         const participantsRef = collection(db, "events", eventID, "participants");
         const participantsSnap = await getDocs(participantsRef);
 
@@ -165,13 +183,24 @@ export async function loadEventDetail(eventID) {
 
         let html = '';
         for (const participantDoc of participantsSnap.docs) {
+            const userID = participantDoc.id;
             const participantData = participantDoc.data();
-            const userName = participantData.userName || "無名稱";
+
+            let userName = "無名稱";
+            try {
+                const userDoc = await getDoc(doc(db, "users", userID));
+                if (userDoc.exists()) {
+                    userName = userDoc.data().userName || "無名稱";
+                }
+            } catch (e) {
+                console.warn(`無法取得使用者 ${userID} 資料`, e);
+            }
+
             const checkStatus = participantData.checkStatus || "未打卡";
             const checkTimeStamp = participantData.checkTime?.toDate?.();
-            const checkTime = checkTimeStamp
+            const checkTime = (checkStatus !== '未打卡' && checkTimeStamp)
                 ? `${checkTimeStamp.getFullYear()}/${checkTimeStamp.getMonth() + 1}/${checkTimeStamp.getDate()}`
-                : "未知日期";
+                : "";
 
             html += `<div class="record-item">
                         <span class="eventName">${userName}</span>
@@ -180,6 +209,12 @@ export async function loadEventDetail(eventID) {
                     </div>`;
         }
 
+        // 新增刪除活動按鈕
+        html += `<div class="record-item delete-button" id="deleteEventButton">
+                    <span class="btnDeleteEvent">刪除活動</span>
+                </div>`;
+
+        //計算已打卡的參加者人數並更新進度文字
         const totalParticipants = participantsSnap.size;
         let checkedInCount = 0;
         participantsSnap.forEach(doc => {
@@ -192,6 +227,29 @@ export async function loadEventDetail(eventID) {
         const progressElement = document.getElementById('checkInProgress');
         progressElement.textContent = `進度${checkedInCount}/${totalParticipants}`;
         container.innerHTML = html;
+
+        // 綁定刪除活動按鈕事件
+        const deleteBtn = document.getElementById('deleteEventButton');
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', async () => {
+                const confirmed = confirm('確定要刪除活動嗎？');
+                if (confirmed) {
+                    try {
+                        const userUID = localStorage.getItem('userUID');
+                        if (!userUID) throw new Error("使用者未登入");
+
+                        await deleteDoc(doc(db, "events", eventID));
+                        await deleteDoc(doc(db, "users", userUID, "hostedEvents", eventID));
+
+                        toggleSection('manageEvent');
+                        alert('活動已成功刪除');
+                    } catch (e) {
+                        console.error("刪除活動失敗：", e);
+                        alert('刪除活動失敗，請稍後再試');
+                    }
+                }
+            });
+        }
 
     } catch (error) {
         console.error("讀取活動詳情錯誤：", error);
