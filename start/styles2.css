@@ -251,12 +251,31 @@ input::placeholder {
 	left: 30%;
 	font-weight: bold;
 	font-size: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
 }
 @media(max-width:768px) {
 	#joinEventDetail label {
 		left: 5%;
 		font-size: 1.7rem;
 	}
+}
+/*右側元件*/
+#joinEventDetail .rightItem {
+	position: absolute;
+	left: 50%;
+    font-size: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+@media(max-width:768px) {
+	#joinEventDetail .rightItem {
+		left: 40%;
+	}
+}
+.joinCheckStatus {
+    font-size: 2rem;
+    font-weight: 300;
 }
 .exitEventButton {
     background-color: rgba(255, 100, 100, 0.2);
@@ -273,17 +292,6 @@ input::placeholder {
     font-size: 1em;
     color: #ce1414;
     margin: 0px 0px;
-}
-/*------------------------------------------------------------*/
-/*右側元件*/
-#joinEventDetail .rightItem {
-	position: absolute;
-	left: 50%;
-}
-@media(max-width:768px) {
-	#joinEventDetail .rightItem {
-		left: 40%;
-	}
 }
 /*------------------------------------------------------------*/
 .red { color: rgb(238, 4, 4); }
