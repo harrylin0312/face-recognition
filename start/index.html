@@ -95,12 +95,34 @@
             <h2 class="title">加入</h2>
             <input type="text" id="eventCode" placeholder="輸入活動代碼">
             <button id="joinEventBtn">確認</button>
-            <p id="Message"></p>
         </div>
         <!--參加活動詳情-->
         <div id="joinEventDetail" class="container hidden">
             <button class="back-button" id="bckToJoinEventFrmJoinEventDetail">返回</button>
             <h2 class="title"></h2>
+            <div class="card">
+                <div class="field"></div>
+                <div class="field"></div>
+                <div class="field">
+                    <label>打卡狀態</label>
+                    <div class="joinCheckStatus rightItem">未打卡</div>
+                </div>
+                <div class="field">
+                    <label>舉辦者</label>
+                    <div class="rightItem">1</div>
+                </div>
+                <div class="field">
+                    <label>舉辦時間</label>
+                    <div class="rightItem">2</div>
+                </div>
+                <div class="field">
+                    <label>活動ID</label>
+                    <div class="rightItem">3</div>
+                </div>
+                <div class="exitEventButton">
+                    <div class="exitEvent">退出活動</div>
+                </div>
+            </div>
         </div>
         
         <!--個人資料頁面-->
@@ -109,9 +131,7 @@
                     <h2>用戶資料</h2>
                 </div>
                 <div class="PDcard-content">
-                    <div class="PDfield">
-                        <p></p>
-                    </div>
+                    <div class="PDfield"></div>
                     <div class="PDfield">
                         <label id="PDtitalOfUsername-container" for="PDusername">用戶名稱</label>
                         <div id="PDusername-container" class="PDfield-input PDrightItem"></div>
