@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { collection, doc, getDoc, getDocs, setDoc, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { db } from './script2.js';
 
 export async function loadCheckInRecords() {
@@ -58,7 +58,7 @@ export async function loadCheckInRecords() {
                                 <span class="arrow">&gt;</span>
                             </div>`;
                 } else {
-                    html += `<div class="record-item">活動已被刪除 (ID: ${eventID})</div>`;
+                    html += `<div class="record-item" onclick="toggleSection('joinEventDetail', '${eventID}', '活動已被刪除')">活動已被刪除 (ID: ${eventID})<span class="arrow">&gt;</span></div>`;
                 }
             } catch (innerErr) {
                 console.error(`讀取活動 ${eventID} 或打卡資料錯誤：`, innerErr);
@@ -158,7 +158,30 @@ export async function loadJoinEventDetail(eventID) {
         const eventDocRef = doc(db, "events", eventID);
         const eventSnap = await getDoc(eventDocRef);
         if (!eventSnap.exists()) {
-            alert("找不到此活動資料");
+            // 找不到活動資料時，顯示「未知」字串，但活動ID保持不變
+            eventDetailDiv.querySelector('h2.title').textContent = '未知';
+            if (fields.length >= 6) {
+                fields[0].innerHTML = '';
+                fields[1].innerHTML = '';
+                fields[2].innerHTML = `
+                    <label>打卡狀態</label>
+                    <div class="joinCheckStatus rightItem" style="color:black">未知</div>
+                `;
+                fields[3].innerHTML = `
+                    <label>舉辦者</label>
+                    <div class="rightItem">未知</div>
+                `;
+                fields[4].innerHTML = `
+                    <label>舉辦時間</label>
+                    <div class="rightItem">未知</div>
+                `;
+                fields[5].innerHTML = `
+                    <label>活動ID</label>
+                    <div class="rightItem">${eventID}</div>
+                `;
+            }
+            eventDetailDiv.setAttribute('data-event-id', eventID);
+            addExitEventListener();
             return;
         }
 
@@ -179,8 +202,8 @@ export async function loadJoinEventDetail(eventID) {
         eventDetailDiv.querySelector('h2.title').textContent = eventName;
 
         if (fields.length >= 6) {
-            fields[0].innerHTML = ''; // 可自訂內容
-            fields[1].innerHTML = ''; // 可自訂內容
+            fields[0].innerHTML = '';
+            fields[1].innerHTML = '';
             fields[2].innerHTML = `
                 <label>打卡狀態</label>
                 <div class="joinCheckStatus rightItem ${checkColorClass}">${checkStatus}</div>
@@ -198,8 +221,51 @@ export async function loadJoinEventDetail(eventID) {
                 <div class="rightItem">${eventID}</div>
             `;
         }
+        eventDetailDiv.setAttribute('data-event-id', eventID);
+        addExitEventListener();
     } catch (err) {
         console.error("載入活動詳情失敗：", err);
         alert("載入活動詳情失敗，請稍後再試");
     }
+}
+
+export function addExitEventListener() {
+    // 先把所有 .exitEvent 元素換成新節點（清除舊事件）
+    document.querySelectorAll('.exitEvent').forEach(button => {
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+    });
+
+    // 再重新綁定事件
+    document.querySelectorAll('.exitEvent').forEach(button => {
+        button.addEventListener('click', async () => {
+            if (!confirm("確定要退出活動嗎？")) return;
+
+            const eventDetailDiv = document.getElementById('joinEventDetail');
+            const eventID = eventDetailDiv.getAttribute('data-event-id');
+            const userUID = localStorage.getItem('userUID');
+
+            if (!eventID || !userUID) {
+                alert("無法取得活動 ID 或使用者資訊");
+                return;
+            }
+
+            try {
+                const participantRef = doc(db, "events", eventID, "participants", userUID);
+                const joinedEventRef = doc(db, "users", userUID, "joinedEvents", eventID);
+
+                await Promise.all([
+                    deleteDoc(participantRef),
+                    deleteDoc(joinedEventRef)
+                ]);
+
+                alert("已退出活動");
+                toggleSection('joinRecord');
+                loadCheckInRecords();
+            } catch (err) {
+                console.error("退出活動失敗：", err);
+                alert("退出活動失敗，請稍後再試");
+            }
+        });
+    });
 }
