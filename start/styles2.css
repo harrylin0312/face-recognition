@@ -489,3 +489,10 @@ input::placeholder {
     -ms-user-select: none;
     user-select: none;
 }
+/*------------------------------------------------------------*/
+/*------------------------------------------------------------*/
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .title {
+        top: 5%;
+    }
+}
