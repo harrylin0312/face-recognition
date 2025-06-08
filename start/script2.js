@@ -24,7 +24,7 @@ export const db = getFirestore(app);
 
 // 引入外部模組
 import { loadEventManagement, createEvent, loadEventDetail } from './manage.js';
-import { loadCheckInRecords, joinEvent } from './join.js';
+import { loadCheckInRecords, joinEvent, addExitEventListener } from './join.js';
 import { loadPersonalData } from './personalData.js';
 import { toggleSection } from './toggleSection.js';
 window.createEvent = createEvent;
@@ -34,6 +34,7 @@ window.loadCheckInRecords = loadCheckInRecords;
 window.joinEvent = joinEvent;
 window.loadPersonalData = loadPersonalData;
 window.toggleSection = toggleSection;
+window.addExitEventListener = addExitEventListener;
 
 
 
