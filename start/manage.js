@@ -128,12 +128,22 @@ export async function createEvent() {
     }
 
     try {
+        const userRef = doc(db, "users", userUID);
+        const userSnap = await getDoc(userRef);
+        if (!userSnap.exists()) {
+            alert("找不到使用者資料");
+            submitBtn.disabled = false;
+            submitBtn.textContent = "確認";
+            return;
+        }
+        const userName = userSnap.data().userName || "未知使用者";
+
         const eventID = await getUniqueEventID(); //使用隨機ID
 
         //寫入活動資料至events集合與使用者hostedEvents子集合
         await setDoc(doc(db, "events", eventID), {
             eventName: eventName,
-            organizerID: userUID,
+            organizer: userName,
             createdAt: serverTimestamp()
         });
 
