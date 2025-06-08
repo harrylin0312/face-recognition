@@ -142,3 +142,64 @@ function adjustEventDateVisibility() {
         el.style.display = isMobile ? 'none' : '';
     });
 }
+
+// 載入參加活動詳情
+export async function loadJoinEventDetail(eventID) {
+    const userUID = localStorage.getItem('userUID');
+    if (!userUID) {
+        alert('請先登入');
+        return;
+    }
+
+    const eventDetailDiv = document.getElementById('joinEventDetail');
+    const fields = eventDetailDiv.querySelectorAll('.field');
+
+    try {
+        const eventDocRef = doc(db, "events", eventID);
+        const eventSnap = await getDoc(eventDocRef);
+        if (!eventSnap.exists()) {
+            alert("找不到此活動資料");
+            return;
+        }
+
+        const eventData = eventSnap.data();
+        const eventName = eventData.eventName || "無名稱";
+        const organizer = eventData.organizer || "未知";
+        const createdAt = eventData.createdAt?.toDate?.();
+        const createdAtStr = createdAt
+            ? `${createdAt.getFullYear()}/${createdAt.getMonth() + 1}/${createdAt.getDate()}`
+            : "未知時間";
+
+        const participantRef = doc(db, "events", eventID, "participants", userUID);
+        const participantSnap = await getDoc(participantRef);
+        const checkStatus = participantSnap.exists() ? participantSnap.data().checkStatus : "未打卡";
+        const checkColorClass = checkStatus === "未打卡" ? "red" : "green";
+
+        // 更新 DOM
+        eventDetailDiv.querySelector('h2.title').textContent = eventName;
+
+        if (fields.length >= 6) {
+            fields[0].innerHTML = ''; // 可自訂內容
+            fields[1].innerHTML = ''; // 可自訂內容
+            fields[2].innerHTML = `
+                <label>打卡狀態</label>
+                <div class="joinCheckStatus rightItem ${checkColorClass}">${checkStatus}</div>
+            `;
+            fields[3].innerHTML = `
+                <label>舉辦者</label>
+                <div class="rightItem">${organizer}</div>
+            `;
+            fields[4].innerHTML = `
+                <label>舉辦時間</label>
+                <div class="rightItem">${createdAtStr}</div>
+            `;
+            fields[5].innerHTML = `
+                <label>活動ID</label>
+                <div class="rightItem">${eventID}</div>
+            `;
+        }
+    } catch (err) {
+        console.error("載入活動詳情失敗：", err);
+        alert("載入活動詳情失敗，請稍後再試");
+    }
+}
