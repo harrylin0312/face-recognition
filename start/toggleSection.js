@@ -1,5 +1,5 @@
 import { loadEventManagement, loadEventDetail } from './manage.js';
-import { loadCheckInRecords } from './join.js';
+import { loadCheckInRecords, loadJoinEventDetail } from './join.js';
 import { startCamera } from './camera.js';
 
 export function toggleSection(sectionId, eventId = null, eventName = '') {
@@ -46,8 +46,10 @@ export function toggleSection(sectionId, eventId = null, eventName = '') {
 
         if (sectionId === 'joinRecord') loadCheckInRecords();
         if (sectionId === 'manageEvent') loadEventManagement();
+        if (sectionId === 'joinEventDetail' && eventId) loadJoinEventDetail(eventId);
         if (sectionId === 'eventDetail' && eventId) loadEventDetail(eventId);
         if (sectionId === 'joinEventDetail' && eventId) {
+            
             const detailTitle = document.querySelector('#joinEventDetail .title');
             if (detailTitle) detailTitle.textContent = eventName;
         }
