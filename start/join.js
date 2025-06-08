@@ -53,7 +53,7 @@ export async function loadCheckInRecords() {
 
                     html += `<div class="record-item" onclick="toggleSection('joinEventDetail', '${eventID}', '${eventName}')">
                                 <span class="eventName">${eventName}</span>
-                                <span class="eventDate">${formattedDate}</span>
+                                <span class="eventDate eventDateToggle">${formattedDate}</span>
                                 <span class="${checkStatus === '未打卡' ? 'red' : 'green'}">${checkStatus}</span>
                                 <span class="arrow">&gt;</span>
                             </div>`;
@@ -67,6 +67,8 @@ export async function loadCheckInRecords() {
         }
 
         container.innerHTML = html;
+        adjustEventDateVisibility();
+        window.addEventListener('resize', adjustEventDateVisibility);
         const newJoinBtn = document.getElementById('recordJoinNew');
         if (newJoinBtn) {
             newJoinBtn.addEventListener('click', () => toggleSection('joinEvent'));
@@ -132,4 +134,11 @@ export async function joinEvent() {
         console.error('加入活動失敗:', error);
         alert('加入活動失敗，請稍後再試');
     }
+}
+
+function adjustEventDateVisibility() {
+    const isMobile = window.innerWidth <= 768;
+    document.querySelectorAll('.eventDateToggle').forEach(el => {
+        el.style.display = isMobile ? 'none' : '';
+    });
 }
