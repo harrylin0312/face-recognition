@@ -48,6 +48,11 @@ body {
     transform: translateY(-50%);/*自身高度校正*/
     color:#1e1e1e;
 }
+@media(max-height:600px){
+    .title {
+        top: 5%;
+    }
+}
 /*------------------------------------------------------------*/
 /*按鈕群組*/
 .button-group {
@@ -499,8 +504,3 @@ input::placeholder {
 }
 /*------------------------------------------------------------*/
 /*------------------------------------------------------------*/
-@media screen and (max-width: 768px) and (orientation: landscape) {
-    .title {
-        top: 5%;
-    }
-}
