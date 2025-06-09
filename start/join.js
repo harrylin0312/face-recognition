@@ -187,7 +187,18 @@ export async function loadJoinEventDetail(eventID) {
 
         const eventData = eventSnap.data();
         const eventName = eventData.eventName || "無名稱";
-        const organizer = eventData.organizer || "未知";
+        let organizer = "未知";
+        const organizerID = eventData.organizerID;
+        if (organizerID) {
+            try {
+                const organizerDoc = await getDoc(doc(db, "users", organizerID));
+                if (organizerDoc.exists()) {
+                    organizer = organizerDoc.data().userName || "未知";
+                }
+            } catch (e) {
+                console.error("查詢舉辦者資料時發生錯誤：", e);
+            }
+        }
         const createdAt = eventData.createdAt?.toDate?.();
         const createdAtStr = createdAt
             ? `${createdAt.getFullYear()}/${createdAt.getMonth() + 1}/${createdAt.getDate()}`
