@@ -136,14 +136,12 @@ export async function createEvent() {
             submitBtn.textContent = "確認";
             return;
         }
-        const userName = userSnap.data().userName || "未知使用者";
-
         const eventID = await getUniqueEventID(); //使用隨機ID
 
         //寫入活動資料至events集合與使用者hostedEvents子集合
         await setDoc(doc(db, "events", eventID), {
             eventName: eventName,
-            organizer: userName,
+            organizerID: userUID,
             createdAt: serverTimestamp()
         });
 
