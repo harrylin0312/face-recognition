@@ -175,8 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (joinEventBtn) {
             joinEventBtn.addEventListener('click', joinEvent);
         }
-        adjustTitlePosition();
-        window.addEventListener('resize', adjustTitlePosition);
     }, 300); // 動畫完成後清除
 
     // 新增全域點擊監聽，處理帶有 .animated-link 且有 data-url 的連結
@@ -349,16 +347,3 @@ export function navigateWithAnimation(url) {
     }, 1600); // 1.6秒
 }
 
-function adjustTitlePosition() {
-    const titleElement = document.querySelector('.title');
-    if (!titleElement) return;
-
-    const isMobile = window.innerWidth <= 768;
-    const isLandscape = window.innerWidth > window.innerHeight;
-
-    if (isMobile && isLandscape) {
-        titleElement.style.top = '5%';
-    } else {
-        titleElement.style.top = '';
-    }
-}
