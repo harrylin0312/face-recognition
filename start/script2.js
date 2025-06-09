@@ -270,7 +270,7 @@ export async function checkUploadedImages() {
         .list("", { search: `${userUID}.jpg` });
 
     if (error || !data || data.length === 0) {
-        uploadSign.innerHTML = `請上傳用戶臉部影像`;
+        uploadSign.innerHTML = `上傳用戶臉部影像`;
         uploadSign.style.color = "red";
         uploadBtn.style.display = "inline-block";
         // 取得 userData 並更新 #userID，顯示警示圖示
