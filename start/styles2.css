@@ -256,8 +256,8 @@ input::placeholder {
     transform: translateY(-50%);
 }
 @media(max-width:768px) {
-	#joinEventDetail label {
-		left: 5%;
+	#joinEventDetail label, #eventDDetail label {
+		left: 0%;
 		font-size: 1.7rem;
 	}
 }
@@ -265,12 +265,12 @@ input::placeholder {
 #joinEventDetail .rightItem, #eventDDetail .rightItem {
 	position: absolute;
 	left: 50%;
-    font-size: 2rem;
+    font-size: 1.7rem;
     top: 50%;
     transform: translateY(-50%);
 }
 @media(max-width:768px) {
-	#joinEventDetail .rightItem {
+	#joinEventDetail .rightItem, #eventDDetail .rightItem {
 		left: 40%;
 	}
 }
