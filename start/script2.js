@@ -152,6 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ['bckToManageEventFrmJoinEvent', 'joinRecord'],//回到參加紀錄
             ['toJoinEventDetail', 'joinEventDetail'], //參加活動詳情
             ['bckToJoinEventFrmJoinEventDetail', 'joinRecord'], //回到參加紀錄
+            ['toEventDDetail', 'eventDDetail'],//活動詳情
+            ['bckToEventDetailFrmEventDDetail', 'eventDetail'],//回到舉辦紀錄
             
         ];
         sectionBtnMap.forEach(([id, target]) => {
