@@ -154,6 +154,7 @@ export async function createEvent() {
         alert('活動已成功建立');
         document.getElementById('eventName').value = '';
         loadEventManagement();
+        toggleSection('manageEvent');
 
     } catch (error) {
         console.error('建立活動失敗：', error);
@@ -172,6 +173,10 @@ export async function loadEventDetail(eventID) {
     const container = document.getElementById('EventDetailList');
 
     container.innerHTML = '讀取中...';
+    const legendElement = document.querySelector('#eventDetail .legend');
+    const startButtonElement = document.querySelector('#eventDetail .startButton');
+    if (legendElement) legendElement.style.display = 'none';
+    if (startButtonElement) startButtonElement.style.display = 'none';
 
     try {
         const eventDocRef = doc(db, "events", eventID);
@@ -194,6 +199,9 @@ export async function loadEventDetail(eventID) {
         if (participantsSnap.empty) {
             container.innerHTML = '尚無參加者';
             return;
+        } else {
+            if (legendElement) legendElement.style.display = '';
+            if (startButtonElement) startButtonElement.style.display = '';
         }
 
         let html = '';
@@ -224,11 +232,6 @@ export async function loadEventDetail(eventID) {
                     </div>`;
         }
 
-        // 新增刪除活動按鈕
-        html += `<div class="record-item delete-button" id="deleteEventButton">
-                    <span class="btnDeleteEvent">刪除活動</span>
-                </div>`;
-
         //計算已打卡的參加者人數並更新進度文字
         const totalParticipants = participantsSnap.size;
         let checkedInCount = 0;
@@ -242,29 +245,6 @@ export async function loadEventDetail(eventID) {
         const progressElement = document.getElementById('checkInProgress');
         progressElement.textContent = `進度${checkedInCount}/${totalParticipants}`;
         container.innerHTML = html;
-
-        // 綁定刪除活動按鈕事件
-        const deleteBtn = document.getElementById('deleteEventButton');
-        if (deleteBtn) {
-            deleteBtn.addEventListener('click', async () => {
-                const confirmed = confirm('確定要刪除活動嗎？');
-                if (confirmed) {
-                    try {
-                        const userUID = localStorage.getItem('userUID');
-                        if (!userUID) throw new Error("使用者未登入");
-
-                        await deleteDoc(doc(db, "events", eventID));
-                        await deleteDoc(doc(db, "users", userUID, "hostedEvents", eventID));
-
-                        toggleSection('manageEvent');
-                        alert('活動已成功刪除');
-                    } catch (e) {
-                        console.error("刪除活動失敗：", e);
-                        alert('刪除活動失敗，請稍後再試');
-                    }
-                }
-            });
-        }
 
     } catch (error) {
         console.error("讀取活動詳情錯誤：", error);
@@ -329,7 +309,8 @@ export async function loadEventDDetail(eventID) {
         if (exitEventBtn) {
             exitEventBtn.textContent = "刪除活動";
             exitEventBtn.style.cursor = "pointer";
-            exitEventBtn.addEventListener('click', async () => {
+            // 只保留一個事件處理器，防止重複綁定
+            exitEventBtn.onclick = async () => {
                 const confirmed = confirm('確定要刪除活動嗎？');
                 if (confirmed) {
                     try {
@@ -346,7 +327,7 @@ export async function loadEventDDetail(eventID) {
                         alert('刪除活動失敗，請稍後再試');
                     }
                 }
-            });
+            };
         }
 
     } catch (err) {
