@@ -1,4 +1,4 @@
-import { loadEventManagement, loadEventDetail } from './manage.js';
+import { loadEventManagement, loadEventDetail, loadEventDDetail } from './manage.js';
 import { loadCheckInRecords, loadJoinEventDetail } from './join.js';
 import { startCamera } from './camera.js';
 
@@ -57,6 +57,9 @@ export function toggleSection(sectionId, eventId = null, eventName = '') {
             const checkInTitle = document.querySelector('#checkIn .title');
             if (checkInTitle) checkInTitle.textContent = eventName;
             startCamera();
+        }
+        if (sectionId === 'eventDDetail' && eventId) {
+            loadEventDDetail(eventId);
         }
     }, 300);
 }
