@@ -26,9 +26,7 @@
                     <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
             </button>
-            <div class="userDetailGroup"><!--顯示用戶資訊-->
-                
-            </div>
+            <div class="userDetailGroup"><!--顯示用戶資訊--></div>
             <div id="userContainer">
                 <div id="top-section">
                     <p id="userID" class="header"></p>
@@ -36,9 +34,9 @@
                 <div id="expand-container">
                     <div class="expanded" id="expand-contract">
                         <div class="user-action">
-                            <div class="detail">用戶資料</div>
+                            <div class="detail"><i class="fa-solid fa-address-card"></i>用戶資料</div>
                             <hr class="line">
-                            <div class="logout">登出</div>
+                            <div class="logout"><i class="fa-solid fa-right-from-bracket"></i>登出</div>
                         </div>
                     </div>
                 </div>
@@ -51,14 +49,14 @@
 
         <!--舉辦紀錄-->
         <div id="manageEvent" class="container hidden">
-            <button class="back-button" id="bckToMainMenuFrmManage">返回</button>
+            <button class="back-button" id="bckToMainMenuFrmManage"><i class="fa-solid fa-caret-left"></i>主頁</button>
             <h2 class="title">舉辦紀錄</h2>
             <div class="legend">↓已舉辦的活動</div>
             <div class="record-list" id="eventManagementList"></div>
         </div>
         <!--舉辦-->
         <div id="createEvent" class="container hidden">
-            <button class="back-button" id="bckToManageEventFrmCreateEvent">返回</button>
+            <button class="back-button" id="bckToManageEventFrmCreateEvent"><i class="fa-solid fa-caret-left"></i>舉辦紀錄</button>
             <h2 class="title">舉辦</h2>
             <input type="text" id="eventName" placeholder="輸入活動名稱">
             <button id="createEventBtn">確認</button>
@@ -66,7 +64,7 @@
         </div>
         <!--舉辦活動詳情-->
         <div id="eventDetail" class="container hidden">
-            <button class="back-button" id="bckToManageEventFrmEventDetail">返回</button>
+            <button class="back-button" id="bckToManageEventFrmEventDetail"><i class="fa-solid fa-caret-left"></i>舉辦紀錄</button>
             <h2 class="title"></h2>
             <div class="legend">↓參與者</div>
             <div id="checkInProgress"></div>
@@ -75,7 +73,7 @@
         </div>
         <!--舉辦活動詳情資訊-->
         <div id="eventDDetail" class="container hidden">
-            <button class="back-button" id="bckToEventDetailFrmEventDDetail">返回</button>
+            <button class="back-button" id="bckToEventDetailFrmEventDDetail"><i class="fa-solid fa-caret-left"></i>管理活動</button>
             <h2 class="title"></h2>
             <div class="card">
                 <div class="field"></div>
@@ -104,7 +102,7 @@
         </div>
         <!--打卡介面-->
         <div id="checkIn" class="container hidden">
-            <button class="back-button" id="bckToEventDetailFrmCheckIn">返回</button>
+            <button class="back-button" id="bckToEventDetailFrmCheckIn"><i class="fa-solid fa-caret-left"></i>管理活動</button>
             <h2 class="title"></h2>
             <div id="cameraContainer">
                 <video id="camera" autoplay playsinline></video>
@@ -113,21 +111,21 @@
 
         <!--加入紀錄-->
         <div id="joinRecord" class="container hidden">
-            <button class="back-button" id="bckToMainMenuFrmJoin">返回</button>
+            <button class="back-button" id="bckToMainMenuFrmJoin"><i class="fa-solid fa-caret-left"></i>主頁</button>
             <h2 class="title">參加紀錄</h2>
             <div class="legend">↓已參加的活動</div>
             <div class="record-list" id="checkInRecords"></div>
         </div>
         <!--加入-->
         <div id="joinEvent" class="container hidden">
-            <button class="back-button" id="bckToManageEventFrmJoinEvent">返回</button>
-            <h2 class="title">加入</h2>
+            <button class="back-button" id="bckToManageEventFrmJoinEvent"><i class="fa-solid fa-caret-left"></i>參加紀錄</button>
+            <h2 class="title">參加</h2>
             <input type="text" id="eventCode" placeholder="輸入活動代碼">
             <button id="joinEventBtn">確認</button>
         </div>
         <!--參加活動詳情-->
         <div id="joinEventDetail" class="container hidden">
-            <button class="back-button" id="bckToJoinEventFrmJoinEventDetail">返回</button>
+            <button class="back-button" id="bckToJoinEventFrmJoinEventDetail"><i class="fa-solid fa-caret-left"></i>參加紀錄</button>
             <h2 class="title"></h2>
             <div class="card">
                 <div class="field"></div>
