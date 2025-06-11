@@ -324,10 +324,29 @@ export async function loadEventDDetail(eventID) {
         fields[2].textContent = total;
         fields[3].textContent = checkedIn;
 
-        // 新增：設定 exitEvent 按鈕文字
+        // 新增：設定 exitEvent 按鈕文字與刪除活動事件綁定
         const exitEventBtn = container.querySelector('.exitEvent');
         if (exitEventBtn) {
             exitEventBtn.textContent = "刪除活動";
+            exitEventBtn.style.cursor = "pointer";
+            exitEventBtn.addEventListener('click', async () => {
+                const confirmed = confirm('確定要刪除活動嗎？');
+                if (confirmed) {
+                    try {
+                        const userUID = localStorage.getItem('userUID');
+                        if (!userUID) throw new Error("使用者未登入");
+
+                        await deleteDoc(doc(db, "events", eventID));
+                        await deleteDoc(doc(db, "users", userUID, "hostedEvents", eventID));
+
+                        toggleSection('manageEvent');
+                        alert('活動已成功刪除');
+                    } catch (e) {
+                        console.error("刪除活動失敗：", e);
+                        alert('刪除活動失敗，請稍後再試');
+                    }
+                }
+            });
         }
 
     } catch (err) {
