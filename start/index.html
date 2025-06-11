@@ -73,6 +73,35 @@
             <button class="startButton" id="start">開始打卡</button>
             <div class="record-list" id="EventDetailList"></div>
         </div>
+        <!--舉辦活動詳情資訊-->
+        <div id="eventDDetail" class="container hidden">
+            <button class="back-button" id="bckToEventDetailFrmEventDDetail">返回</button>
+            <h2 class="title"></h2>
+            <div class="card">
+                <div class="field"></div>
+                <div class="field"></div>
+                <div class="field">
+                    <label>活動ID</label>
+                    <div class="rightItem"></div>
+                </div>
+                <div class="field">
+                    <label>舉辦時間</label>
+                    <div class="rightItem"></div>
+                </div>
+                <div class="field">
+                    <label>參加人數</label>
+                    <div class="manageJoinProgress rightItem"></div>
+                </div>
+                <div class="field">
+                    <label>已打卡人數</label>
+                    <div class="manageCheckProgress rightItem"></div>
+                </div>
+                <div class="exitEventButton">
+                    <div class="exitEvent"></div>
+                </div>
+                <div class="field"></div>
+            </div>
+        </div>
         <!--打卡介面-->
         <div id="checkIn" class="container hidden">
             <button class="back-button" id="bckToEventDetailFrmCheckIn">返回</button>
@@ -104,8 +133,8 @@
                 <div class="field"></div>
                 <div class="field"></div>
                 <div class="field">
-                    <label>打卡狀態</label>
-                    <div class="joinCheckStatus rightItem"></div>
+                    <label>活動ID</label>
+                    <div class="rightItem"></div>
                 </div>
                 <div class="field">
                     <label>舉辦者</label>
@@ -116,11 +145,11 @@
                     <div class="rightItem"></div>
                 </div>
                 <div class="field">
-                    <label>活動ID</label>
-                    <div class="rightItem"></div>
+                    <label>打卡狀態</label>
+                    <div class="joinCheckStatus rightItem"></div>
                 </div>
                 <div class="exitEventButton">
-                    <div class="exitEvent">退出活動</div>
+                    <div class="exitEvent"></div>
                 </div>
                 <div class="field"></div>
             </div>
