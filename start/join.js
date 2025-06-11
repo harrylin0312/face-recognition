@@ -83,6 +83,7 @@ export async function loadCheckInRecords() {
     }
 }
 
+//加入活動
 export async function joinEvent() {
     const eventCode = document.getElementById('eventCode').value.trim();
     if (!eventCode) {
@@ -130,6 +131,7 @@ export async function joinEvent() {
 
         alert('成功加入活動');
         document.getElementById('eventCode').value = '';
+        toggleSection('joinRecord');
     } catch (error) {
         console.error('加入活動失敗:', error);
         alert('加入活動失敗，請稍後再試');
