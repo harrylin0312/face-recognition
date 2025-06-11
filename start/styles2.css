@@ -47,6 +47,7 @@ body {
     top: 15%;
     transform: translateY(-50%);/*自身高度校正*/
     color:#1e1e1e;
+    white-space: nowrap;/*防止換行*/
 }
 @media(max-width:768px){
     .title {
@@ -250,7 +251,7 @@ input::placeholder {
 #joinEventDetail label, #eventDDetail label {
 	position: absolute;
 	left: 30%;
-	font-weight: bold;
+	font-weight: 600;
 	font-size: 2rem;
     top: 50%;
     transform: translateY(-50%);
@@ -266,12 +267,13 @@ input::placeholder {
 	position: absolute;
 	left: 50%;
     font-size: 1.7rem;
+	font-weight: 250;
     top: 50%;
     transform: translateY(-50%);
 }
 @media(max-width:768px) {
 	#joinEventDetail .rightItem, #eventDDetail .rightItem {
-		left: 40%;
+		left: 43%;
 	}
 }
 .joinCheckStatus {
@@ -324,7 +326,7 @@ input::placeholder {
     background-color:#d3d3d3;
     padding: 2px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 700;
 }
 #expand-container {
     width: 100%;
@@ -373,7 +375,7 @@ input::placeholder {
         left: 10px;
     }
 }
-/*------------------------------------------------------------*/
+/*--------------------------------------- ---------------------*/
 /*返回按鈕*/
 .back-button {
     position: absolute;
