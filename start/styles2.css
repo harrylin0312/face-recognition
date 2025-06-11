@@ -181,15 +181,6 @@ input::placeholder {
     left: 50%;
     transform: translateX(-50%);
 }
-/*刪除活動*/
-.record-item .btnDeleteEvent {
-    font-size: 0.7em;
-    color: #ce1414;
-    text-align: center;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
 /*活動ID*/
 .record-item .eventID {
     font-size: 0.5em;
@@ -522,6 +513,13 @@ input::placeholder {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+/*可選取*/
+.selectable {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 /*------------------------------------------------------------*/
 /*------------------------------------------------------------*/
