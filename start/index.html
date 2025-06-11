@@ -18,7 +18,7 @@
         <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./I'm-watching-you.png" type="image/png" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     </head>
-    <body>
+    <body class="no-select">
         <!--主選單-->
         <div class="container" id="mainMenu">
             <button id="closeBtn">
@@ -29,7 +29,7 @@
             <div class="userDetailGroup"><!--顯示用戶資訊-->
                 
             </div>
-            <div id="userContainer" class="no-select">
+            <div id="userContainer">
                 <div id="top-section">
                     <p id="userID" class="header"></p>
                 </div>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            <div class="button-group no-select">
+            <div class="button-group">
                 <button id="toManageEvent">管理</button>
                 <button id="toJoinRecord">參加</button>
             </div>
@@ -82,7 +82,7 @@
                 <div class="field"></div>
                 <div class="field">
                     <label>活動ID</label>
-                    <div class="rightItem"></div>
+                    <div class="rightItem selectable"></div>
                 </div>
                 <div class="field">
                     <label>舉辦時間</label>
@@ -134,7 +134,7 @@
                 <div class="field"></div>
                 <div class="field">
                     <label>活動ID</label>
-                    <div class="rightItem"></div>
+                    <div class="rightItem selectable"></div>
                 </div>
                 <div class="field">
                     <label>舉辦者</label>
