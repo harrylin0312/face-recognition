@@ -163,10 +163,7 @@ export async function loadJoinEventDetail(eventID) {
             if (fields.length >= 6) {
                 fields[0].innerHTML = '';
                 fields[1].innerHTML = '';
-                fields[2].innerHTML = `
-                    <label>打卡狀態</label>
-                    <div class="joinCheckStatus rightItem" style="color:black">未知</div>
-                `;
+                fields[2].innerHTML = `<label>活動ID</label><div class="rightItem">${eventID}</div>`;
                 fields[3].innerHTML = `
                     <label>舉辦者</label>
                     <div class="rightItem">未知</div>
@@ -176,10 +173,12 @@ export async function loadJoinEventDetail(eventID) {
                     <div class="rightItem">未知</div>
                 `;
                 fields[5].innerHTML = `
-                    <label>活動ID</label>
-                    <div class="rightItem">${eventID}</div>
+                    <label>打卡狀態</label>
+                    <div class="joinCheckStatus rightItem" style="color:black">未知</div>
                 `;
             }
+            const exitButton = eventDetailDiv.querySelector('.exitEvent');
+            if (exitButton) exitButton.textContent = '退出活動';
             eventDetailDiv.setAttribute('data-event-id', eventID);
             addExitEventListener();
             return;
@@ -215,10 +214,7 @@ export async function loadJoinEventDetail(eventID) {
         if (fields.length >= 6) {
             fields[0].innerHTML = '';
             fields[1].innerHTML = '';
-            fields[2].innerHTML = `
-                <label>打卡狀態</label>
-                <div class="joinCheckStatus rightItem ${checkColorClass}">${checkStatus}</div>
-            `;
+            fields[2].innerHTML = `<label>活動ID</label><div class="rightItem">${eventID}</div>`;
             fields[3].innerHTML = `
                 <label>舉辦者</label>
                 <div class="rightItem">${organizer}</div>
@@ -228,10 +224,12 @@ export async function loadJoinEventDetail(eventID) {
                 <div class="rightItem">${createdAtStr}</div>
             `;
             fields[5].innerHTML = `
-                <label>活動ID</label>
-                <div class="rightItem">${eventID}</div>
+                <label>打卡狀態</label>
+                <div class="joinCheckStatus rightItem ${checkColorClass}">${checkStatus}</div>
             `;
         }
+        const exitButton = eventDetailDiv.querySelector('.exitEvent');
+        if (exitButton) exitButton.textContent = '退出活動';
         eventDetailDiv.setAttribute('data-event-id', eventID);
         addExitEventListener();
     } catch (err) {
