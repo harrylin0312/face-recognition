@@ -48,6 +48,11 @@ body {
     transform: translateY(-50%);/*自身高度校正*/
     color:#1e1e1e;
 }
+@media(max-width:768px){
+    .title {
+        font-size: 3em;
+    }
+}
 @media(max-height:600px){
     .title {
         top: 5%;
@@ -251,7 +256,7 @@ input::placeholder {
     pointer-events: none;
 }
 /*左側元件*/
-#joinEventDetail label {
+#joinEventDetail label, #eventDDetail label {
 	position: absolute;
 	left: 30%;
 	font-weight: bold;
@@ -266,7 +271,7 @@ input::placeholder {
 	}
 }
 /*右側元件*/
-#joinEventDetail .rightItem {
+#joinEventDetail .rightItem, #eventDDetail .rightItem {
 	position: absolute;
 	left: 50%;
     font-size: 2rem;
@@ -399,7 +404,7 @@ input::placeholder {
     }
 }
 /*------------------------------------------------------------*/
-/*打卡進度*/
+/*打卡進度*//*遺棄*/
 #checkInProgress {
     position: absolute;
     top: 37%;
@@ -407,6 +412,7 @@ input::placeholder {
     transform: translateY(-50%);
     font-size: 1.5em;
     color: #343434; /* 顏色可自訂 */
+    display: none;
 }
 @media(max-width:768px) {/*手機版樣式*/
     #checkInProgress {
@@ -418,6 +424,7 @@ input::placeholder {
 .startButton {
     position: absolute;
     top: 37%;
+    right: 26%;
     transform: translateY(-50%);
     padding: 8px 16px;
     background-color: #698F99;
@@ -427,19 +434,24 @@ input::placeholder {
     border: none;
     cursor: pointer;
 }
+@media(max-width:768px) {/*手機版樣式*/
+    .startButton {
+        right: 3%;
+    }
+}
 /*------------------------------------------------------------*/
 /*圖例*/
 .legend {
     position: absolute;
     top: 37%;
-    left: 28%;
+    left: 26%;
     transform: translateY(-50%);
     font-size: 1.5em;
     color: #343434; /* 顏色可自訂 */
 }
 @media(max-width:768px) {/*手機版樣式*/
     .legend {
-        left: 4%;
+        left: 3%;
     }
 }
 /*------------------------------------------------------------*/
@@ -479,6 +491,15 @@ input::placeholder {
         transform: scaleX(-1);
     }
 
+}
+
+/*------------------------------------------------------------*/
+/*資訊按鈕*/
+.fa-circle-info {
+    font-size: 30px;
+    color: rgba(255, 255, 255, 0.55);
+    border-radius: 980px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 /*------------------------------------------------------------*/
 /*容器內子元素初始狀態（除了 .back-button） */
