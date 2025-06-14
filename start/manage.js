@@ -6,7 +6,7 @@ export async function loadEventManagement() {
     const container = document.getElementById('eventManagementList');
 
     if (!userUID) {
-        container.innerHTML = '尚未登入，請先 <a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+        container.innerHTML = '尚未登入，請先 <a href="#" class="animated-link" data-url="../login/" style="color:red;">登入</a>';
         return;
     }
 
@@ -311,21 +311,29 @@ export async function loadEventDDetail(eventID) {
             exitEventBtn.style.cursor = "pointer";
             // 只保留一個事件處理器，防止重複綁定
             exitEventBtn.onclick = async () => {
+                if (exitEventBtn.disabled) return;
+
                 const confirmed = confirm('確定要刪除活動嗎？');
-                if (confirmed) {
-                    try {
-                        const userUID = localStorage.getItem('userUID');
-                        if (!userUID) throw new Error("使用者未登入");
+                if (!confirmed) return;
 
-                        await deleteDoc(doc(db, "events", eventID));
-                        await deleteDoc(doc(db, "users", userUID, "hostedEvents", eventID));
+                exitEventBtn.disabled = true;
+                exitEventBtn.textContent = "刪除中...";
 
-                        toggleSection('manageEvent');
-                        alert('活動已成功刪除');
-                    } catch (e) {
-                        console.error("刪除活動失敗：", e);
-                        alert('刪除活動失敗，請稍後再試');
-                    }
+                try {
+                    const userUID = localStorage.getItem('userUID');
+                    if (!userUID) throw new Error("使用者未登入");
+
+                    await deleteDoc(doc(db, "events", eventID));
+                    await deleteDoc(doc(db, "users", userUID, "hostedEvents", eventID));
+
+                    toggleSection('manageEvent');
+                    alert('活動已成功刪除');
+                } catch (e) {
+                    console.error("刪除活動失敗：", e);
+                    alert('刪除活動失敗，請稍後再試');
+                } finally {
+                    exitEventBtn.disabled = false;
+                    exitEventBtn.textContent = "刪除活動";
                 }
             };
         }
