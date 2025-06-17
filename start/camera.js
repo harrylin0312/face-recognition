@@ -21,21 +21,23 @@ export async function startCamera() {
         alert("無法開啟攝影機，請確認權限設定");
         return;
     }
-    socket = new WebSocket("https://moderator-weekends-por-bite.trycloudflare.com");
+    socket = new WebSocket("https://early-correctly-likely-too.trycloudflare.com ");
 
     socket.onopen = () => {
-        console.log("🔌 WebSocket 已連線 (startCamera)");
+        console.log("✅ WebSocket 已開啟，開始傳送");
+        console.log("WebSocket 已連線 (startCamera)");
         startCaptureLoop(video);
     };
     socket.onmessage = evt => {
-        console.log("👈 來自後端：", evt.data);
+        console.log("📩 後端回覆：", evt.data);
     };
     socket.onclose = () => {
-        console.log("🔌 WebSocket 已斷開");
+        console.log("❌ WebSocket 被關閉");
+        console.log("WebSocket 已斷開");
         stopCamera();
     };
     socket.onerror = err => {
-        console.error("🔌 WebSocket 發生錯誤：", err);
+        console.error("WebSocket 發生錯誤：", err);
     };
 }
 
@@ -58,7 +60,7 @@ function startCaptureLoop(video) {
         const dataURL = offscreenCanvas.toDataURL("image/jpeg", 0.7);
         const eventID = localStorage.getItem("eventID") || "test-event"; // default fallback
         const payload = { type: "match_event_face", eventID, data: dataURL };
-        console.log("➡️ 傳送影像給後端，size =", dataURL.length);
+        console.log("準備發送至後端，大小:", dataURL.length);
         socket.send(JSON.stringify(payload));
     }, 3000);
 }
