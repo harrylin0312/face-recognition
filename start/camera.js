@@ -29,7 +29,7 @@ export async function startCamera() {
         startCaptureLoop(video);
     };
     socket.onmessage = evt => {
-        console.log("📩 後端回覆：", evt.data);
+        console.log("後端回覆：", evt.data);
     };
     socket.onclose = () => {
         console.log("❌ WebSocket 被關閉");
