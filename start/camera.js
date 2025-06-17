@@ -21,7 +21,7 @@ export async function startCamera() {
         alert("無法開啟攝影機，請確認權限設定");
         return;
     }
-    socket = new WebSocket("ws://localhost:8080");
+    socket = new WebSocket("wss://你的子域名.trycloudflare.com");
 
     socket.onopen = () => {
         console.log("🔌 WebSocket 已連線 (startCamera)");
@@ -56,7 +56,8 @@ function startCaptureLoop(video) {
         }
         ctx.drawImage(video, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
         const dataURL = offscreenCanvas.toDataURL("image/jpeg", 0.7);
-        const payload = { type: "base64", data: dataURL };
+        const eventID = localStorage.getItem("eventID") || "test-event"; // default fallback
+        const payload = { type: "match_event_face", eventID, data: dataURL };
         console.log("➡️ 傳送影像給後端，size =", dataURL.length);
         socket.send(JSON.stringify(payload));
     }, 3000);
