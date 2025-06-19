@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const confirmLogout = confirm('確定要登出嗎?');
                 if (confirmLogout) {
                     localStorage.removeItem('userUID');
-                    navigateWithAnimation('https://harrylin0312.github.io/face-recognition/login/');
+                    navigateWithAnimation('../login/');
                 }
             });
         }
@@ -202,7 +202,7 @@ export async function loadUserName() {
     const userIDElement = document.getElementById('userID');
     const userUID = localStorage.getItem("userUID");
     if (!userUID) {
-        userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+        userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="../login/" style="color:red;">登入</a>';
         userIDElement.className = 'red';
         return;
     }
@@ -238,7 +238,7 @@ export async function loadUserName() {
                 });
             }
         } else {
-            userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+            userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="../login/" style="color:red;">登入</a>';
             userIDElement.className = 'red';
         }
     } catch (error) {
@@ -246,7 +246,7 @@ export async function loadUserName() {
         if (error.code === 'unavailable' || !navigator.onLine) {
             userIDElement.textContent = '網路連線錯誤';
         } else {
-            userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+            userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="../login/" style="color:red;">登入</a>';
         }
         userIDElement.className = 'red';
     }
@@ -348,4 +348,3 @@ export function navigateWithAnimation(url) {
         window.location.href = url;
     }, 1600); // 1.6秒
 }
-
