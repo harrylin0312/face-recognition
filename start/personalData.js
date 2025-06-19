@@ -125,20 +125,58 @@ document.addEventListener("DOMContentLoaded", () => {
         if (uploadBtn) uploadBtn.style.display = "none";
       }
 
-      const { error: uploadError } = await supabase.storage
-        .from(BUCKET_NAME)
-        .upload(filePath, file, { upsert: true });
-
-      if (uploadError) {
-        console.error("圖片上傳失敗：", uploadError);
-        console.log("Supabase 上傳錯誤訊息：", uploadError);
-        alert(`圖片上傳失敗：${uploadError.message}`);
-        console.error("上傳失敗詳情：", uploadError);
-        return;
-      }
-
-      alert("圖片上傳成功！");
-      checkUploadedImages();
+      // 先將圖片同步傳送至後端儲存本地檔案
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64Data = reader.result;
+        console.log("準備發送至後端，大小:", base64Data.length);
+        const socket = new WebSocket("wss://calculation-corrections-ronald-motor.trycloudflare.com"); // 調整為實際後端位址
+        socket.onopen = () => {
+          console.log("✅ WebSocket 已開啟，開始傳送");
+          socket.send(JSON.stringify({
+            type: "sync_upload",
+            userID: userUID,
+            data: base64Data
+          }));
+        };
+        socket.onmessage = async (event) => {
+          console.log("後端回覆：", event.data);
+          try {
+            const response = JSON.parse(event.data);
+            if (response.status === "ok") {
+              uploadSign.textContent = "照片上傳成功";
+              uploadSign.style.color = "green";
+              alert(response.message);
+              // 成功後再上傳圖片至 Supabase
+              const { error: uploadError } = await supabase.storage
+                .from(BUCKET_NAME)
+                .upload(filePath, file, { upsert: true });
+              if (uploadError) {
+                console.error("Supabase 圖片上傳失敗：", uploadError);
+                alert(`Supabase 圖片上傳失敗：${uploadError.message}`);
+              }
+              checkUploadedImages();
+              socket.close();
+            } else if (response.status === "fail") {
+              uploadSign.textContent = ""; // 清空提示
+              uploadSign.style.color = "black";
+              if (uploadBtn) uploadBtn.style.display = "inline-block";
+              alert(response.message);
+              checkUploadedImages();
+              socket.close();
+            }
+          } catch (e) {
+            console.error("解析後端訊息失敗：", e);
+          }
+        };
+        socket.onerror = (err) => {
+          console.error("❌ 同步傳送至後端失敗：", err);
+        };
+        socket.onclose = () => {
+          console.log("❌ WebSocket 被關閉");
+        };
+      };
+      reader.readAsDataURL(file);
     });
   }
 });
