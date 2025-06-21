@@ -1,10 +1,15 @@
+import { toggleSection } from './toggleSection.js';
+
 let socket = null;
+let currentStream = null;
+let cameraActive = false;
 let captureInterval = null;
 
 export async function startCamera() {
     const userUID = localStorage.getItem("userUID");
     if (!userUID) {
         alert("請先登入才能打卡");
+        toggleSection("eventDetail");
         return;
     }
     const video = document.getElementById('camera');
@@ -15,13 +20,21 @@ export async function startCamera() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         video.srcObject = stream;
-        await video.play();
+        currentStream = stream;
+        await new Promise(resolve => {
+            video.onloadedmetadata = () => {
+                video.play().then(resolve);
+            };
+        });
+        cameraActive = true;
     } catch (err) {
         console.error("無法開啟攝影機：", err);
         alert("無法開啟攝影機，請確認權限設定");
+        stopCamera();
+        toggleSection("eventDetail");
         return;
     }
-    socket = new WebSocket("wss://calculation-corrections-ronald-motor.trycloudflare.com");
+    socket = new WebSocket("wss://it-constitution-knew-attempting.trycloudflare.com");
 
     socket.onopen = () => {
         console.log("🔌 WebSocket 已連線 (startCamera)");
@@ -33,9 +46,13 @@ export async function startCamera() {
     socket.onclose = () => {
         console.log("🔌 WebSocket 已斷開");
         stopCamera();
+        toggleSection("eventDetail");
     };
     socket.onerror = err => {
         console.error("🔌 WebSocket 發生錯誤：", err);
+        alert("無法連線至後端，請稍後再試");
+        stopCamera();
+        toggleSection("eventDetail");
     };
 }
 
@@ -64,17 +81,30 @@ function startCaptureLoop(video) {
 }
 
 export function stopCamera() {
+    if (!cameraActive) return;
+    cameraActive = false;
     if (captureInterval) {
         clearInterval(captureInterval);
         captureInterval = null;
     }
     const video = document.getElementById('camera');
-    if (video && video.srcObject) {
-        video.srcObject.getTracks().forEach(t => t.stop());
+    if (currentStream) {
+        const tracks = currentStream.getTracks();
+        tracks.forEach(track => {
+            if (track.readyState === 'live') {
+                track.stop();
+            }
+        });
+        currentStream = null;
+    }
+    if (video) {
+        video.pause();
+        video.removeAttribute('srcObject');
         video.srcObject = null;
     }
     if (socket && socket.readyState === WebSocket.OPEN) {
         socket.close();
     }
     socket = null;
+    console.log("🛑 已停止攝影機與 WebSocket");
 }
