@@ -1,9 +1,13 @@
 import { loadEventManagement, loadEventDetail, loadEventDDetail } from './manage.js';
 import { loadCheckInRecords, loadJoinEventDetail } from './join.js';
-import { startCamera } from './camera.js';
+import { startCamera, stopCamera } from './camera.js';
 
 export function toggleSection(sectionId, eventId = null, eventName = '') {
     const allContainers = document.querySelectorAll('.container');
+    const currentVisible = Array.from(allContainers).find(container => !container.classList.contains('hidden'));
+    const isLeavingCheckIn = currentVisible?.id === 'checkIn';
+    if (isLeavingCheckIn) stopCamera();
+
     const nextSection = document.getElementById(sectionId);
     const userID = document.getElementById('userContainer');
     const close_btn = document.getElementById('closeBtn');
@@ -56,7 +60,11 @@ export function toggleSection(sectionId, eventId = null, eventName = '') {
         if (sectionId === 'checkIn') {
             const checkInTitle = document.querySelector('#checkIn .title');
             if (checkInTitle) checkInTitle.textContent = eventName;
-            startCamera();
+
+            // 延遲執行 startCamera，確保畫面已經顯示出來
+            setTimeout(() => {
+                startCamera();
+            }, 300);
         }
         if (sectionId === 'eventDDetail' && eventId) {
             loadEventDDetail(eventId);
