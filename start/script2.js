@@ -27,6 +27,10 @@ import { loadEventManagement, createEvent, loadEventDetail } from './manage.js';
 import { loadCheckInRecords, joinEvent, addExitEventListener } from './join.js';
 import { loadPersonalData } from './personalData.js';
 import { toggleSection } from './toggleSection.js';
+import { startCamera, stopCamera } from './camera.js';
+
+window.startCamera = startCamera;
+window.stopCamera = stopCamera;
 window.createEvent = createEvent;
 window.loadEventManagement = loadEventManagement;
 window.loadEventDetail = loadEventDetail;
