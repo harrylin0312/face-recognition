@@ -36,7 +36,7 @@ export async function startCamera() {
         console.error("無法開啟攝影機：", err);
         alert("無法開啟攝影機，請確認權限設定");
         stopCamera();
-        toggleSection("eventDetail");
+        toggleSection("eventDetail", window.currentEventId);
         return;
     }
     socket = new WebSocket("wss://flexible-button-exceptions-photographer.trycloudflare.com");
@@ -83,13 +83,13 @@ export async function startCamera() {
     socket.onclose = () => {
         console.log("🔌 WebSocket 已斷開");
         stopCamera();
-        toggleSection("eventDetail");
+        toggleSection("eventDetail", window.currentEventId);
     };
     socket.onerror = err => {
         console.error("🔌 WebSocket 發生錯誤：", err);
         alert("無法連線至後端，請稍後再試");
         stopCamera();
-        toggleSection("eventDetail");
+        toggleSection("eventDetail", window.currentEventId);
     };
 }
 
