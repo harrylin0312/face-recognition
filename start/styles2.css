@@ -299,6 +299,7 @@ input::placeholder {
 /*------------------------------------------------------------*/
 .red { color: rgb(238, 4, 4); }
 .green { color: green; }
+.black { color: black; }
 /*------------------------------------------------------------*/
 /*用戶資訊*/
 #userContainer {
@@ -492,7 +493,6 @@ input::placeholder {
     position: absolute;
     bottom: 0px;
     left: 50%;
-    color: green;
     padding: 5px 10px;
     border-radius: 980px;
     font-size: 20px;
