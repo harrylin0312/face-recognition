@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ['bckToManageEventFrmCreateEvent', 'manageEvent'],//回到舉辦紀錄
             ['toEventDetail', 'eventDetail'],//活動詳情
             ['bckToManageEventFrmEventDetail', 'manageEvent'],//回到舉辦紀錄
-            ['start','checkIn'],//打卡
+            ['toCheckIn','checkIn'],//打卡
             ['bckToEventDetailFrmCheckIn', 'eventDetail'],//回到活動詳情
 
             ['toJoinRecord', 'joinRecord'],//參加紀錄
@@ -167,15 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 新增「打卡」按鈕點擊事件，帶入活動名稱
-        const startCheckInBtn = document.getElementById('start');
-        if (startCheckInBtn) {
-            startCheckInBtn.addEventListener('click', () => {
-                const eventName = document.querySelector('#eventDetail .title')?.textContent || '';
-                const eventId = window.currentEventId;
-                toggleSection('checkIn', eventId, eventName);
-            });
-        }
 
         const joinEventBtn = document.getElementById('joinEventBtn');
         if (joinEventBtn) {
