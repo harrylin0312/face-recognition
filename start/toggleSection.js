@@ -53,14 +53,6 @@ export function toggleSection(sectionId, eventId = null, eventName = '') {
         if (sectionId === 'joinEventDetail' && eventId) loadJoinEventDetail(eventId);
         if (sectionId === 'eventDetail' && eventId) loadEventDetail(eventId);
         if (sectionId === 'eventDDetail' && eventId) loadEventDDetail(eventId);
-        if (sectionId === 'checkIn') {
-            const checkInTitle = document.querySelector('#checkIn .title');
-            if (checkInTitle) checkInTitle.textContent = eventName;
-
-            // 延遲執行 startCamera，確保畫面已經顯示出來
-            setTimeout(() => {
-                startCamera();
-            }, 300);
-        }
+        if (sectionId === 'checkIn') startCamera();
     }, 300);
 }
