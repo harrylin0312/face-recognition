@@ -6,7 +6,7 @@ export async function loadCheckInRecords() {
     const container = document.getElementById('checkInRecords');
 
     if (!userUID) {
-        container.innerHTML = '尚未登入，請先 <a href="#" class="animated-link" data-url="https://harrylin0312.github.io/face-recognition/login/" style="color:red;">登入</a>';
+        container.innerHTML = '尚未登入，請先 <a href="#" class="animated-link" data-url="../login/" style="color:red;">登入</a>';
         return;
     }
 
@@ -148,17 +148,25 @@ function adjustEventDateVisibility() {
 // 載入參加活動詳情
 export async function loadJoinEventDetail(eventID) {
     const userUID = localStorage.getItem('userUID');
-    if (!userUID) {
-        alert('請先登入');
-        return;
-    }
-
     const eventDetailDiv = document.getElementById('joinEventDetail');
     const fields = eventDetailDiv.querySelectorAll('.field');
 
     try {
         const eventDocRef = doc(db, "events", eventID);
         const eventSnap = await getDoc(eventDocRef);
+
+        if (eventSnap.exists()) {
+            // 顯示活動名稱
+            const eventData = eventSnap.data();
+            const titleElement = eventDetailDiv.querySelector('h2.title');
+            titleElement.innerHTML = `${eventData.eventName || "無名稱"}`;
+        } else {
+            const titleElement = eventDetailDiv.querySelector('h2.title');
+            titleElement.textContent = "找不到活動資料";
+            eventDetailDiv.innerHTML = '找不到活動';
+            return;
+        }
+        
         if (!eventSnap.exists()) {
             // 找不到活動資料時，顯示「未知」字串，但活動ID保持不變
             eventDetailDiv.querySelector('h2.title').textContent = '未知';
@@ -240,6 +248,7 @@ export async function loadJoinEventDetail(eventID) {
     }
 }
 
+// 退出活動事件綁定
 export function addExitEventListener() {
     // 先把所有 .exitEvent 元素換成新節點（清除舊事件）
     document.querySelectorAll('.exitEvent').forEach(button => {
