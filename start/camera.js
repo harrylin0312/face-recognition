@@ -34,7 +34,7 @@ export async function startCamera() {
         toggleSection("eventDetail");
         return;
     }
-    socket = new WebSocket("wss://it-constitution-knew-attempting.trycloudflare.com");
+    socket = new WebSocket("wss://flexible-button-exceptions-photographer.trycloudflare.com");
 
     socket.onopen = () => {
         console.log("🔌 WebSocket 已連線 (startCamera)");
