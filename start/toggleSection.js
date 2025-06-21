@@ -52,11 +52,7 @@ export function toggleSection(sectionId, eventId = null, eventName = '') {
         if (sectionId === 'manageEvent') loadEventManagement();
         if (sectionId === 'joinEventDetail' && eventId) loadJoinEventDetail(eventId);
         if (sectionId === 'eventDetail' && eventId) loadEventDetail(eventId);
-        if (sectionId === 'joinEventDetail' && eventId) {
-            
-            const detailTitle = document.querySelector('#joinEventDetail .title');
-            if (detailTitle) detailTitle.textContent = eventName;
-        }
+        if (sectionId === 'eventDDetail' && eventId) loadEventDDetail(eventId);
         if (sectionId === 'checkIn') {
             const checkInTitle = document.querySelector('#checkIn .title');
             if (checkInTitle) checkInTitle.textContent = eventName;
@@ -65,9 +61,6 @@ export function toggleSection(sectionId, eventId = null, eventName = '') {
             setTimeout(() => {
                 startCamera();
             }, 300);
-        }
-        if (sectionId === 'eventDDetail' && eventId) {
-            loadEventDDetail(eventId);
         }
     }, 300);
 }
