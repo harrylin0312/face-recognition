@@ -190,8 +190,8 @@ input::placeholder {
     flex: 1;
 }
 /*箭頭*/
-.record-item .arrow {
-    font-size: 1em;
+.record-item .fa-chevron-right {
+    font-size: 0.9em;
     color: #575757b0;
     text-align: right;
     flex: 0.05;
@@ -440,7 +440,7 @@ input::placeholder {
     top: 37%;
     left: 26%;
     transform: translateY(-50%);
-    font-size: 1.5em;
+    font-size: 1.3em;
     color: #343434; /* 顏色可自訂 */
 }
 @media(max-width:768px) {/*手機版樣式*/
