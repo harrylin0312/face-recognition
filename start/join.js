@@ -55,10 +55,10 @@ export async function loadCheckInRecords() {
                                 <span class="eventName">${eventName}</span>
                                 <span class="eventDate eventDateToggle">${formattedDate}</span>
                                 <span class="${checkStatus === '未打卡' ? 'red' : 'green'}">${checkStatus}</span>
-                                <span class="arrow">&gt;</span>
+                                <i class="fa-solid fa-chevron-right"></i>
                             </div>`;
                 } else {
-                    html += `<div class="record-item" onclick="toggleSection('joinEventDetail', '${eventID}', '活動已被刪除')">活動已被刪除 (ID: ${eventID})<span class="arrow">&gt;</span></div>`;
+                    html += `<div class="record-item" onclick="toggleSection('joinEventDetail', '${eventID}', '活動已被刪除')">活動已被刪除 (ID: ${eventID})<i class="fa-solid fa-chevron-right"></i></div>`;
                 }
             } catch (innerErr) {
                 console.error(`讀取活動 ${eventID} 或打卡資料錯誤：`, innerErr);
