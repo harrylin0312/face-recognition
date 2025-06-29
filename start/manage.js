@@ -13,7 +13,7 @@ export async function loadEventManagement() {
     container.innerHTML = '讀取中...';
 
     try {
-        //取得使用者舉辦的所有活動文件集合
+        //取得使用者舉}, 300);辦的所有活動文件集合
         const hostedEventsRef = collection(db, "users", userUID, "hostedEvents");
         //取得活動詳細資料並依建立時間排序
         const snapshot = await getDocs(hostedEventsRef);
@@ -166,7 +166,7 @@ export async function createEvent() {
     }
 }
 
-//載入活詳情
+//載入舉辦活動詳情
 export async function loadEventDetail(eventID) {
     window.currentEventId = eventID;
     const titleElement = document.querySelector('#eventDetail .title');
@@ -185,7 +185,7 @@ export async function loadEventDetail(eventID) {
         if (eventDocSnap.exists()) {
             //顯示活動名稱
             const eventData = eventDocSnap.data();
-            titleElement.innerHTML = `${eventData.eventName || "無名稱"} <i class="fa-regular fa-circle-info" style="cursor: pointer;" onclick="toggleSection('eventDDetail', window.currentEventId)"></i>`;
+            titleElement.innerHTML = `${eventData.eventName || "無名稱"} <i class="fa-solid fa-circle-info" onclick="toggleSection('eventDDetail', window.currentEventId)"></i>`;
         } else {
             titleElement.textContent = "找不到活動資料";
             container.innerHTML = '找不到活動';
@@ -320,7 +320,7 @@ export async function loadEventDDetail(eventID) {
                 exitEventBtn.textContent = "刪除中...";
 
                 try {
-                    const userUID = localStorage.getItem('userUID');
+                    const userUID = localStorage.getItem('userUID');ㄨ
                     if (!userUID) throw new Error("使用者未登入");
 
                     await deleteDoc(doc(db, "events", eventID));
