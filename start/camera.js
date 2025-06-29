@@ -39,7 +39,7 @@ export async function startCamera() {
         toggleSection("eventDetail", window.currentEventId);
         return;
     }
-    socket = new WebSocket("wss://move-playback-creations-briefly.trycloudflare.com");
+    socket = new WebSocket("wss:// https://office-stereo-spaces-chef.trycloudflare.com");
 
     socket.onopen = () => {
         console.log("🔌 WebSocket 已連線 (startCamera)");
