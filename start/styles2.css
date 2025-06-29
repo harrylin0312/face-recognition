@@ -512,6 +512,7 @@ input::placeholder {
     color: rgba(255, 255, 255, 0.55);
     border-radius: 980px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 /*------------------------------------------------------------*/
 /*容器內子元素初始狀態（除了 .back-button） */
