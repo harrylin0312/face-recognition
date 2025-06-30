@@ -48,7 +48,7 @@ export async function loadEventManagement() {
                     html += `<div class="record-item" onclick="toggleSection('eventDetail', '${eventID}', '${eventName}')">
                                 <span class="eventName">${eventName}</span>
                                 <span class="eventDate eventDateToggle">${formattedDate}</span>
-                                <i class="fa-solid fa-chevron-right"></i>
+                                <i class="fa-solid fa-angle-right"></i>
                             </div>`;
                 } else {
                     html += `<div class="record-item">找不到活動 (ID: ${eventID})</div>`;
