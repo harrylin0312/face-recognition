@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.onload = () => {
         const base64Data = reader.result;
         console.log("準備發送至後端，大小:", base64Data.length);
-        const socket = new WebSocket("wss://burden-thou-org-vault.trycloudflare.com"); // 調整為實際後端位址
+        const socket = new WebSocket("wss://person-readily-est-induction.trycloudflare.com"); // 調整為實際後端位址
         socket.onopen = () => {
           console.log("✅ WebSocket 已開啟，開始傳送");
           socket.send(JSON.stringify({
