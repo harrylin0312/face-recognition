@@ -190,7 +190,7 @@ input::placeholder {
     flex: 1;
 }
 /*箭頭*/
-.record-item .fa-chevron-right {
+.record-item .fa-angle-right {
     font-size: 0.9em;
     color: #575757b0;
     text-align: right;
@@ -543,4 +543,5 @@ input::placeholder {
     -ms-user-select: text;
     user-select: text;
 }
+/*------------------------------------------------------------*/
 /*------------------------------------------------------------*/
