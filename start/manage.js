@@ -320,7 +320,7 @@ export async function loadEventDDetail(eventID) {
                 exitEventBtn.textContent = "刪除中...";
 
                 try {
-                    const userUID = localStorage.getItem('userUID');ㄨ
+                    const userUID = localStorage.getItem('userUID');
                     if (!userUID) throw new Error("使用者未登入");
 
                     await deleteDoc(doc(db, "events", eventID));
