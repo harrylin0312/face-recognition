@@ -39,7 +39,7 @@ export async function startCamera() {
         toggleSection("eventDetail", window.currentEventId);
         return;
     }
-    socket = new WebSocket("wss://person-readily-est-induction.trycloudflare.com");
+    socket = new WebSocket("wss://bradford-worn-into-diesel.trycloudflare.com");
 
     socket.onopen = () => {
         console.log("🔌 WebSocket 已連線 (startCamera)");
