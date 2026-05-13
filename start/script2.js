@@ -2,10 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-const BUCKET_NAME = "face123";
-export const supabase = createClient("https://wiqldwmpszfinwbdegrs.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpcWxkd21wc3pmaW53YmRlZ3JzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg5NTUyNTQsImV4cCI6MjA2NDUzMTI1NH0.gbPCAFdTdEcl8-1C4OnNlp2G0YGue6kd1N9cvxmqiUA");
+import { demoUser, demoEvents } from "./demoData.js";
 
 // 初始化 Firebase
 const firebaseConfig = {
@@ -21,6 +18,20 @@ const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+const urlParams = new URLSearchParams(window.location.search);
+export const isDemoMode = urlParams.get("mode") === "demo";
+
+export const demoUserData = demoUser;
+export { demoEvents };
+
+if (isDemoMode) {
+    localStorage.setItem("appMode", "demo");
+    localStorage.removeItem("userUID");
+    localStorage.setItem("userData", JSON.stringify(demoUserData));
+}
+
+export const BACKEND_WS_URL = "wss://external-armed-plug-joseph.trycloudflare.com";
 
 // 引入外部模組
 import { loadEventManagement, createEvent, loadEventDetail } from './manage.js';
@@ -63,6 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const confirmLogout = confirm('確定要登出嗎?');
                 if (confirmLogout) {
                     localStorage.removeItem('userUID');
+                    localStorage.removeItem('appMode');
+                    localStorage.removeItem('demoUserName');
+                    localStorage.removeItem('demoUserEmail');
                     navigateWithAnimation('../login/');
                 }
             });
@@ -195,6 +209,18 @@ window.addEventListener('resize', setVH);
 //顯示用戶名稱
 export async function loadUserName() {
     const userIDElement = document.getElementById('userID');
+    const demoModeNotice = document.getElementById('demoModeNotice');
+
+    if (isDemoMode) {
+        if (demoModeNotice) demoModeNotice.classList.remove('hidden');
+        userIDElement.textContent = `用戶：${demoUserData.userName}`;
+        userIDElement.className = 'green';
+        userIDElement.addEventListener('click', expandContract);
+        return;
+    }
+
+    if (demoModeNotice) demoModeNotice.classList.add('hidden');
+
     const userUID = localStorage.getItem("userUID");
     if (!userUID) {
         userIDElement.innerHTML = '<a href="#" class="animated-link" data-url="../login/" style="color:red;">登入</a>';
@@ -248,59 +274,132 @@ export async function loadUserName() {
     checkUploadedImages()
 }
 export async function checkUploadedImages() {
-    // 檢查是否有上傳個人臉部影像
     const uploadSign = document.getElementById("uploadSign");
     const uploadBtn = document.querySelector(".PDuploadBtn");
+    const userIDElement = document.getElementById("userID");
+    const detailElement = document.querySelector(".detail");
+
+    if (!uploadSign || !uploadBtn) return;
+
+    if (isDemoMode) {
+        uploadSign.textContent = "Demo 模式資料僅供展示，不會儲存。";
+        uploadSign.style.color = "#094244";
+        uploadBtn.style.display = "none";
+        return;
+    }
+
     const userUID = localStorage.getItem("userUID");
+    if (!userUID) return;
 
-    if (!uploadSign || !uploadBtn || !userUID) return;
-
-    uploadSign.textContent = "載入中...";
+    uploadSign.textContent = "正在確認臉部影像狀態...";
     uploadSign.style.color = "black";
     uploadBtn.style.display = "none";
 
-    const { data, error } = await supabase
-        .storage
-        .from(BUCKET_NAME)
-        .list("", { search: `${userUID}.jpg` });
+    const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+    if (userIDElement && userData.userName) {
+        userIDElement.textContent = `用戶：${userData.userName}`;
+        userIDElement.className = "green";
+    }
 
-    if (error || !data || data.length === 0) {
-        uploadSign.innerHTML = `上傳用戶臉部影像`;
-        uploadSign.style.color = "red";
+    try {
+        const result = await checkFaceImageFromBackend(userUID);
+
+        if (result.hasImage) {
+            uploadSign.textContent = "已完成上傳";
+            uploadSign.style.color = "green";
+            uploadBtn.style.display = "none";
+
+            if (detailElement) {
+                const warningIcon = detailElement.querySelector(".warning-icon");
+                if (warningIcon) detailElement.removeChild(warningIcon);
+            }
+        } else {
+            uploadSign.textContent = "上傳用戶臉部影像";
+            uploadSign.style.color = "red";
+            uploadBtn.style.display = "inline-block";
+
+            if (userIDElement && userData.userName) {
+                userIDElement.innerHTML = `用戶：${userData.userName} <span style="color:red;"><i class="fa-solid fa-triangle-exclamation"></i></span>`;
+                userIDElement.className = "green";
+            }
+
+            if (detailElement && !detailElement.querySelector(".warning-icon")) {
+                const warningIcon = document.createElement("i");
+                warningIcon.className = "fa-solid fa-triangle-exclamation warning-icon";
+                warningIcon.style.color = "red";
+                warningIcon.style.marginLeft = "6px";
+                detailElement.appendChild(warningIcon);
+            }
+        }
+    } catch (error) {
+        console.error("確認臉部影像狀態失敗：", error);
+        uploadSign.textContent = "目前未確認臉部影像狀態";
+        uploadSign.style.color = "#094244";
         uploadBtn.style.display = "inline-block";
-        // 取得 userData 並更新 #userID，顯示警示圖示
-        const userIDElement = document.getElementById("userID");
-        const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-        userIDElement.innerHTML = `用戶：${userData.userName} <span style="color:red;"><i class="fa-solid fa-triangle-exclamation"></i></span>`;
-        userIDElement.className = 'green';
 
-        // 在 .detail 後加入警示圖示
-        const detailElement = document.querySelector(".detail");
-        if (detailElement && !detailElement.querySelector(".warning-icon")) {
-            const warningIcon = document.createElement("i");
-            warningIcon.className = "fa-solid fa-triangle-exclamation warning-icon";
-            warningIcon.style.color = "red";
-            warningIcon.style.marginLeft = "6px";
-            detailElement.appendChild(warningIcon);
-        }
-    } else {
-        uploadSign.textContent = "已完成上傳";
-        uploadSign.style.color = "green";
-        uploadBtn.style.display = "none";
-        // 取得 userData 並更新 #userID，移除警示圖示
-        const userIDElement = document.getElementById("userID");
-        const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-        if (userIDElement && userData.userName) {
-            userIDElement.textContent = `用戶：${userData.userName}`;
-            userIDElement.className = 'green';
-        }
-        // 查詢成功且圖片存在時，清除 .detail 旁的警示圖示
-        const detailElement = document.querySelector(".detail");
         if (detailElement) {
             const warningIcon = detailElement.querySelector(".warning-icon");
             if (warningIcon) detailElement.removeChild(warningIcon);
         }
     }
+}
+
+function checkFaceImageFromBackend(userUID) {
+    return new Promise((resolve, reject) => {
+        const socket = new WebSocket(BACKEND_WS_URL);
+        let completed = false;
+
+        const timeout = setTimeout(() => {
+            if (completed) return;
+            completed = true;
+            socket.close();
+            reject(new Error("確認臉部影像狀態逾時"));
+        }, 8000);
+
+        socket.onopen = () => {
+            socket.send(JSON.stringify({
+                type: "check_face_image",
+                userID: userUID,
+            }));
+        };
+
+        socket.onmessage = (event) => {
+            try {
+                const response = JSON.parse(event.data);
+
+                if (response.status === "ready") {
+                    return;
+                }
+
+                if (response.type === "check_face_image_result") {
+                    completed = true;
+                    clearTimeout(timeout);
+                    socket.close();
+                    resolve(response);
+                    return;
+                }
+
+                if (response.status === "fail" || response.status === "error") {
+                    completed = true;
+                    clearTimeout(timeout);
+                    socket.close();
+                    reject(new Error(response.message || response.reason || "後端查詢失敗"));
+                }
+            } catch (error) {
+                completed = true;
+                clearTimeout(timeout);
+                socket.close();
+                reject(error);
+            }
+        };
+
+        socket.onerror = () => {
+            if (completed) return;
+            completed = true;
+            clearTimeout(timeout);
+            reject(new Error("WebSocket 連線失敗"));
+        };
+    });
 }
 
 // 用戶資訊欄

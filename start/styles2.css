@@ -197,6 +197,14 @@ input::placeholder {
     flex: 0.05;
     font-weight:lighter;
 }
+.record-item .abcarrow {
+    font-size: 0.9em;
+    color: #575757b0;
+    text-align: right;
+    flex: 0.05;
+    font-weight:lighter;
+    margin: 0 0 0 0;
+}
 /*舉辦活動按鈕樣式*/
 .record-item .btnCreateEvent {
     font-size: 1em;

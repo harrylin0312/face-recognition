@@ -1,14 +1,39 @@
-import { db, loadUserName, supabase ,checkUploadedImages } from "./script2.js";
+import { db, loadUserName, checkUploadedImages, isDemoMode, demoUserData, BACKEND_WS_URL } from "./script2.js";
 import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { getAuth, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-const BUCKET_NAME = "face123";
 
 
 
 
 export async function loadPersonalData() {
   const userUID = localStorage.getItem("userUID");
+  if (isDemoMode) {
+    const usernameContainer = document.getElementById("PDusername-container");
+    const emailElement = document.getElementById("PDemail");
+    const registrationDateElement = document.getElementById("PDregistrationDate");
+
+    if (usernameContainer) {
+      usernameContainer.innerHTML = "";
+
+      const text = document.createElement("div");
+      text.textContent = demoUserData.userName;
+      text.className = "PDstatic-text";
+
+      const noticeBtn = document.createElement("button");
+      noticeBtn.innerHTML = '<i class="fas fa-pen"></i>';
+      noticeBtn.addEventListener("click", () => {
+        alert("Demo 模式資料僅供展示，不會儲存。");
+      });
+
+      usernameContainer.append(text, noticeBtn);
+    }
+
+    if (emailElement) emailElement.textContent = demoUserData.email;
+    if (registrationDateElement) registrationDateElement.textContent = demoUserData.registrationDate;
+
+    return;
+  }
   if (!userUID) {
     document.getElementById("PDusername-container").textContent = "未登入";
     document.getElementById("PDemail").textContent = "";
@@ -107,6 +132,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("PDfileInput");
 
   if (uploadBtn && fileInput) {
+    if (isDemoMode) {
+      uploadBtn.addEventListener("click", () => {
+        alert("Demo 模式資料僅供展示，不會儲存。");
+      });
+      return;
+    }
+
     uploadBtn.addEventListener("click", () => fileInput.click());
 
     fileInput.addEventListener("change", async (event) => {
@@ -114,8 +146,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!file) return;
 
       const userUID = localStorage.getItem("userUID") || "anonymous";
-      const fileExt = file.name.split(".").pop();
-      const filePath = `${userUID}.jpg`;
 
       const uploadSign = document.getElementById("uploadSign");
       const uploadBtn = document.querySelector(".PDuploadBtn");
@@ -130,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.onload = () => {
         const base64Data = reader.result;
         console.log("準備發送至後端，大小:", base64Data.length);
-        const socket = new WebSocket("wss://discharge-setting-sense-boxes.trycloudflare.com"); // 調整為實際後端位址
+        const socket = new WebSocket(BACKEND_WS_URL);
         socket.onopen = () => {
           console.log("✅ WebSocket 已開啟，開始傳送");
           socket.send(JSON.stringify({
@@ -143,18 +173,16 @@ document.addEventListener("DOMContentLoaded", () => {
           console.log("後端回覆：", event.data);
           try {
             const response = JSON.parse(event.data);
+            if (response.status === "ready") {
+              console.log("✅ 後端已準備接收圖片");
+              return;
+            }
+
             if (response.status === "ok") {
               uploadSign.textContent = "照片上傳成功";
               uploadSign.style.color = "green";
-              alert(response.message);
-              // 成功後再上傳圖片至 Supabase
-              const { error: uploadError } = await supabase.storage
-                .from(BUCKET_NAME)
-                .upload(filePath, file, { upsert: true });
-              if (uploadError) {
-                console.error("Supabase 圖片上傳失敗：", uploadError);
-                alert(`Supabase 圖片上傳失敗：${uploadError.message}`);
-              }
+              if (uploadBtn) uploadBtn.style.display = "inline-block";
+              alert(response.message || "照片已成功同步至後端");
               checkUploadedImages();
               socket.close();
             } else if (response.status === "fail") {
@@ -171,6 +199,12 @@ document.addEventListener("DOMContentLoaded", () => {
         };
         socket.onerror = (err) => {
           console.error("❌ 同步傳送至後端失敗：", err);
+          if (uploadSign) {
+            uploadSign.textContent = "後端連線失敗";
+            uploadSign.style.color = "red";
+          }
+          if (uploadBtn) uploadBtn.style.display = "inline-block";
+          alert("無法連線至後端，請確認 server.py 與 Cloudflare Tunnel 是否正在執行。");
         };
         socket.onclose = () => {
           console.log("❌ WebSocket 被關閉");

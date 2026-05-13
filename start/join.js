@@ -1,9 +1,21 @@
 import { collection, doc, getDoc, getDocs, setDoc, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-import { db } from './script2.js';
+import { db, isDemoMode } from './script2.js';
+import { demoUser, getDemoEventById, getDemoJoinedEvents, getDemoCheckInStatus, getDemoParticipant } from './demoData.js';
 
 export async function loadCheckInRecords() {
     const userUID = localStorage.getItem('userUID');
     const container = document.getElementById('checkInRecords');
+
+    if (isDemoMode) {
+        container.innerHTML = buildDemoCheckInRecords();
+        adjustEventDateVisibility();
+        window.addEventListener('resize', adjustEventDateVisibility);
+        const newJoinBtn = document.getElementById('recordJoinNew');
+        if (newJoinBtn) {
+            newJoinBtn.addEventListener('click', () => toggleSection('joinEvent'));
+        }
+        return;
+    }
 
     if (!userUID) {
         container.innerHTML = '尚未登入，請先 <a href="#" class="animated-link" data-url="../login/" style="color:red;">登入</a>';
@@ -83,9 +95,51 @@ export async function loadCheckInRecords() {
     }
 }
 
+function buildDemoCheckInRecords() {
+    let html = `
+        <div class="record-item no-hover" id="recordJoinNew" style="background-color: rgba(180, 180, 180, 0.25); border:rgba(202, 202, 202, 0.7) 1px solid;">
+            <span class="btnJoinEvent">加入 Demo 活動+</span>
+        </div>
+    `;
+
+    const demoJoinedEvents = getDemoJoinedEvents();
+
+    demoJoinedEvents.forEach((event) => {
+        const eventName = event.name || "Demo 活動";
+        const eventDate = event.createdAt ? event.createdAt.split(" ")[0] : "Demo 日期";
+        const checkStatus = getDemoCheckInStatus(event.id, demoUser.uid);
+
+        html += `<div class="record-item" onclick="toggleSection('joinEventDetail', '${event.id}', '${eventName}')">
+                    <span class="eventName">${eventName}</span>
+                    <span class="eventDate eventDateToggle">${eventDate}</span>
+                    <span class="${checkStatus === '未打卡' ? 'red' : 'green'}">${checkStatus}</span>
+                    <i class="fa-solid fa-angle-right"></i>
+                </div>`;
+    });
+
+    return html;
+}
+
 //加入活動
 export async function joinEvent() {
     const eventCode = document.getElementById('eventCode').value.trim();
+
+    if (isDemoMode) {
+        const demoEvent = getDemoEventById(eventCode);
+        if (!eventCode) {
+            alert('請輸入活動代碼，例如 DEMO001');
+            return;
+        }
+        if (!demoEvent) {
+            alert('查無此 Demo 活動，請輸入 DEMO001、DEMO002 或 DEMO003');
+            return;
+        }
+        alert('Demo 模式資料僅供展示，不會儲存。');
+        document.getElementById('eventCode').value = '';
+        toggleSection('joinRecord');
+        return;
+    }
+
     if (!eventCode) {
         alert('請輸入活動代碼');
         return;
@@ -150,6 +204,11 @@ export async function loadJoinEventDetail(eventID) {
     const userUID = localStorage.getItem('userUID');
     const eventDetailDiv = document.getElementById('joinEventDetail');
     const fields = eventDetailDiv.querySelectorAll('.field');
+
+    if (isDemoMode) {
+        loadDemoJoinEventDetail(eventID, eventDetailDiv, fields);
+        return;
+    }
 
     try {
         const eventDocRef = doc(db, "events", eventID);
@@ -248,8 +307,52 @@ export async function loadJoinEventDetail(eventID) {
     }
 }
 
+function loadDemoJoinEventDetail(eventID, eventDetailDiv, fields) {
+    const demoEvent = getDemoEventById(eventID);
+    if (!demoEvent) {
+        eventDetailDiv.querySelector('h2.title').textContent = '找不到 Demo 活動';
+        return;
+    }
+
+    const demoParticipant = getDemoParticipant(eventID, demoUser.uid);
+    const checkStatus = demoParticipant?.checkedIn ? "已打卡" : "未打卡";
+    const checkColorClass = checkStatus === "未打卡" ? "red" : "green";
+    const titleText = demoEvent.name || "Demo 活動";
+
+    eventDetailDiv.querySelector('h2.title').textContent = titleText;
+
+    if (fields.length >= 6) {
+        fields[0].innerHTML = '';
+        fields[1].innerHTML = '';
+        fields[2].innerHTML = `<label>活動ID</label><div class="rightItem">${eventID}</div>`;
+        fields[3].innerHTML = `
+            <label>舉辦者</label>
+            <div class="rightItem">${demoEvent.hostName || "Demo"}</div>
+        `;
+        fields[4].innerHTML = `
+            <label>舉辦時間</label>
+            <div class="rightItem">${demoEvent.createdAt ? demoEvent.createdAt.split(" ")[0] : "Demo 日期"}</div>
+        `;
+        fields[5].innerHTML = `
+            <label>打卡狀態</label>
+            <div class="joinCheckStatus rightItem ${checkColorClass}">${checkStatus}</div>
+        `;
+    }
+
+    const exitButton = eventDetailDiv.querySelector('.exitEvent');
+    if (exitButton) {
+        exitButton.textContent = 'Demo 模式不可退出活動';
+        exitButton.onclick = () => {
+            alert('Demo 模式資料僅供展示，不會儲存。');
+        };
+    }
+    eventDetailDiv.setAttribute('data-event-id', eventID);
+}
+
 // 退出活動事件綁定
 export function addExitEventListener() {
+    if (isDemoMode) return;
+
     // 先把所有 .exitEvent 元素換成新節點（清除舊事件）
     document.querySelectorAll('.exitEvent').forEach(button => {
         const newButton = button.cloneNode(true);

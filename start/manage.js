@@ -1,9 +1,18 @@
-import { collection, doc, getDoc, getDocs, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";import { db } from './script2.js';
+import { collection, doc, getDoc, getDocs, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { db, isDemoMode } from './script2.js';
+import { demoEvents, getDemoEventById, getDemoCheckedInCount } from './demoData.js';
 
 export async function loadEventManagement() {
     //取得目前登入使用者的 UID
     const userUID = localStorage.getItem('userUID');
     const container = document.getElementById('eventManagementList');
+
+    if (isDemoMode) {
+        container.innerHTML = buildDemoEventManagementList();
+        adjustEventDateVisibility();
+        window.addEventListener('resize', adjustEventDateVisibility);
+        return;
+    }
 
     if (!userUID) {
         container.innerHTML = '尚未登入，請先 <a href="#" class="animated-link" data-url="../login/" style="color:red;">登入</a>';
@@ -48,7 +57,7 @@ export async function loadEventManagement() {
                     html += `<div class="record-item" onclick="toggleSection('eventDetail', '${eventID}', '${eventName}')">
                                 <span class="eventName">${eventName}</span>
                                 <span class="eventDate eventDateToggle">${formattedDate}</span>
-                                <i class="fa-solid fa-angle-right"></i>
+                                <p class="abcarrow">›</p>
                             </div>`;
                 } else {
                     html += `<div class="record-item">找不到活動 (ID: ${eventID})</div>`;
@@ -75,6 +84,27 @@ export async function loadEventManagement() {
             container.innerHTML = '載入失敗，請稍後再試';
         }
     }
+}
+
+function buildDemoEventManagementList() {
+    let html = `
+        <div id="btnToCreateEvent" class="record-item no-hover" style="background-color: rgba(180, 180, 180, 0.25); border:rgba(202, 202, 202, 0.7) 1px solid;">
+            <span class="btnCreateEvent">Demo 模式不可建立新活動</span>
+        </div>
+    `;
+
+    demoEvents.forEach((event) => {
+        const eventID = event.id;
+        const eventName = event.name || "無名稱";
+        const formattedDate = event.createdAt ? event.createdAt.split(" ")[0] : "Demo 日期";
+        html += `<div class="record-item" onclick="toggleSection('eventDetail', '${eventID}', '${eventName}')">
+                    <span class="eventName">${eventName}</span>
+                    <span class="eventDate eventDateToggle">${formattedDate}</span>
+                    <p class="abcarrow">›</p>
+                </div>`;
+    });
+
+    return html;
 }
 
 //產生隨機活動
@@ -107,6 +137,11 @@ async function getUniqueEventID() {
 }
 
 export async function createEvent() {
+    if (isDemoMode) {
+        alert("Demo 模式資料僅供展示，不會儲存。");
+        return;
+    }
+
     const eventNameInput = document.getElementById('eventName');
     const eventName = eventNameInput.value.trim();
     const submitBtn = document.getElementById('createEventBtn');
@@ -177,6 +212,11 @@ export async function loadEventDetail(eventID) {
     const startButtonElement = document.querySelector('#eventDetail .startButton');
     if (legendElement) legendElement.style.display = 'none';
     if (startButtonElement) startButtonElement.style.display = 'none';
+
+    if (isDemoMode) {
+        loadDemoEventDetail(eventID, titleElement, container, legendElement, startButtonElement);
+        return;
+    }
 
     try {
         const eventDocRef = doc(db, "events", eventID);
@@ -256,6 +296,47 @@ export async function loadEventDetail(eventID) {
     }
 }
 
+function loadDemoEventDetail(eventID, titleElement, container, legendElement, startButtonElement) {
+    const eventData = getDemoEventById(eventID);
+
+    if (!eventData) {
+        titleElement.textContent = "找不到 Demo 活動";
+        container.innerHTML = "找不到 Demo 活動";
+        return;
+    }
+
+    titleElement.innerHTML = `${eventData.name || "無名稱"} <i class="fa-solid fa-circle-info" onclick="toggleSection('eventDDetail', window.currentEventId)"></i>`;
+
+    const participants = eventData.participants || [];
+    if (participants.length === 0) {
+        container.innerHTML = "尚無參加者";
+        return;
+    }
+
+    if (legendElement) legendElement.style.display = '';
+    if (startButtonElement) startButtonElement.style.display = '';
+
+    let checkedInCount = 0;
+    let html = '';
+
+    participants.forEach((participant) => {
+        const checkStatus = participant.checkedIn ? "已打卡" : "未打卡";
+        const checkTime = participant.checkedIn ? "Demo" : "";
+        if (participant.checkedIn) checkedInCount++;
+
+        html += `<div class="record-item">
+                    <span class="eventName">${participant.name || "無名稱"}</span>
+                    <span class="eventDate">${checkTime}</span>
+                    <span class="${checkStatus === '未打卡' ? 'red' : 'green'}">${checkStatus}</span>
+                </div>`;
+    });
+
+    const progressElement = document.getElementById('checkInProgress');
+    if (progressElement) {
+        progressElement.textContent = `進度${checkedInCount}/${participants.length}`;
+    }
+    container.innerHTML = html;
+}
 
 // 載入活動詳細資訊（活動DDetail）
 export async function loadEventDDetail(eventID) {
@@ -265,6 +346,11 @@ export async function loadEventDDetail(eventID) {
 
     if (!eventID || !fields || fields.length < 4) {
         console.warn("欄位數量不足或 eventID 錯誤");
+        return;
+    }
+
+    if (isDemoMode) {
+        loadDemoEventDDetail(eventID, container, fields, title);
         return;
     }
 
@@ -340,6 +426,33 @@ export async function loadEventDDetail(eventID) {
 
     } catch (err) {
         console.error("讀取活動詳細資訊失敗：", err);
+    }
+}
+
+function loadDemoEventDDetail(eventID, container, fields, title) {
+    const eventData = getDemoEventById(eventID);
+
+    if (!eventData) {
+        title.textContent = "找不到 Demo 活動";
+        return;
+    }
+
+    const participants = eventData.participants || [];
+    const checkedIn = getDemoCheckedInCount(eventID);
+
+    title.textContent = eventData.name || "無名稱";
+    fields[0].textContent = eventData.id || "Demo ID";
+    fields[1].textContent = eventData.createdAt ? eventData.createdAt.split(" ")[0] : "Demo 日期";
+    fields[2].textContent = participants.length;
+    fields[3].textContent = checkedIn;
+
+    const exitEventBtn = container.querySelector('.exitEvent');
+    if (exitEventBtn) {
+        exitEventBtn.textContent = "Demo 模式不可刪除活動";
+        exitEventBtn.style.cursor = "not-allowed";
+        exitEventBtn.onclick = () => {
+            alert("Demo 模式資料僅供展示，不會儲存。");
+        };
     }
 }
 

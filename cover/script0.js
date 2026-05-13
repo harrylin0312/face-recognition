@@ -19,7 +19,7 @@ document.getElementById('getStart').addEventListener('click', function () {
 
     button.addEventListener('animationend', function handleAnimationEnd() {
         button.removeEventListener('animationend', handleAnimationEnd);
-        window.location.href = 'https://harrylin0312.github.io/face-recognition/login/';
+        window.location.href = '../login/';
     });
 });
 

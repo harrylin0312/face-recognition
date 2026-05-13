@@ -1,5 +1,5 @@
 import { toggleSection } from './toggleSection.js';
-import { db } from './script2.js';
+import { db, BACKEND_WS_URL } from './script2.js';
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 let socket = null;
 let firstSendDone = false;
@@ -39,7 +39,7 @@ export async function startCamera() {
         toggleSection("eventDetail", window.currentEventId);
         return;
     }
-    socket = new WebSocket("wss://discharge-setting-sense-boxes.trycloudflare.com");
+    socket = new WebSocket(BACKEND_WS_URL);
 
     socket.onopen = () => {
         console.log("🔌 WebSocket 已連線 (startCamera)");
@@ -50,6 +50,10 @@ export async function startCamera() {
         const checkerMessage = document.getElementById("checkerMessage");
         try {
             const data = JSON.parse(evt.data);
+            if (data.status === "ready") {
+                console.log("✅ 後端已準備接收辨識影像");
+                return;
+            }
             if (data.status === "ok" && data.user) {
                 const userRef = doc(db, "users", data.user);
                 const userSnap = await getDoc(userRef);
@@ -65,7 +69,7 @@ export async function startCamera() {
                 if (data.reason === "無人臉") {
                     checkerMessage.textContent = "等待中...";
                     checkerMessage.className = "black";
-                } else if (data.reason.includes("伺服器忙碌中")) {
+                } else if (data.reason && data.reason.includes("伺服器忙碌中")) {
                     checkerMessage.textContent = "⚠️ 伺服器忙碌中，請稍候...";
                     checkerMessage.className = "orange";
                 } else {

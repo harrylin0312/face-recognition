@@ -155,6 +155,10 @@ function login() {
         .then(async (userCredential) => {
             const user = userCredential.user;
             localStorage.removeItem("userUID");
+            localStorage.removeItem("appMode");
+            localStorage.removeItem("demoUserName");
+            localStorage.removeItem("demoUserEmail");
+            localStorage.removeItem("userData");
             localStorage.setItem("userUID", user.uid);//儲存登入者uid
 
             try {
@@ -190,6 +194,21 @@ function login() {
             document.getElementById("LoginMessage").innerText = errorMessage;
             document.getElementById("LoginMessage").className = "message-error";
         });
+}
+
+// Demo 模式入口
+function enterDemoMode() {
+    localStorage.removeItem("userUID");
+    localStorage.setItem("appMode", "demo");
+    localStorage.setItem("demoUserName", "Demo");
+    localStorage.setItem("demoUserEmail", "demo@example.com");
+
+    window.location.href = "../start/index.html?mode=demo";
+}
+
+const demoLoginButton = document.getElementById("demoLoginButton");
+if (demoLoginButton) {
+    demoLoginButton.addEventListener("click", enterDemoMode);
 }
 
 // 監聽 Enter 鍵以執行登入
@@ -263,6 +282,7 @@ document.getElementById("prompt").addEventListener("click", function () {
 window.togglePage = togglePage;
 window.register = register;
 window.login = login;
+window.enterDemoMode = enterDemoMode;
 
 // 初次淡入效果
 document.addEventListener('DOMContentLoaded', () => {

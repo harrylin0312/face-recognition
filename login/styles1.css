@@ -63,6 +63,34 @@ body {
     background-color: #007bff;
 }
 /*------------------------------------------------------------*/
+/*Demo 模式底部膠囊按鈕*/
+.container #demoLoginButton.demo-pill {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 28px;
+    margin: 0 auto;
+    width: fit-content;
+    min-width: 210px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.92);
+    color: #094244;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    z-index: 20;
+    --animate-duration: 0.8s;
+}
+
+.container #demoLoginButton.demo-pill:hover {
+    background-color: #ffffff;
+    bottom: 31px;
+}
+/*------------------------------------------------------------*/
 /*切換介面按鈕*/
 .container a {
     display: inline-block;
@@ -153,5 +181,3 @@ body {
     user-select: none;
     cursor: default;
 }
-
-
